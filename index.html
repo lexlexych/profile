@@ -17,6 +17,7 @@
   --sh:#1A222C; --sh-ink:#E4E9EE; --danger:#B8412B;
   --shadow:0 24px 60px -24px rgba(22,32,43,.35);
   --bit:28,123,105;
+  --k-java:147,106,30; --k-back:44,98,146; --k-web:182,58,102; --k-ai:118,76,156; --k-auto:28,123,105;
   --nav-h:78px;
   --ease:cubic-bezier(.76,0,.24,1); --ease-out:cubic-bezier(.16,1,.3,1);
   --f-display:'Tektur','Russo One','Arial Black',system-ui,sans-serif;
@@ -34,6 +35,7 @@
     --sh:#0C1117; --danger:#F07A5C;
     --shadow:0 30px 80px -30px rgba(0,0,0,.85);
     --bit:92,199,176;
+    --k-java:212,162,76; --k-back:108,166,222; --k-web:238,120,160; --k-ai:178,146,226; --k-auto:92,199,176;
   }
 }
 :root[data-theme="dark"]{
@@ -44,6 +46,7 @@
   --sh:#0C1117; --danger:#F07A5C;
   --shadow:0 30px 80px -30px rgba(0,0,0,.85);
   --bit:92,199,176;
+  --k-java:212,162,76; --k-back:108,166,222; --k-web:238,120,160; --k-ai:178,146,226; --k-auto:92,199,176;
 }
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
 *,*::before,*::after{box-sizing:border-box}
@@ -237,7 +240,76 @@ body.not-first .scroll-hint{opacity:0}
 .job-drawer li{display:flex;gap:8px}
 .job-drawer li::before{content:"";flex:0 0 6px;height:6px;margin-top:7px;background:var(--verd);transform:rotate(45deg)}
 
-/* ============ 3. CERTIFICATES ============ */
+/* ============ 3. SKILLS (KNOWLEDGE GRAPH) ============ */
+.kn{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(300px,.85fr);gap:clamp(18px,2.6vw,40px);align-items:stretch}
+.kn-stage,.kn-panel{height:clamp(340px,calc(100vh - 332px),700px)}
+.kn-stage{position:relative;min-width:0}
+.kn-stage::before{content:"";position:absolute;inset:2% 8%;border-radius:50%;pointer-events:none;
+  background:radial-gradient(closest-side,color-mix(in srgb,var(--surface-solid) 78%,transparent),color-mix(in srgb,var(--surface-solid) 30%,transparent) 62%,transparent)}
+#kgraph{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab;-webkit-tap-highlight-color:transparent}
+#kgraph.over{cursor:pointer}
+#kgraph.drag{cursor:grabbing}
+.kn-br{position:absolute;width:18px;height:18px;border:1.5px solid var(--line-strong);pointer-events:none}
+.kn-br.tl{top:0;left:0;border-right:0;border-bottom:0}.kn-br.tr{top:0;right:0;border-left:0;border-bottom:0}
+.kn-br.bl{bottom:0;left:0;border-right:0;border-top:0}.kn-br.brr{bottom:0;right:0;border-left:0;border-top:0}
+.kn-hud{position:absolute;top:12px;left:18px;display:flex;flex-wrap:wrap;gap:4px 16px;font-family:var(--f-mono);font-size:11px;color:var(--muted);pointer-events:none}
+.kn-hud b{color:var(--ink);font-weight:600}
+.kn-hud .kn-rot{color:rgba(var(--bit),.85)}
+.kn-ctl{position:absolute;top:8px;right:10px;display:flex;gap:8px}
+.kn-ctl .ibtn{width:36px;height:36px;background:var(--surface);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.kn-ctl .ibtn svg{width:16px;height:16px}
+#knSpin .i-play{fill:currentColor;stroke:none;display:none}
+#knSpin[aria-pressed="false"] .i-play{display:block}
+#knSpin[aria-pressed="false"] .i-pause{display:none}
+#knReset:hover svg{transform:rotate(-120deg)}
+.kn-hint{position:absolute;right:16px;bottom:12px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);pointer-events:none;transition:opacity .4s}
+.kn-hint svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;color:var(--verd)}
+.kn-card{--c:var(--k-auto);position:absolute;left:12px;bottom:12px;width:min(350px,calc(100% - 24px));max-height:calc(100% - 64px);overflow-y:auto;scrollbar-width:thin;overscroll-behavior:contain;
+  padding:14px 16px 16px;background:var(--surface);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(var(--c),.55);border-radius:8px;box-shadow:var(--shadow);
+  opacity:0;visibility:hidden;transform:translateY(14px);pointer-events:none;transition:opacity .35s,transform .55s var(--ease-out),border-color .4s,visibility 0s .55s}
+.kn-card.show{opacity:1;visibility:visible;transform:none;pointer-events:auto;transition-delay:0s}
+.kn-card-top{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.kn-card-top .deg{margin-left:auto;font-family:var(--f-mono);font-size:11px;color:var(--brass);white-space:nowrap}
+.kn-card-top .ibtn{width:28px;height:28px;flex:0 0 auto}
+.kn-card-top .ibtn svg{width:14px;height:14px}
+.kn-card h3{font-family:var(--f-display);font-weight:600;font-size:clamp(18px,1.6vw,22px);line-height:1.15;margin:6px 0 12px}
+.kn-dot{flex:0 0 auto;width:8px;height:8px;transform:rotate(45deg);background:rgb(var(--c));box-shadow:0 0 8px rgba(var(--c),.55)}
+.kn-rel-l{font-size:11.5px;color:var(--muted);margin-bottom:7px}
+.kn-rel{display:flex;flex-wrap:wrap;gap:6px}
+.kn-rel button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:7px;padding:3px 10px 3px 8px;font-size:12px;border:1px solid var(--line-strong);border-radius:20px;transition:border-color .25s,background .25s}
+.kn-rel button .kn-dot{width:6px;height:6px;box-shadow:none}
+.kn-rel button:hover{border-color:rgb(var(--c));background:rgba(var(--c),.1)}
+.kn-rel button:focus-visible{outline:1.5px dashed var(--verd);outline-offset:2px}
+.kn-panel{display:flex;flex-direction:column;min-width:0}
+.kn-panel .panel-bar b{font-family:var(--f-mono);font-weight:600;color:var(--brass)}
+.kn-search{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);position:relative;cursor:text}
+.kn-search::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--verd);transform:scaleX(0);transform-origin:left;transition:transform .6s var(--ease-out)}
+.kn-search:focus-within::after{transform:scaleX(1)}
+.kn-search svg{width:16px;height:16px;flex:0 0 auto;fill:none;stroke:var(--muted);stroke-width:2;stroke-linecap:round}
+.kn-search input{flex:1;min-width:0;background:transparent;border:0;outline:none;font:inherit;font-size:14px;color:var(--ink);padding:3px 0;-webkit-appearance:none;appearance:none}
+.kn-search input::placeholder{color:var(--muted)}
+.kn-list{position:relative;flex:1;min-height:0;overflow-y:auto;padding:4px 16px 18px;scrollbar-width:thin;overscroll-behavior:contain;
+  -webkit-mask-image:linear-gradient(transparent,#000 10px,#000 calc(100% - 22px),transparent);mask-image:linear-gradient(transparent,#000 10px,#000 calc(100% - 22px),transparent)}
+.kn-sec{padding:10px 0 12px;border-bottom:1px dashed var(--line)}
+.kn-sec:last-of-type{border-bottom:0}
+.kn-sec-h{all:unset;cursor:pointer;box-sizing:border-box;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;width:100%;padding:3px 0 9px;font-weight:700;font-size:13.5px;line-height:1.25}
+.kn-sec-h .kn-idx{font-family:var(--f-mono);font-size:11px;font-weight:600;color:rgb(var(--c));display:flex;align-items:center;gap:7px}
+.kn-sec-h .kn-idx::before{content:"";width:9px;height:9px;transform:rotate(45deg);border:1.5px solid rgb(var(--c));transition:background .3s,box-shadow .3s}
+.kn-sec-h .kn-n{font-family:var(--f-mono);font-size:11px;font-weight:400;color:var(--muted)}
+.kn-sec-h:hover .kn-sec-t,.kn-sec-h[aria-pressed="true"] .kn-sec-t{color:rgb(var(--c))}
+.kn-sec-h[aria-pressed="true"] .kn-idx::before{background:rgb(var(--c));box-shadow:0 0 10px rgb(var(--c))}
+.kn-sec-h:focus-visible{outline:1.5px dashed var(--verd);outline-offset:3px}
+.kn-items{display:flex;flex-wrap:wrap;gap:6px}
+.kn-it{all:unset;cursor:pointer;box-sizing:border-box;display:inline-flex;align-items:center;gap:7px;padding:4px 10px 4px 8px;font-size:12.5px;line-height:1.35;border:1px solid var(--line);border-radius:4px;background:color-mix(in srgb,var(--surface-solid) 60%,transparent);transition:border-color .25s,background .25s,box-shadow .25s,opacity .25s}
+.kn-it::before{content:"";flex:0 0 auto;width:6px;height:6px;transform:rotate(45deg);background:rgb(var(--c))}
+.kn-it.hub{font-weight:700;border-color:rgba(var(--c),.5)}
+.kn-it:hover,.kn-it.hl{border-color:rgb(var(--c));background:rgba(var(--c),.1)}
+.kn-it[aria-pressed="true"]{border-color:rgb(var(--c));background:rgba(var(--c),.2);box-shadow:0 0 0 3px rgba(var(--c),.14)}
+.kn-it:focus-visible{outline:1.5px dashed var(--verd);outline-offset:2px}
+.kn-it[hidden],.kn-sec[hidden]{display:none}
+.kn-empty{margin:18px 0;font-size:13px;color:var(--muted);text-align:center}
+
+/* ============ 4. CERTIFICATES ============ */
 .certs{display:grid;grid-template-columns:minmax(250px,.72fr) minmax(0,1.6fr);gap:clamp(24px,4vw,64px);align-items:center}
 .panel{border:1px solid var(--line-strong);background:var(--surface);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:8px;overflow:hidden}
 .panel-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}
@@ -281,7 +353,7 @@ body.not-first .scroll-hint{opacity:0}
 .glare{position:absolute;inset:0;background:radial-gradient(circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.22),transparent 45%);opacity:0;transition:opacity .3s;pointer-events:none}
 .cert:hover .glare{opacity:1}
 
-/* ============ 4. PROJECTS ============ */
+/* ============ 5. PROJECTS ============ */
 .proj-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap}
 .car-ctrl{display:flex;align-items:center;gap:12px}
 .gbtn{all:unset;cursor:pointer;width:52px;height:52px;display:grid;place-items:center;position:relative;border-radius:50%}
@@ -330,7 +402,7 @@ body.not-first .scroll-hint{opacity:0}
 .dots button{all:unset;cursor:pointer;font-family:var(--f-mono);font-size:12px;width:16px;text-align:center;color:var(--muted);transition:color .3s}
 .dots button.active{color:var(--verd);font-weight:600}
 
-/* ============ 5. CONTACT ============ */
+/* ============ 6. CONTACT ============ */
 .contact{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(26px,5vw,80px);align-items:center}
 .term{border:1px solid var(--line-strong);background:var(--surface-solid);border-radius:8px;overflow:hidden;margin-top:26px;max-width:480px}
 .term-body{padding:16px 18px;font-family:var(--f-mono);font-size:13px;line-height:2}
@@ -484,11 +556,21 @@ body.not-first .scroll-hint{opacity:0}
 }
 
 /* ============ RESPONSIVE ============ */
+.menu button,.nav-cta{white-space:nowrap}
+@media (max-width:1360px){
+  .nav-inner{gap:16px}
+  .menu button{padding:10px 8px;gap:5px}
+}
+@media (max-width:1240px){
+  .menu button .n{display:none}
+}
 @media (max-width:1100px){
   .menu button .t{display:none}
+  .menu button .n{display:inline}
   .jobs{grid-template-columns:repeat(4,minmax(230px,1fr));overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;scrollbar-width:thin}
   .job-w{scroll-snap-align:start}
   .bus-line{width:calc(4 * 250px)}
+  .kn{grid-template-columns:minmax(0,1.3fr) minmax(270px,1fr)}
 }
 @media (max-width:860px){
   :root{--nav-h:66px}
@@ -509,6 +591,12 @@ body.not-first .scroll-hint{opacity:0}
   .m-media{border-right:0;border-bottom:1px solid var(--line)}
   .ghost-num{display:none}
   .foot{position:static;margin-top:24px}
+  .kn{grid-template-columns:1fr}
+  .kn-stage{height:min(62vh,440px)}
+  .kn-panel{height:auto}
+  .kn-list{overflow:visible;-webkit-mask-image:none;mask-image:none}
+  .kn-card{max-height:calc(100% - 60px)}
+  .kn-card.show~.kn-hint{opacity:0}
 }
 @media (max-width:520px){
   .menu button{padding:10px 7px}
@@ -516,6 +604,9 @@ body.not-first .scroll-hint{opacity:0}
   .lang{--lw:28px}
   .logo b{font-size:13px}
   .stats{gap:18px}
+  .kn-hud{left:12px;top:10px;flex-direction:column}
+  .kn-hud .kn-rot{display:none}
+  .kn-card{left:8px;bottom:8px;width:calc(100% - 16px);padding:12px 14px 14px}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -596,9 +687,10 @@ body.not-first .scroll-hint{opacity:0}
     <nav class="menu" id="menu" data-i18n-aria="aria.sections">
       <button data-go="0"><span class="n">01</span><span class="t" data-i18n="nav.0">О себе</span></button>
       <button data-go="1"><span class="n">02</span><span class="t" data-i18n="nav.1">Путь</span></button>
-      <button data-go="2"><span class="n">03</span><span class="t" data-i18n="nav.2">Сертификаты</span></button>
-      <button data-go="3"><span class="n">04</span><span class="t" data-i18n="nav.3">Проекты</span></button>
-      <button data-go="4"><span class="n">05</span><span class="t" data-i18n="nav.4">Контакты</span></button>
+      <button data-go="2"><span class="n">03</span><span class="t" data-i18n="nav.2">Знания</span></button>
+      <button data-go="3"><span class="n">04</span><span class="t" data-i18n="nav.3">Сертификаты</span></button>
+      <button data-go="4"><span class="n">05</span><span class="t" data-i18n="nav.4">Проекты</span></button>
+      <button data-go="5"><span class="n">06</span><span class="t" data-i18n="nav.5">Контакты</span></button>
       <div class="rack"></div>
       <div class="menu-glow" id="menuGlow"></div>
       <div class="roller" id="roller"><svg data-gear="10" viewBox="-50 -50 100 100"></svg></div>
@@ -610,7 +702,7 @@ body.not-first .scroll-hint{opacity:0}
         <button data-lang="en" lang="en" aria-label="English">EN</button>
         <button data-lang="ru" lang="ru" aria-label="Русский">RU</button>
       </div>
-      <button class="nav-cta magnetic" data-go="4" data-spinhost>
+      <button class="nav-cta magnetic" data-go="5" data-spinhost>
         <svg data-gear="10" data-spin="1" viewBox="-50 -50 100 100"></svg><span data-i18n="cta">Обсудить проект</span>
       </button>
     </div>
@@ -619,7 +711,7 @@ body.not-first .scroll-hint{opacity:0}
 
 <!-- ========== HUD ========== -->
 <div class="hud hud-l" aria-hidden="true">
-  <span class="num" id="hudNum">01</span><span class="of">/ 05</span><span class="name" id="hudName"></span>
+  <span class="num" id="hudNum">01</span><span class="of">/ 06</span><span class="name" id="hudName"></span>
 </div>
 <div class="hud hud-r" id="hudR"></div>
 <div class="scroll-hint" aria-hidden="true"><i></i><span data-i18n="scroll">Листайте</span></div>
@@ -672,8 +764,8 @@ body.not-first .scroll-hint{opacity:0}
           </div>
           <div class="hero-foot" data-a="up" style="--d:7">
             <div class="hero-btns">
-              <button class="btn btn-primary magnetic" data-go="3" data-spinhost><svg data-gear="10" data-spin="1" viewBox="-50 -50 100 100"></svg><span data-i18n="hero.b1"></span></button>
-              <button class="btn btn-ghost magnetic" data-go="4"><span data-i18n="hero.b2"></span></button>
+              <button class="btn btn-primary magnetic" data-go="4" data-spinhost><svg data-gear="10" data-spin="1" viewBox="-50 -50 100 100"></svg><span data-i18n="hero.b1"></span></button>
+              <button class="btn btn-ghost magnetic" data-go="5"><span data-i18n="hero.b2"></span></button>
             </div>
             <div class="stats">
               <div class="stat"><b data-count="5" data-suffix="+">0</b><span data-i18n="stat.0"></span></div>
@@ -692,7 +784,7 @@ body.not-first .scroll-hint{opacity:0}
     <div class="slide-scroll">
       <div class="wrap">
         <div class="s-head" data-a="left">
-          <div class="s-meta"><span class="idx">02 / 05</span><span class="bitline" data-bits></span></div>
+          <div class="s-meta"><span class="idx">02 / 06</span><span class="bitline" data-bits></span></div>
           <h2 class="s-title" data-i18n="path.title"></h2>
           <p class="s-sub" data-i18n="path.sub"></p>
         </div>
@@ -704,14 +796,50 @@ body.not-first .scroll-hint{opacity:0}
     </div>
   </section>
 
-  <!-- 03 CERTIFICATES -->
-  <section class="slide" id="certs">
+  <!-- 03 SKILLS -->
+  <section class="slide" id="skills">
     <div class="ghost-num" data-a="right">03</div>
     <div class="slide-scroll">
       <div class="wrap">
         <div class="s-head" data-a="left">
-          <div class="s-meta"><span class="idx">03 / 05</span><span class="bitline" data-bits></span></div>
-          <h2 class="s-title" data-i18n="nav.2"></h2>
+          <div class="s-meta"><span class="idx">03 / 06</span><span class="bitline" data-bits></span></div>
+          <h2 class="s-title" data-i18n="kn.title"></h2>
+          <p class="s-sub" data-i18n="kn.sub"></p>
+        </div>
+        <div class="kn">
+          <div class="kn-stage" id="knStage" data-a="fade" style="--d:1">
+            <canvas id="kgraph" role="img" data-i18n-aria="kn.graph"></canvas>
+            <span class="kn-br tl"></span><span class="kn-br tr"></span><span class="kn-br bl"></span><span class="kn-br brr"></span>
+            <div class="kn-hud" aria-hidden="true">
+              <span><b id="knNodes">0</b> <span data-i18n="kn.nodes"></span></span>
+              <span><b id="knLinks">0</b> <span data-i18n="kn.links"></span></span>
+              <span class="kn-rot" id="knRot"></span>
+            </div>
+            <div class="kn-ctl">
+              <button class="ibtn" id="knSpin" type="button" aria-pressed="true" data-i18n-aria="kn.spin"><svg viewBox="0 0 24 24"><path class="i-pause" d="M9 6v12M15 6v12"/><path class="i-play" d="M8 5.5v13l10.5-6.5z"/></svg></button>
+              <button class="ibtn" id="knReset" type="button" data-i18n-aria="kn.reset"><svg viewBox="0 0 24 24"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3M4.5 4v4h4"/></svg></button>
+            </div>
+            <div class="kn-card" id="knCard" aria-live="polite"></div>
+            <div class="kn-hint" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v5M12 16v5M3 12h5M16 12h5"/><path d="M12 3l-2 2M12 3l2 2M12 21l-2-2M12 21l2-2M3 12l2-2M3 12l2 2M21 12l-2-2M21 12l-2 2"/></svg><span data-i18n="kn.hint"></span></div>
+          </div>
+          <div class="kn-panel panel" data-a="right" style="--d:2">
+            <div class="panel-bar"><span class="leds"><i></i><i></i><i></i></span><span>skills.graph</span><b id="knTotal"></b></div>
+            <label class="kn-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><input id="knSearch" type="search" autocomplete="off" spellcheck="false" data-i18n-ph="kn.search" data-i18n-aria="kn.search"></label>
+            <div class="kn-list" id="knList" role="group" data-i18n-aria="kn.list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 CERTIFICATES -->
+  <section class="slide" id="certs">
+    <div class="ghost-num" data-a="right">04</div>
+    <div class="slide-scroll">
+      <div class="wrap">
+        <div class="s-head" data-a="left">
+          <div class="s-meta"><span class="idx">04 / 06</span><span class="bitline" data-bits></span></div>
+          <h2 class="s-title" data-i18n="nav.3"></h2>
         </div>
         <div class="certs">
           <div data-a="left" style="--d:2">
@@ -736,14 +864,14 @@ body.not-first .scroll-hint{opacity:0}
     </div>
   </section>
 
-  <!-- 04 PROJECTS -->
+  <!-- 05 PROJECTS -->
   <section class="slide" id="projects">
     <div class="slide-scroll">
       <div class="wrap">
         <div class="proj-head">
           <div class="s-head" data-a="left" style="margin-bottom:0">
-            <div class="s-meta"><span class="idx">04 / 05</span><span class="bitline" data-bits></span></div>
-            <h2 class="s-title" data-i18n="nav.3"></h2>
+            <div class="s-meta"><span class="idx">05 / 06</span><span class="bitline" data-bits></span></div>
+            <h2 class="s-title" data-i18n="nav.4"></h2>
           </div>
           <div class="car-ctrl" data-a="right" style="--d:1">
             <button class="gbtn" id="prevP" data-i18n-aria="aria.prev"><svg class="g" data-gear="16" data-spin="0" viewBox="-50 -50 100 100"></svg><svg class="ar" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
@@ -764,13 +892,13 @@ body.not-first .scroll-hint{opacity:0}
     </div>
   </section>
 
-  <!-- 05 CONTACT -->
+  <!-- 06 CONTACT -->
   <section class="slide" id="contact">
     <div class="slide-scroll">
       <div class="wrap contact">
         <div>
           <div class="s-head" data-a="left" style="margin-bottom:0">
-            <div class="s-meta"><span class="idx">05 / 05</span><span class="bitline" data-bits></span></div>
+            <div class="s-meta"><span class="idx">06 / 06</span><span class="bitline" data-bits></span></div>
             <h2 class="s-title" data-i18n="c.title"></h2>
             <p class="s-sub" data-i18n="c.sub"></p>
           </div>
@@ -925,8 +1053,8 @@ const I18N = {
   ru: {
     'aria.home':'На первый слайд','aria.sections':'Разделы','aria.lang':'Язык','aria.prev':'Предыдущий проект','aria.next':'Следующий проект','aria.close':'Закрыть',
     'name.full':'Имя Фамилия','name.first':'Имя','name.last':'Фамилия','logo.sub':'Софт · веб · AI',
-    'nav.0':'О себе','nav.1':'Путь','nav.2':'Сертификаты','nav.3':'Проекты','nav.4':'Контакты',
-    'word.0':'ПРИВЕТ','word.1':'ПУТЬ','word.2':'СЕРТИФИКАТЫ','word.3':'ПРОЕКТЫ','word.4':'НА СВЯЗИ',
+    'nav.0':'О себе','nav.1':'Путь','nav.2':'Знания','nav.3':'Сертификаты','nav.4':'Проекты','nav.5':'Контакты',
+    'word.0':'ПРИВЕТ','word.1':'ПУТЬ','word.2':'ЗНАНИЯ','word.3':'СЕРТИФИКАТЫ','word.4':'ПРОЕКТЫ','word.5':'НА СВЯЗИ',
     'cta':'Обсудить проект','scroll':'Листайте',
     'hero.photo':'Фото','hero.c1':'Открыт к проектам','hero.c2':'Работаю удалённо',
     'hero.lead':'Короткое описание: кто вы, с кем работаете и какую задачу клиента решаете. Две-три строки, не больше — подробности будут дальше в презентации.',
@@ -940,6 +1068,19 @@ const I18N = {
     'job.role':'Должность','job.company':'Компания','job.desc':'Короткое описание: чем занимались и за что отвечали.','job.tech':'Технология','job.ach':'Достижения',
     'job.a0':'Результат с цифрой','job.a1':'Ключевой проект','job.a2':'Чему научился','job.now':'сейчас',
     'job.free':'Фриланс','job.freeC':'Софт, веб и AI-автоматизация','job.freeD':'Короткое описание: с какими клиентами работаете сейчас.',
+    'kn.title':'Сеть знаний','kn.sub':'Точки — технологии и компетенции, линии — связи между ними. Вращайте облако и выберите узел, чтобы увидеть его окружение.',
+    'kn.hint':'тяните, чтобы вращать','kn.nodes':'узлов','kn.links':'связей','kn.deg':'связей: {n}','kn.rel':'Связано с',
+    'kn.search':'Найти технологию…','kn.empty':'Ничего не найдено','kn.list':'Технологии по разделам','kn.spin':'Автовращение','kn.reset':'Сбросить вид',
+    'kn.graph':'Трёхмерный граф знаний: технологии и связи между ними. Полный список — в таблице рядом.',
+    'kn.cat.java':'Java-экосистема','kn.cat.back':'Бэкенд и DevOps','kn.cat.web':'Веб и фронтенд','kn.cat.ai':'AI-консалтинг','kn.cat.auto':'Автоматизация и AI-агенты',
+    'kn.n.oop':'ООП и SOLID','kn.n.concurrency':'Многопоточность','kn.n.patterns':'Паттерны проектирования',
+    'kn.n.micro':'Микросервисы','kn.n.vps':'VPS и self-hosting',
+    'kn.n.css':'CSS и адаптивная вёрстка','kn.n.canvas':'Canvas / SVG-анимация','kn.n.a11y':'Доступность (a11y)','kn.n.i18n':'Мультиязычность (i18n)',
+    'kn.n.strategy':'AI-стратегия','kn.n.process':'Анализ процессов AS-IS / TO-BE','kn.n.portfolio':'Портфель AI-инициатив','kn.n.finance':'Финмодель: ROI, TCO, P&L',
+    'kn.n.readiness':'Оценка AI-готовности','kn.n.governance':'AI Governance и RACI','kn.n.dataquality':'Качество данных','kn.n.gdpr':'GDPR',
+    'kn.n.risk':'Риск-менеджмент LLM','kn.n.agentaudit':'Аудит AI-агентов','kn.n.change':'Управление изменениями','kn.n.roadmap':'Roadmap трансформации',
+    'kn.n.agents':'AI-агенты','kn.n.workflow':'Автоматизация процессов','kn.n.assistants':'Кастомные AI-ассистенты','kn.n.chatbots':'Чат-боты',
+    'kn.n.routing':'Роутинг агентов','kn.n.mas':'Мультиагентные системы','kn.n.vectordb':'Векторные БД','kn.n.pipelines':'Пайплайны данных',
     'cert.verify':'Проверка подлинности','cert.org':'Организация','cert.date':'Дата','cert.info':'Подробности','cert.ok':'ID','cert.open':'Открыть сертификат','cert.check':'Проверить онлайн',
     'cert.beam':'Специалист по AI-автоматизации бизнеса','cert.beam.i':'Переподготовка 600 ак. часов (27.04–21.08.2026): 15 модулей — AI-агенты и мультиагентные системы, RAG, промпт-инжиниринг, анализ бизнес-процессов, GDPR и EU AI Act. Все модули — «отлично».',
     'cert.n8n':'n8n Professional Certificate','cert.n8n.i':'Пройдены все курсы программы n8n Academy по автоматизации рабочих процессов в n8n.',
@@ -967,6 +1108,7 @@ const I18N = {
     'fb.price':'Стоимость зависит от задачи. Опишите проект в форме — отвечу с оценкой сроков и бюджета.',
     'fb.contact':'Проще всего — через форму обратной связи или по email hello@example.com.',
     'fb.projects':'Примеры работ собраны в разделе «Проекты». Нажмите на карточку, чтобы открыть подробности.',
+    'fb.skills':'Технологии и компетенции собраны в разделе «Знания»: Java и Spring, бэкенд, веб, AI-консалтинг, автоматизация и AI-агенты (n8n, RAG, мультиагентные системы).',
     'fb.exp':'Опыт работы по годам — в разделе «Путь».','fb.certs':'Сертификаты: «Специалист по AI-автоматизации бизнеса» (Beam Institute, 600 ч), n8n Professional Certificate и Oracle Certified Professional: Java SE 11. Их можно открыть в разделе «Сертификаты».',
     'fb.default':'Чтобы ответить точно, лучше написать через форму — отвечу в течение дня.',
     'langName':'Russian'
@@ -974,8 +1116,8 @@ const I18N = {
   en: {
     'aria.home':'Go to first slide','aria.sections':'Sections','aria.lang':'Language','aria.prev':'Previous project','aria.next':'Next project','aria.close':'Close',
     'name.full':'First Last','name.first':'First','name.last':'Last','logo.sub':'Software · Web · AI',
-    'nav.0':'About','nav.1':'Experience','nav.2':'Certificates','nav.3':'Projects','nav.4':'Contact',
-    'word.0':'HELLO','word.1':'EXPERIENCE','word.2':'CERTIFICATES','word.3':'PROJECTS','word.4':'CONTACT',
+    'nav.0':'About','nav.1':'Experience','nav.2':'Skills','nav.3':'Certificates','nav.4':'Projects','nav.5':'Contact',
+    'word.0':'HELLO','word.1':'EXPERIENCE','word.2':'SKILLS','word.3':'CERTIFICATES','word.4':'PROJECTS','word.5':'CONTACT',
     'cta':'Discuss a project','scroll':'Scroll',
     'hero.photo':'Photo','hero.c1':'Open to projects','hero.c2':'Working remotely',
     'hero.lead':'A short intro: who you are, who you work with and which client problem you solve. Two or three lines at most — the details come later in the presentation.',
@@ -989,6 +1131,19 @@ const I18N = {
     'job.role':'Position','job.company':'Company','job.desc':'Short description: what you did and what you were responsible for.','job.tech':'Technology','job.ach':'Achievements',
     'job.a0':'A result with a number','job.a1':'Key project','job.a2':'What I learned','job.now':'now',
     'job.free':'Freelance','job.freeC':'Software, web & AI automation','job.freeD':'Short description: the kind of clients you work with now.',
+    'kn.title':'Knowledge graph','kn.sub':'Points are technologies and skills, lines are the links between them. Rotate the cloud and pick a node to see what it connects to.',
+    'kn.hint':'drag to rotate','kn.nodes':'nodes','kn.links':'links','kn.deg':'links: {n}','kn.rel':'Connected to',
+    'kn.search':'Find a technology…','kn.empty':'Nothing found','kn.list':'Technologies by area','kn.spin':'Auto-rotation','kn.reset':'Reset view',
+    'kn.graph':'3D knowledge graph: technologies and the links between them. The full list is in the table next to it.',
+    'kn.cat.java':'Java ecosystem','kn.cat.back':'Backend & DevOps','kn.cat.web':'Web & frontend','kn.cat.ai':'AI consulting','kn.cat.auto':'Automation & AI agents',
+    'kn.n.oop':'OOP & SOLID','kn.n.concurrency':'Concurrency','kn.n.patterns':'Design patterns',
+    'kn.n.micro':'Microservices','kn.n.vps':'VPS & self-hosting',
+    'kn.n.css':'CSS & responsive layout','kn.n.canvas':'Canvas / SVG animation','kn.n.a11y':'Accessibility (a11y)','kn.n.i18n':'Internationalization (i18n)',
+    'kn.n.strategy':'AI strategy','kn.n.process':'Process analysis AS-IS / TO-BE','kn.n.portfolio':'AI initiative portfolio','kn.n.finance':'Financial model: ROI, TCO, P&L',
+    'kn.n.readiness':'AI readiness assessment','kn.n.governance':'AI governance & RACI','kn.n.dataquality':'Data quality','kn.n.gdpr':'GDPR',
+    'kn.n.risk':'LLM risk management','kn.n.agentaudit':'AI agent audit','kn.n.change':'Change management','kn.n.roadmap':'Transformation roadmap',
+    'kn.n.agents':'AI agents','kn.n.workflow':'Workflow automation','kn.n.assistants':'Custom AI assistants','kn.n.chatbots':'Chatbots',
+    'kn.n.routing':'Agent routing','kn.n.mas':'Multi-agent systems','kn.n.vectordb':'Vector databases','kn.n.pipelines':'Data pipelines',
     'cert.verify':'Verification','cert.org':'Issuer','cert.date':'Date','cert.info':'Details','cert.ok':'ID','cert.open':'Open certificate','cert.check':'Verify online',
     'cert.beam':'AI Business Automation Specialist','cert.beam.i':'600-hour further education program (27.04–21.08.2026): 15 modules — AI agents and multi-agent systems, RAG, prompt engineering, business process analysis, GDPR and the EU AI Act. All modules graded “very good”.',
     'cert.n8n':'n8n Professional Certificate','cert.n8n.i':'Completed all courses of the n8n Academy program on workflow automation with n8n.',
@@ -1016,6 +1171,7 @@ const I18N = {
     'fb.price':'The price depends on the task. Describe your project in the form and I\u2019ll reply with a time and budget estimate.',
     'fb.contact':'The easiest way is the contact form or email hello@example.com.',
     'fb.projects':'Work examples are in the Projects section. Click a card to open the details.',
+    'fb.skills':'All technologies and skills are in the Skills section: Java and Spring, backend, web, AI consulting, automation and AI agents (n8n, RAG, multi-agent systems).',
     'fb.exp':'Work history by year is in the Experience section.','fb.certs':'Certificates: AI Business Automation Specialist (Beam Institute, 600 hours), n8n Professional Certificate and Oracle Certified Professional: Java SE 11. You can open them in the Certificates section.',
     'fb.default':'To give you a precise answer, please write via the form — I\u2019ll reply within a day.',
     'langName':'English'
@@ -1023,8 +1179,8 @@ const I18N = {
   de: {
     'aria.home':'Zur ersten Folie','aria.sections':'Abschnitte','aria.lang':'Sprache','aria.prev':'Vorheriges Projekt','aria.next':'Nächstes Projekt','aria.close':'Schließen',
     'name.full':'Vorname Nachname','name.first':'Vorname','name.last':'Nachname','logo.sub':'Software · Web · KI',
-    'nav.0':'Über mich','nav.1':'Werdegang','nav.2':'Zertifikate','nav.3':'Projekte','nav.4':'Kontakt',
-    'word.0':'HALLO','word.1':'WERDEGANG','word.2':'ZERTIFIKATE','word.3':'PROJEKTE','word.4':'KONTAKT',
+    'nav.0':'Über mich','nav.1':'Werdegang','nav.2':'Kenntnisse','nav.3':'Zertifikate','nav.4':'Projekte','nav.5':'Kontakt',
+    'word.0':'HALLO','word.1':'WERDEGANG','word.2':'KENNTNISSE','word.3':'ZERTIFIKATE','word.4':'PROJEKTE','word.5':'KONTAKT',
     'cta':'Projekt besprechen','scroll':'Scrollen',
     'hero.photo':'Foto','hero.c1':'Offen für Projekte','hero.c2':'Arbeite remote',
     'hero.lead':'Eine kurze Vorstellung: wer Sie sind, mit wem Sie arbeiten und welches Problem Sie für Kunden lösen. Höchstens zwei, drei Zeilen — Details folgen später.',
@@ -1038,6 +1194,19 @@ const I18N = {
     'job.role':'Position','job.company':'Unternehmen','job.desc':'Kurzbeschreibung: Aufgaben und Verantwortungsbereich.','job.tech':'Technologie','job.ach':'Erfolge',
     'job.a0':'Ergebnis mit Zahl','job.a1':'Schlüsselprojekt','job.a2':'Was ich gelernt habe','job.now':'heute',
     'job.free':'Freelance','job.freeC':'Software, Web & KI-Automatisierung','job.freeD':'Kurzbeschreibung: mit welchen Kunden Sie aktuell arbeiten.',
+    'kn.title':'Wissensnetz','kn.sub':'Punkte sind Technologien und Kompetenzen, Linien ihre Verbindungen. Drehen Sie die Wolke und wählen Sie einen Knoten, um sein Umfeld zu sehen.',
+    'kn.hint':'ziehen zum Drehen','kn.nodes':'Knoten','kn.links':'Verbindungen','kn.deg':'Verbindungen: {n}','kn.rel':'Verbunden mit',
+    'kn.search':'Technologie suchen…','kn.empty':'Nichts gefunden','kn.list':'Technologien nach Bereichen','kn.spin':'Automatische Drehung','kn.reset':'Ansicht zurücksetzen',
+    'kn.graph':'3D-Wissensgraph: Technologien und ihre Verbindungen. Die vollständige Liste steht in der Tabelle daneben.',
+    'kn.cat.java':'Java-Ökosystem','kn.cat.back':'Backend & DevOps','kn.cat.web':'Web & Frontend','kn.cat.ai':'KI-Beratung','kn.cat.auto':'Automatisierung & KI-Agenten',
+    'kn.n.oop':'OOP & SOLID','kn.n.concurrency':'Nebenläufigkeit','kn.n.patterns':'Entwurfsmuster',
+    'kn.n.micro':'Microservices','kn.n.vps':'VPS & Self-Hosting',
+    'kn.n.css':'CSS & Responsive Design','kn.n.canvas':'Canvas / SVG-Animation','kn.n.a11y':'Barrierefreiheit (a11y)','kn.n.i18n':'Mehrsprachigkeit (i18n)',
+    'kn.n.strategy':'KI-Strategie','kn.n.process':'Prozessanalyse AS-IS / TO-BE','kn.n.portfolio':'Portfolio von KI-Initiativen','kn.n.finance':'Finanzmodell: ROI, TCO, P&L',
+    'kn.n.readiness':'KI-Reifegradanalyse','kn.n.governance':'KI-Governance & RACI','kn.n.dataquality':'Datenqualität','kn.n.gdpr':'DSGVO',
+    'kn.n.risk':'LLM-Risikomanagement','kn.n.agentaudit':'Audit von KI-Agenten','kn.n.change':'Change Management','kn.n.roadmap':'Transformations-Roadmap',
+    'kn.n.agents':'KI-Agenten','kn.n.workflow':'Workflow-Automatisierung','kn.n.assistants':'Individuelle KI-Assistenten','kn.n.chatbots':'Chatbots',
+    'kn.n.routing':'Agenten-Routing','kn.n.mas':'Multi-Agenten-Systeme','kn.n.vectordb':'Vektordatenbanken','kn.n.pipelines':'Datenpipelines',
     'cert.verify':'Echtheitsprüfung','cert.org':'Aussteller','cert.date':'Datum','cert.info':'Details','cert.ok':'ID','cert.open':'Zertifikat öffnen','cert.check':'Online prüfen',
     'cert.beam':'KI-Business-Automatisierungs-Spezialist','cert.beam.i':'Weiterbildung mit 600 UE (27.04.–21.08.2026): 15 Module — KI-Agenten und Multi-Agenten-Systeme, RAG, Prompt Engineering, Geschäftsprozessanalyse, DSGVO und EU AI Act. Alle Module „sehr gut“.',
     'cert.n8n':'n8n Professional Certificate','cert.n8n.i':'Alle Kurse des n8n-Academy-Programms zur Workflow-Automatisierung mit n8n abgeschlossen.',
@@ -1065,6 +1234,7 @@ const I18N = {
     'fb.price':'Der Preis hängt von der Aufgabe ab. Beschreiben Sie Ihr Projekt im Formular — ich antworte mit einer Schätzung zu Zeit und Budget.',
     'fb.contact':'Am einfachsten über das Kontaktformular oder per E-Mail an hello@example.com.',
     'fb.projects':'Arbeitsbeispiele finden Sie unter „Projekte“. Klicken Sie auf eine Karte für Details.',
+    'fb.skills':'Alle Technologien und Kompetenzen finden Sie unter „Kenntnisse“: Java und Spring, Backend, Web, KI-Beratung, Automatisierung und KI-Agenten (n8n, RAG, Multi-Agenten-Systeme).',
     'fb.exp':'Der Werdegang nach Jahren steht im Abschnitt „Werdegang“.','fb.certs':'Zertifikate: KI-Business-Automatisierungs-Spezialist (Beam Institute, 600 UE), n8n Professional Certificate und Oracle Certified Professional: Java SE 11. Sie lassen sich im Abschnitt „Zertifikate“ öffnen.',
     'fb.default':'Für eine genaue Antwort schreiben Sie am besten über das Formular — ich antworte innerhalb eines Tages.',
     'langName':'German'
@@ -1132,6 +1302,180 @@ $('#jobs').innerHTML = JOBS.map((j, i) => `
       <div class="job-drawer"><h5 data-i18n="job.ach"></h5><ul><li data-i18n="job.a0"></li><li data-i18n="job.a1"></li><li data-i18n="job.a2"></li></ul></div>
     </article>
   </div>`).join('');
+
+/* ================= KNOWLEDGE DATA ================= */
+// Граф знаний (слайд «Знания»). Разделы — в порядке таблицы; цвет раздела — токен --k-<key>, название — i18n-ключ kn.cat.<key>
+const KN_CATS = ['java', 'back', 'web', 'ai', 'auto'];
+// Узел: id, cat — раздел, name — подпись без перевода. Без name подпись берётся из I18N по ключу kn.n.<id> (во всех трёх языках).
+// hub: true — центральный узел раздела: подпись видна всегда и крупнее, в таблице идёт первым. Размер узла зависит от числа связей.
+const KN_NODES = [
+  { id:'java', cat:'java', name:'Java', hub:true },
+  { id:'oop', cat:'java' },
+  { id:'collections', cat:'java', name:'Collections & Generics' },
+  { id:'streams', cat:'java', name:'Stream API & Lambdas' },
+  { id:'concurrency', cat:'java' },
+  { id:'jvm', cat:'java', name:'JVM & GC' },
+  { id:'patterns', cat:'java' },
+  { id:'spring', cat:'java', name:'Spring Framework' },
+  { id:'boot', cat:'java', name:'Spring Boot' },
+  { id:'springweb', cat:'java', name:'Spring Web MVC' },
+  { id:'springdata', cat:'java', name:'Spring Data JPA' },
+  { id:'hibernate', cat:'java', name:'Hibernate / JPA' },
+  { id:'springsec', cat:'java', name:'Spring Security' },
+  { id:'jdbc', cat:'java', name:'JDBC' },
+  { id:'maven', cat:'java', name:'Maven' },
+  { id:'gradle', cat:'java', name:'Gradle' },
+  { id:'junit', cat:'java', name:'JUnit 5' },
+  { id:'mockito', cat:'java', name:'Mockito' },
+  { id:'lombok', cat:'java', name:'Lombok' },
+  { id:'groovy', cat:'java', name:'Groovy' },
+  { id:'vaadin', cat:'java', name:'Vaadin' },
+  { id:'jasper', cat:'java', name:'JasperReports' },
+  { id:'jmeter', cat:'java', name:'JMeter' },
+  { id:'sap', cat:'java', name:'SAP NetWeaver' },
+
+  { id:'rest', cat:'back', name:'REST API', hub:true },
+  { id:'micro', cat:'back' },
+  { id:'sql', cat:'back', name:'SQL' },
+  { id:'postgres', cat:'back', name:'PostgreSQL' },
+  { id:'docker', cat:'back', name:'Docker' },
+  { id:'git', cat:'back', name:'Git' },
+  { id:'cicd', cat:'back', name:'CI/CD · GitHub Actions' },
+  { id:'linux', cat:'back', name:'Linux / Bash' },
+  { id:'vps', cat:'back' },
+  { id:'openapi', cat:'back', name:'OpenAPI / Swagger' },
+  { id:'oauth', cat:'back', name:'OAuth 2.0 / JWT' },
+  { id:'json', cat:'back', name:'JSON' },
+  { id:'webhooks', cat:'back', name:'Webhooks' },
+  { id:'postman', cat:'back', name:'Postman' },
+  { id:'soap', cat:'back', name:'SOAP' },
+  { id:'graphql', cat:'back', name:'GraphQL' },
+  { id:'supabase', cat:'back', name:'Supabase' },
+  { id:'go', cat:'back', name:'Go' },
+
+  { id:'js', cat:'web', name:'JavaScript', hub:true },
+  { id:'html', cat:'web', name:'HTML5' },
+  { id:'css', cat:'web' },
+  { id:'ts', cat:'web', name:'TypeScript' },
+  { id:'react', cat:'web', name:'React' },
+  { id:'angular', cat:'web', name:'Angular' },
+  { id:'node', cat:'web', name:'Node.js' },
+  { id:'thymeleaf', cat:'web', name:'Thymeleaf' },
+  { id:'canvas', cat:'web' },
+  { id:'a11y', cat:'web' },
+  { id:'i18n', cat:'web' },
+
+  { id:'strategy', cat:'ai', hub:true },
+  { id:'oppmap', cat:'ai', name:'AI Opportunity Map' },
+  { id:'process', cat:'ai' },
+  { id:'portfolio', cat:'ai' },
+  { id:'finance', cat:'ai' },
+  { id:'readiness', cat:'ai' },
+  { id:'governance', cat:'ai' },
+  { id:'dataquality', cat:'ai' },
+  { id:'gdpr', cat:'ai' },
+  { id:'aiact', cat:'ai', name:'EU AI Act' },
+  { id:'risk', cat:'ai' },
+  { id:'agentaudit', cat:'ai' },
+  { id:'change', cat:'ai' },
+  { id:'roadmap', cat:'ai' },
+
+  { id:'agents', cat:'auto', hub:true },
+  { id:'n8n', cat:'auto', name:'n8n' },
+  { id:'workflow', cat:'auto' },
+  { id:'lowcode', cat:'auto', name:'Low-code / No-code' },
+  { id:'llmapi', cat:'auto', name:'LLM API · OpenAI · Claude' },
+  { id:'prompt', cat:'auto', name:'Prompt Engineering' },
+  { id:'cot', cat:'auto', name:'Chain-of-Thought' },
+  { id:'assistants', cat:'auto' },
+  { id:'chatbots', cat:'auto' },
+  { id:'routing', cat:'auto' },
+  { id:'mas', cat:'auto' },
+  { id:'mcp', cat:'auto', name:'MCP' },
+  { id:'rag', cat:'auto', name:'RAG' },
+  { id:'embeddings', cat:'auto', name:'Embeddings' },
+  { id:'vectordb', cat:'auto' },
+  { id:'pipelines', cat:'auto' },
+  { id:'hitl', cat:'auto', name:'Human-in-the-Loop' },
+  { id:'bpmn', cat:'auto', name:'BPMN' },
+  { id:'flowable', cat:'auto', name:'Flowable' },
+  { id:'claudecode', cat:'auto', name:'Claude Code' },
+  { id:'codex', cat:'auto', name:'Codex' },
+  { id:'livekit', cat:'auto', name:'LiveKit' },
+];
+// Связи: 'a: b c d' — узел a связан с b, c и d. Связь двусторонняя, повторы не страшны. Неизвестный id — предупреждение в консоли.
+const KN_LINKS = [
+  'java: oop collections streams concurrency jvm patterns spring jdbc maven gradle junit lombok',
+  'oop: patterns collections',
+  'streams: collections concurrency',
+  'jvm: concurrency',
+  'spring: boot springweb springdata springsec patterns',
+  'boot: springweb springdata springsec maven gradle junit lombok docker micro',
+  'springweb: rest openapi thymeleaf json',
+  'springdata: hibernate postgres',
+  'hibernate: jdbc sql',
+  'jdbc: sql',
+  'springsec: oauth',
+  'junit: mockito cicd',
+  'maven: gradle cicd',
+  'groovy: java gradle jmeter',
+  'vaadin: java boot springweb css',
+  'jasper: java jdbc sql',
+  'jmeter: java rest soap junit cicd',
+  'sap: java soap',
+
+  'rest: micro openapi oauth json webhooks postman node llmapi',
+  'micro: docker',
+  'sql: postgres pipelines',
+  'postgres: docker vectordb',
+  'docker: linux vps cicd',
+  'git: cicd',
+  'linux: vps',
+  'vps: n8n',
+  'json: webhooks js n8n',
+  'webhooks: n8n chatbots',
+  'oauth: n8n',
+  'postman: openapi soap graphql',
+  'soap: rest springweb',
+  'graphql: rest json react node',
+  'supabase: postgres sql rest oauth vectordb js',
+  'go: rest micro docker livekit',
+
+  'js: html css ts react node canvas n8n',
+  'html: css a11y thymeleaf i18n canvas',
+  'css: canvas',
+  'ts: react node',
+  'react: a11y i18n',
+  'angular: js ts rest i18n',
+
+  'strategy: oppmap process portfolio finance readiness governance roadmap change',
+  'oppmap: process portfolio',
+  'process: workflow roadmap',
+  'portfolio: finance roadmap',
+  'governance: gdpr aiact risk dataquality agentaudit',
+  'gdpr: aiact risk',
+  'risk: hitl llmapi',
+  'dataquality: pipelines rag',
+  'agentaudit: agents readiness',
+  'readiness: change roadmap',
+  'change: roadmap',
+
+  'agents: n8n workflow llmapi prompt assistants chatbots routing mas mcp rag hitl',
+  'n8n: workflow lowcode chatbots rag llmapi',
+  'workflow: lowcode hitl',
+  'llmapi: prompt embeddings mcp',
+  'prompt: cot assistants',
+  'assistants: chatbots',
+  'routing: mas',
+  'mas: mcp',
+  'rag: embeddings vectordb pipelines',
+  'embeddings: vectordb',
+  'bpmn: process workflow flowable',
+  'flowable: java boot rest workflow hitl',
+  'claudecode: agents llmapi mcp prompt git',
+  'codex: agents llmapi prompt git claudecode',
+  'livekit: agents llmapi chatbots webhooks',
+];
 
 /* ================= GEAR GEOMETRY ================= */
 function gearPath(teeth, pitchR, holeR = 0, depth = null) {
@@ -1274,7 +1618,7 @@ function buildCircuits() {
 /* ================= BINARY FIELD ================= */
 const cvs = $('#binary'), ctx = cvs.getContext('2d');
 let cols = [], bitRGB = '92,199,176', dpr = 1;
-function readTheme() { bitRGB = getComputedStyle(document.documentElement).getPropertyValue('--bit').trim() || bitRGB; }
+function readTheme() { bitRGB = getComputedStyle(document.documentElement).getPropertyValue('--bit').trim() || bitRGB; kgTheme(); }
 function buildBinary() {
   dpr = Math.min(devicePixelRatio || 1, 2);
   cvs.width = innerWidth * dpr; cvs.height = innerHeight * dpr;
@@ -1332,6 +1676,7 @@ function loop(now) {
     for (const g of c.gears) g.el.setAttribute('transform', `translate(${g.x.toFixed(1)} ${g.y.toFixed(1)}) rotate(${(baseAngle * g.ratio + g.phase).toFixed(2)})`);
   }
   if (!RM) drawBinary(dt); else if (!loop._drawn) { drawBinary(0); loop._drawn = true; }
+  if (slides[current] === knSlide) kgFrame(dt);
   requestAnimationFrame(loop);
 }
 
@@ -1385,6 +1730,7 @@ function enterSlide(i) {
   $$('[data-bits]', s).forEach(scrambleBits);
   $$('[data-count]', s).forEach(countUp);
   if (s.id === 'certs') layoutCerts();
+  if (s === knSlide) kgEnter();
   const sc = $('.slide-scroll', s); if (sc) sc.scrollTop = 0;
 }
 
@@ -1430,6 +1776,7 @@ addEventListener('wheel', e => {
   if (slides[current].id === 'projects' && Math.abs(e.deltaX) > Math.abs(e.deltaY) && e.target.closest('#carousel')) { e.preventDefault(); carWheel(e.deltaX); return; }
   if (e.target.closest('.jobs') && Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
   if (e.target.closest('textarea')) return;
+  if (canScroll(e.target.closest('.kn-list,.kn-card'), e.deltaY)) return;
   if (canScroll($('.slide-scroll', slides[current]), e.deltaY)) return;
   e.preventDefault();
   const now = performance.now();
@@ -1442,11 +1789,13 @@ addEventListener('wheel', e => {
 let ts = null;
 addEventListener('touchstart', e => {
   if (modalOpen() || e.touches.length > 1 || e.target.closest('.chat')) { ts = null; return; }
-  const sc = $('.slide-scroll', slides[current]);
-  ts = { x: e.touches[0].clientX, y: e.touches[0].clientY, top: sc.scrollTop <= 2, bottom: sc.scrollTop + sc.clientHeight >= sc.scrollHeight - 2, inCar: !!e.target.closest('#carousel,.jobs,input[type=range]') };
+  const sc = $('.slide-scroll', slides[current]), inner = e.target.closest('.kn-list,.kn-card');
+  const atTop = el => el.scrollTop <= 2, atBottom = el => el.scrollTop + el.clientHeight >= el.scrollHeight - 2;
+  ts = { x: e.touches[0].clientX, y: e.touches[0].clientY, top: atTop(sc) && (!inner || atTop(inner)), bottom: atBottom(sc) && (!inner || atBottom(inner)),
+    inCar: !!e.target.closest('#carousel,.jobs,input[type=range]'), lock: !!e.target.closest('#kgraph') };
 }, { passive: true });
 addEventListener('touchend', e => {
-  if (!ts) return;
+  if (!ts || ts.lock) { ts = null; return; }
   const t = e.changedTouches[0], dx = t.clientX - ts.x, dy = t.clientY - ts.y;
   if (Math.abs(dy) > 70 && Math.abs(dy) > Math.abs(dx) * 1.3) {
     if (dy < 0 && ts.bottom) goTo(current + 1);
@@ -1457,7 +1806,7 @@ addEventListener('touchend', e => {
 
 // keyboard
 addEventListener('keydown', e => {
-  if (e.key === 'Escape') { if (chatOpen()) toggleChat(false); else closeAllModals(); return; }
+  if (e.key === 'Escape') { if (chatOpen()) toggleChat(false); else if (modalOpen()) closeAllModals(); else kgClear(); return; }
   if (modalOpen()) {
     if ($('#pm').classList.contains('open')) { if (e.key === 'ArrowRight') pmStep(1); if (e.key === 'ArrowLeft') pmStep(-1); }
     return;
@@ -1540,6 +1889,486 @@ $$('.job').forEach(j => {
   j.addEventListener('keydown', e => { if (e.key === 'Enter') j.click(); });
   j.addEventListener('mouseenter', () => kick($('.job-gear g', j), 90));
 });
+
+/* ================= KNOWLEDGE GRAPH ================= */
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[c]);
+const hex2rgb = h => { h = h.trim().replace('#', ''); if (h.length === 3) h = h.replace(/./g, '$&$&'); const n = parseInt(h, 16) || 0; return `${n >> 16 & 255},${n >> 8 & 255},${n & 255}`; };
+// 3×3 matrices, row-major
+const m3 = (a, b) => [
+  a[0]*b[0] + a[1]*b[3] + a[2]*b[6], a[0]*b[1] + a[1]*b[4] + a[2]*b[7], a[0]*b[2] + a[1]*b[5] + a[2]*b[8],
+  a[3]*b[0] + a[4]*b[3] + a[5]*b[6], a[3]*b[1] + a[4]*b[4] + a[5]*b[7], a[3]*b[2] + a[4]*b[5] + a[5]*b[8],
+  a[6]*b[0] + a[7]*b[3] + a[8]*b[6], a[6]*b[1] + a[7]*b[4] + a[8]*b[7], a[6]*b[2] + a[7]*b[5] + a[8]*b[8]];
+const m3rot = (x, y, z, a) => { // rotation by angle a around the unit axis (x, y, z) — Rodrigues
+  const c = Math.cos(a), s = Math.sin(a), k = 1 - c;
+  return [c + x*x*k, x*y*k - z*s, x*z*k + y*s, y*x*k + z*s, c + y*y*k, y*z*k - x*s, z*x*k - y*s, z*y*k + x*s, c + z*z*k];
+};
+const m3v = (M, p) => [M[0]*p[0] + M[1]*p[1] + M[2]*p[2], M[3]*p[0] + M[4]*p[1] + M[5]*p[2], M[6]*p[0] + M[7]*p[1] + M[8]*p[2]];
+function m3ortho(m) { // re-orthonormalize: float drift after thousands of rotations
+  let [a0, a1, a2, b0, b1, b2] = m, l = Math.hypot(a0, a1, a2);
+  a0 /= l; a1 /= l; a2 /= l;
+  const d = a0*b0 + a1*b1 + a2*b2; b0 -= d*a0; b1 -= d*a1; b2 -= d*a2;
+  l = Math.hypot(b0, b1, b2); b0 /= l; b1 /= l; b2 /= l;
+  return [a0, a1, a2, b0, b1, b2, a1*b2 - a2*b1, a2*b0 - a0*b2, a0*b1 - a1*b0];
+}
+
+// model: nodes with neighbours, deduplicated edges
+const KN = (() => {
+  const byId = new Map();
+  const nodes = KN_NODES.map((d, i) => {
+    const n = { id: d.id, cat: d.cat, ci: KN_CATS.indexOf(d.cat), hub: !!d.hub, label: d.name, i, nb: [], edges: [], w: {} };
+    if (n.ci < 0) console.warn('KN_NODES: unknown section', d.cat, 'for', d.id);
+    Object.defineProperty(n, 'title', { get: () => n.label ?? t('kn.n.' + n.id) });
+    byId.set(d.id, n);
+    return n;
+  });
+  const edges = [], seen = new Set();
+  KN_LINKS.forEach(line => {
+    const [a, rest = ''] = line.split(':'), A = byId.get(a.trim());
+    rest.trim().split(/\s+/).filter(Boolean).forEach(b => {
+      const B = byId.get(b);
+      if (!A || !B || A === B) { console.warn('KN_LINKS: bad link', a.trim(), '→', b); return; }
+      const key = Math.min(A.i, B.i) + '-' + Math.max(A.i, B.i);
+      if (seen.has(key)) return;
+      seen.add(key);
+      const e = { a: A, b: B };
+      edges.push(e); A.nb.push(B); B.nb.push(A); A.edges.push(e); B.edges.push(e);
+    });
+  });
+  nodes.forEach(n => { n.deg = n.nb.length; n.hood = new Set([n, ...n.nb]); });
+  const byCat = Object.fromEntries(KN_CATS.map(k => [k, new Set(nodes.filter(n => n.cat === k))]));
+  return { nodes, edges, byId, byCat, order: nodes.slice() };
+})();
+
+// 3D layout: seeded force simulation — springs on links, repulsion between all nodes,
+// every section pulled to its own anchor on a ring, so auto-rotation shows the areas in turn
+(() => {
+  let seed = 20260927;
+  const rnd = () => { seed = seed + 0x6D2B79F5 | 0; let x = Math.imul(seed ^ seed >>> 15, 1 | seed); x = x + Math.imul(x ^ x >>> 7, 61 | x) ^ x; return ((x ^ x >>> 14) >>> 0) / 4294967296; };
+  const { nodes, edges } = KN, n = nodes.length, K = KN_CATS.length, IT = 360;
+  const anc = KN_CATS.map((_, i) => { const a = i / K * Math.PI * 2; return [Math.cos(a) * .78, i % 2 ? .3 : -.3, Math.sin(a) * .78]; });
+  const P = nodes.map(nd => { const a = anc[nd.ci] || [0, 0, 0]; return a.map(v => v * .8 + (rnd() - .5) * .5); });
+  const V = nodes.map(() => [0, 0, 0]);
+  for (let it = 0; it < IT; it++) {
+    const F = nodes.map(() => [0, 0, 0]), heat = 1 - it / IT * .8;
+    for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) {
+      const dx = P[i][0] - P[j][0], dy = P[i][1] - P[j][1], dz = P[i][2] - P[j][2], f = .0012 / (dx*dx + dy*dy + dz*dz + .003);
+      F[i][0] += dx*f; F[i][1] += dy*f; F[i][2] += dz*f; F[j][0] -= dx*f; F[j][1] -= dy*f; F[j][2] -= dz*f;
+    }
+    for (const e of edges) {
+      const i = e.a.i, j = e.b.i, dx = P[j][0] - P[i][0], dy = P[j][1] - P[i][1], dz = P[j][2] - P[i][2];
+      const d = Math.hypot(dx, dy, dz) + 1e-6, f = (d - (e.a.cat === e.b.cat ? .3 : .6)) * .05 / d;
+      F[i][0] += dx*f; F[i][1] += dy*f; F[i][2] += dz*f; F[j][0] -= dx*f; F[j][1] -= dy*f; F[j][2] -= dz*f;
+    }
+    nodes.forEach((nd, i) => { // + pull to the section anchor (hubs sit deeper) + weak gravity to the centre
+      const a = anc[nd.ci] || [0, 0, 0], k = nd.hub ? .06 : .02, ar = nd.hub ? .6 : .85, p = P[i], v = V[i];
+      for (let c = 0; c < 3; c++) { v[c] = (v[c] + F[i][c] + (a[c] * ar - p[c]) * k - p[c] * .006) * .8; p[c] += v[c] * heat; }
+    });
+  }
+  const c = [0, 1, 2].map(k => P.reduce((s, p) => s + p[k], 0) / n);
+  P.forEach(p => { p[0] -= c[0]; p[1] -= c[1]; p[2] -= c[2]; });
+  const m = Math.max(...P.map(p => Math.hypot(p[0], p[1], p[2]))) || 1;
+  nodes.forEach((nd, i) => { nd.p = P[i].map(v => v / m); nd.ph = rnd() * 6.283; });
+})();
+
+// renderer: canvas 2D with a perspective projection; camera looks along −z, +z is towards the viewer
+const knSlide = $('#skills'), knStage = $('#knStage'), kgCvs = $('#kgraph'), kgC = kgCvs.getContext('2d');
+const knList = $('#knList'), knCard = $('#knCard'), knSearch = $('#knSearch'), knRot = $('#knRot');
+const KG_D = 4;
+const KG_FB = 'Onest, system-ui, sans-serif', KG_FD = "Tektur, 'Arial Black', sans-serif";
+const KG_M0 = m3(m3rot(1, 0, 0, -.32), m3rot(0, 1, 0, .5));
+const KG_RINGS = (() => { // armillary rings around the cloud: equator with ticks + a tilted meridian
+  const eq = [], mer = [], R = 1.16;
+  for (let i = 0; i <= 120; i++) { const a = i / 120 * Math.PI * 2, c = Math.cos(a), s = Math.sin(a); eq.push([c * R, 0, s * R]); mer.push([c * R * .64, s * R, c * R * .77]); }
+  return [eq, mer];
+})();
+let kgW = 0, kgH = 0, kgR = 100, kgDpr = 1, kgN = 0, kgT = 0, kgM = KG_M0.slice();
+let kgVx = 0, kgVy = 0, kgAuto = !RM, kgAutoK = 1, kgOver = false, kgAppear = 1, kgSx = 0, kgSy = 0, kgZ = 1, kgCardW = 0, kgCardH = 0;
+let kgSel = null, kgHover = null, kgCat = null, kgMatch = null, kgFocus = null, kgPtr = null;
+let kgInk = '22,32,43', kgBg = '230,234,238', kgBrass = '147,106,30', kgDark = false;
+const kgCol = {}, kgPulses = [];
+
+function kgTheme() {
+  const cs = getComputedStyle(document.documentElement);
+  KN_CATS.forEach(k => kgCol[k] = cs.getPropertyValue('--k-' + k).trim() || '128,128,128');
+  kgInk = hex2rgb(cs.getPropertyValue('--ink')); kgBg = hex2rgb(cs.getPropertyValue('--bg')); kgBrass = hex2rgb(cs.getPropertyValue('--brass'));
+  const [r, g, b] = kgBg.split(',').map(Number);
+  kgDark = r * .3 + g * .59 + b * .11 < 128;
+}
+function kgResize() {
+  const w = knStage.clientWidth, h = knStage.clientHeight;
+  if (!w || !h) return;
+  kgW = w; kgH = h; kgDpr = Math.min(devicePixelRatio || 1, 2);
+  kgCvs.width = Math.round(w * kgDpr); kgCvs.height = Math.round(h * kgDpr);
+  kgR = Math.min(w * (w < 500 ? .39 : .36), h * .43);
+  kgCardSize();
+}
+function kgCardSize() { kgCardW = knCard.offsetWidth; kgCardH = knCard.offsetHeight; }
+function kgSeedPulses() { // signals running along the links, like the circuit pulses in the background
+  kgPulses.length = 0;
+  if (RM || !KN.edges.length) return;
+  for (let i = 0, n = innerWidth < 700 ? 9 : 16; i < n; i++) {
+    const e = KN.edges[ri(0, KN.edges.length - 1)];
+    kgPulses.push({ e, from: Math.random() < .5 ? e.a : e.b, t: Math.random(), v: rand(.006, .013) });
+  }
+}
+function kgTextW(n, disp) { // label width at 100px, cached per language and font
+  const k = LANG + (disp ? 'd' : 'b');
+  if (n.w[k] == null) { kgC.font = disp ? `600 100px ${KG_FD}` : `500 100px ${KG_FB}`; n.w[k] = kgC.measureText(n.title).width; }
+  return n.w[k];
+}
+const kgCentroid = set => {
+  const c = [0, 0, 0];
+  set.forEach(n => { c[0] += n.p[0]; c[1] += n.p[1]; c[2] += n.p[2]; });
+  const l = Math.hypot(c[0], c[1], c[2]);
+  return l > .05 ? c.map(v => v / l) : null;
+};
+
+function kgFrame(dt) {
+  if (!kgW) { kgResize(); if (!kgW) return; }
+  const f = dt / 16.67, c = kgC, drag = !!(kgPtr && kgPtr.drag), sp = Math.abs(gSpeed);
+  kgN++; kgT += dt / 1000;
+  if (kgAppear < 1) kgAppear = RM ? 1 : Math.min(1, kgAppear + dt / 1500);
+  const ap = 1 - Math.pow(1 - kgAppear, 3);
+
+  // rotation: inertia + auto-spin; a focus target is turned to the front
+  const autoT = kgAuto && !kgSel && !kgCat && !kgMatch && !kgOver && !kgPtr ? 1 : 0;
+  kgAutoK += (autoT - kgAutoK) * Math.min(1, .05 * f);
+  if (!drag) {
+    const k = Math.pow(.93, f); kgVx *= k; kgVy *= k;
+    if (Math.abs(kgVx) < 1e-5) kgVx = 0;
+    if (Math.abs(kgVy) < 1e-5) kgVy = 0;
+    const ry = kgVx * f + (RM ? 0 : .0024 * f * kgAutoK * (1 + (sp - 1) * .45));
+    if (ry) kgM = m3(m3rot(0, 1, 0, ry), kgM);
+    if (kgVy) kgM = m3(m3rot(1, 0, 0, kgVy * f), kgM);
+    if (kgFocus) {
+      const [x, y, z] = m3v(kgM, kgFocus), s = Math.hypot(x, y), ang = Math.atan2(s, z);
+      if (ang > .002 && s > 1e-6) kgM = m3(m3rot(y / s, -x / s, 0, RM ? ang : ang * (1 - Math.pow(.9, f))), kgM);
+    }
+  }
+  if (kgN % 120 === 0) kgM = m3ortho(kgM);
+
+  // the open info card pushes the cloud aside: to the right on wide stages, up on narrow ones
+  let tx = 0, ty = 0;
+  if (kgSel) { if (kgCardW < kgW * .6) tx = Math.min(kgCardW / 2 + 8, kgW * .2); else ty = -Math.min(kgCardH / 2, kgH * .24); }
+  const ks = RM ? 1 : Math.min(1, .07 * f);
+  kgSx += (tx - kgSx) * ks; kgSy += (ty - kgSy) * ks;
+  kgZ += ((kgCat || (kgMatch && !kgSel) ? 1.22 : 1) - kgZ) * ks; // zoom in on a focused section / search result
+
+  // projection
+  const M = kgM, cx = kgW / 2 + kgSx, cy = kgH / 2 + kgSy, R = kgR * kgZ, br = RM ? 0 : .016;
+  for (const n of KN.nodes) {
+    const p = n.p, px = p[0] + Math.sin(kgT * .9 + n.ph) * br, py = p[1] + Math.cos(kgT * .7 + n.ph * 1.3) * br, pz = p[2] + Math.sin(kgT * .8 + n.ph * .7) * br;
+    const z = (M[6]*px + M[7]*py + M[8]*pz) * ap, s = KG_D / (KG_D - z);
+    n.x = cx + (M[0]*px + M[1]*py + M[2]*pz) * ap * R * s; n.y = cy + (M[3]*px + M[4]*py + M[5]*pz) * ap * R * s;
+    n.z = z; n.s = s; n.d = (z + 1) / 2;
+  }
+  const proj = p => { const [x, y, z] = m3v(M, p), s = KG_D / (KG_D - z * ap); return [cx + x * ap * R * s, cy + y * ap * R * s, (z / 1.16 + 1) / 2]; };
+
+  c.setTransform(kgDpr, 0, 0, kgDpr, 0, 0);
+  c.clearRect(0, 0, kgW, kgH);
+  c.lineCap = 'round';
+  const F = kgSel ? kgSel.hood : kgCat ? KN.byCat[kgCat] : kgMatch;
+  const hv = drag ? null : kgHover, H = hv ? hv.hood : null;
+
+  // armillary rings, batched by depth
+  const bk = [[], [], [], [], []];
+  const seg = (a, b) => bk[Math.max(0, Math.min(4, Math.floor((a[2] + b[2]) / 2 * 5)))].push(a[0], a[1], b[0], b[1]);
+  for (const ring of KG_RINGS) { let prev = proj(ring[0]); for (let i = 1; i < ring.length; i++) { const q = proj(ring[i]); seg(prev, q); prev = q; } }
+  KG_RINGS[0].forEach((p, i) => { if (i % 4 || i === 120) return; const L = i % 12 ? 1.035 : 1.08; seg(proj(p), proj([p[0] * L, 0, p[2] * L])); });
+  c.lineWidth = 1;
+  bk.forEach((b, i) => {
+    if (!b.length) return;
+    const d = (i + .5) / 5;
+    c.strokeStyle = `rgba(${kgInk},${((.03 + .15 * d * d) * ap).toFixed(3)})`;
+    c.beginPath(); for (let k = 0; k < b.length; k += 4) { c.moveTo(b[k], b[k + 1]); c.lineTo(b[k + 2], b[k + 3]); } c.stroke();
+  });
+  c.font = `500 9.5px ${'JetBrains Mono, monospace'}`; c.textAlign = 'center'; c.textBaseline = 'middle';
+  for (let i = 0; i < 120; i += 30) {
+    const p = KG_RINGS[0][i], q = proj([p[0] * 1.15, 0, p[2] * 1.15]);
+    if (q[2] < .45) continue;
+    c.fillStyle = `rgba(${kgBrass},${((q[2] - .45) * 1.3 * ap).toFixed(3)})`;
+    c.fillText(String(i * 3).padStart(3, '0') + '°', q[0], q[1]);
+  }
+  c.textAlign = 'left';
+
+  // links: colour of the section, gradient between sections
+  const kE = kgDark ? 1 : 1.35;
+  for (const e of KN.edges) {
+    const A = e.a, B = e.b, d = (A.d + B.d) / 2;
+    let st = 0;
+    if (kgSel) st = A === kgSel || B === kgSel ? 1 : F.has(A) && F.has(B) ? 0 : -1;
+    else if (F) st = F.has(A) && F.has(B) ? 1 : F.has(A) || F.has(B) ? 0 : -1;
+    let dim = 1;
+    if (hv) { if (A === hv || B === hv) st = 1; else dim = .45; }
+    let a = (.05 + .3 * d * d) * kE, lw = .5 + .9 * d;
+    if (st === 1) { a = .35 + .6 * d; lw = 1.1 + 1.2 * d; } else if (st === -1) a *= .15;
+    a *= dim * ap * ap;
+    if (a < .008) continue;
+    c.lineWidth = lw;
+    if (A.cat === B.cat) c.strokeStyle = `rgba(${kgCol[A.cat]},${a.toFixed(3)})`;
+    else {
+      const g = c.createLinearGradient(A.x, A.y, B.x, B.y);
+      g.addColorStop(0, `rgba(${kgCol[A.cat]},${a.toFixed(3)})`); g.addColorStop(1, `rgba(${kgCol[B.cat]},${a.toFixed(3)})`);
+      c.strokeStyle = g;
+    }
+    c.beginPath(); c.moveTo(A.x, A.y); c.lineTo(B.x, B.y); c.stroke();
+  }
+
+  // pulses: random walk over the graph; "burst" pulses fly out of a selected node once
+  if (!RM) for (let i = kgPulses.length - 1; i >= 0; i--) {
+    const p = kgPulses[i];
+    p.t += p.v * f * (1 + (sp - 1) * .3) * (kgAppear < 1 ? 0 : 1);
+    if (p.t >= 1) {
+      if (p.burst) { kgPulses.splice(i, 1); continue; }
+      const to = p.e.a === p.from ? p.e.b : p.e.a, opts = to.edges.length > 1 ? to.edges.filter(x => x !== p.e) : to.edges;
+      p.e = opts[ri(0, opts.length - 1)]; p.from = to; p.t -= 1;
+    }
+    const A = p.from, B = p.e.a === A ? p.e.b : p.e.a, col = kgCol[B.cat];
+    let w = 1;
+    if (!p.burst && F && !(F.has(A) && F.has(B))) w = .12;
+    if (!p.burst && hv && A !== hv && B !== hv) w *= .5;
+    for (let k = 3; k >= 0; k--) {
+      const tt = Math.max(0, p.t - k * .03), x = A.x + (B.x - A.x) * tt, y = A.y + (B.y - A.y) * tt;
+      const s = A.s + (B.s - A.s) * tt, a = (.2 + .8 * (A.d + (B.d - A.d) * tt)) * ap * w * (1 - k * .22);
+      c.fillStyle = k ? `rgba(${col},${(a * .7).toFixed(3)})` : kgDark ? `rgba(255,255,255,${a.toFixed(3)})` : `rgba(${col},${a.toFixed(3)})`;
+      c.beginPath(); c.arc(x, y, (k ? 1.7 - k * .25 : 1.5) * s * (p.burst ? 1.35 : 1), 0, 6.283); c.fill();
+    }
+  }
+
+  // nodes, back to front
+  const sm = kgW < 500 ? .85 : 1;
+  for (const n of KN.order.sort((a, b) => a.z - b.z)) {
+    const col = kgCol[n.cat], depthA = .15 + .85 * Math.pow(n.d, 1.4);
+    let em = false, w = 1;
+    if (F) { em = F.has(n); w = em ? 1 : .2; }
+    if (H) { if (H.has(n)) { em = true; w = 1; } else w *= .5; }
+    const A = (em ? Math.max(depthA, .65) : depthA * w) * Math.min(1, ap * 1.5);
+    const r = (2 + Math.sqrt(n.deg) * 1.1) * n.s * sm * (n === kgSel || n === hv ? 1.3 : 1);
+    n.r = r; n.em = em; n.A = A;
+    if (A > .25) {
+      const g = c.createRadialGradient(n.x, n.y, 0, n.x, n.y, r * 3.4);
+      g.addColorStop(0, `rgba(${col},${(A * (kgDark ? .34 : .2)).toFixed(3)})`); g.addColorStop(1, `rgba(${col},0)`);
+      c.fillStyle = g; c.beginPath(); c.arc(n.x, n.y, r * 3.4, 0, 6.283); c.fill();
+    }
+    c.fillStyle = `rgba(${col},${A.toFixed(3)})`;
+    c.beginPath(); c.arc(n.x, n.y, r, 0, 6.283); c.fill();
+    c.fillStyle = kgDark ? `rgba(255,255,255,${(A * .8).toFixed(3)})` : `rgba(${kgBg},${(A * .95).toFixed(3)})`;
+    c.beginPath(); c.arc(n.x, n.y, r * .4, 0, 6.283); c.fill();
+  }
+
+  // reticles: selected node gets a rotating lock, hovered one a ring
+  if (kgSel) {
+    const n = kgSel, rr = n.r + 9, a0 = kgT * 1.2;
+    c.lineWidth = 1.6; c.strokeStyle = `rgba(${kgBrass},.95)`;
+    for (let k = 0; k < 4; k++) { const a = a0 + k * Math.PI / 2; c.beginPath(); c.arc(n.x, n.y, rr, a, a + .7); c.stroke(); }
+    c.lineWidth = 1; c.setLineDash([2, 5]); c.strokeStyle = `rgba(${kgBrass},.55)`;
+    c.beginPath(); c.arc(n.x, n.y, rr + 7, -a0 * .5, -a0 * .5 + 6.283); c.stroke(); c.setLineDash([]);
+  }
+  if (hv && hv !== kgSel) { c.lineWidth = 1.3; c.strokeStyle = `rgba(${kgCol[hv.cat]},.9)`; c.beginPath(); c.arc(hv.x, hv.y, hv.r + 5, 0, 6.283); c.stroke(); }
+
+  // labels: front nodes, hubs and everything in focus; greedy placement without overlaps
+  const cands = [];
+  for (const n of KN.nodes) {
+    let pr;
+    if (n === kgSel) pr = 9; else if (n === hv) pr = 8;
+    else if (n.em) pr = 5 + n.d + n.hub;
+    else if (F) continue;
+    else if (n.hub) pr = 3 + n.d;
+    else if (n.d > .56) pr = 1 + n.d;
+    else continue;
+    n.lp = pr; cands.push(n);
+  }
+  cands.sort((a, b) => b.lp - a.lp);
+  const boxes = [];
+  c.textBaseline = 'middle'; c.lineJoin = 'round';
+  for (const n of cands) {
+    const top = n.lp >= 8, disp = top || n.hub;
+    const fs = (top ? 15 : n.hub ? 12.5 : 11.5) * (.82 + .3 * n.d) * (kgW < 500 ? .92 : 1);
+    const w = kgTextW(n, disp) * fs / 100, h = fs * 1.25, gap = n.r + (top ? 17 : 6);
+    let lx = n.x >= cx ? n.x + gap : n.x - gap - w;
+    if (lx < 6 || lx + w > kgW - 6) lx = n.x >= cx ? n.x - gap - w : n.x + gap;
+    lx = Math.max(6, Math.min(kgW - 6 - w, lx));
+    const box = [lx - 5, n.y - h / 2 - 2, w + 10, h + 4];
+    if (!top && boxes.some(q => q[0] < box[0] + box[2] && box[0] < q[0] + q[2] && q[1] < box[1] + box[3] && box[1] < q[1] + q[3])) continue;
+    boxes.push(box);
+    const a = (n.lp >= 5 ? 1 : n.hub ? .45 + .55 * n.d : Math.min(1, (n.d - .56) / .22)) * ap * ap;
+    if (top) {
+      c.fillStyle = `rgba(${kgBg},.88)`; c.strokeStyle = `rgba(${kgCol[n.cat]},.9)`; c.lineWidth = 1;
+      c.beginPath(); c.roundRect ? c.roundRect(box[0], box[1], box[2], box[3], 4) : c.rect(box[0], box[1], box[2], box[3]); c.fill(); c.stroke();
+    }
+    c.font = disp ? `600 ${fs.toFixed(1)}px ${KG_FD}` : `500 ${fs.toFixed(1)}px ${KG_FB}`;
+    if (!top) { c.lineWidth = 3; c.strokeStyle = `rgba(${kgBg},${(a * .7).toFixed(3)})`; c.strokeText(n.title, lx, n.y + .5); }
+    c.fillStyle = `rgba(${kgInk},${a.toFixed(3)})`;
+    c.fillText(n.title, lx, n.y + .5);
+  }
+
+  if (kgN % 6 === 0) {
+    const yaw = (Math.atan2(M[2], M[0]) * 180 / Math.PI + 360) % 360, pit = Math.asin(Math.max(-1, Math.min(1, M[7]))) * 180 / Math.PI;
+    knRot.textContent = `θ ${String(Math.round(yaw) % 360).padStart(3, '0')}° · φ ${pit < 0 ? '−' : '+'}${String(Math.abs(Math.round(pit))).padStart(2, '0')}°`;
+  }
+}
+
+// interaction
+function kgPick(px, py) {
+  let best = null;
+  for (const n of KN.nodes) {
+    if (n.A < .12) continue;
+    const rr = Math.max(10, n.r + 5), dx = px - n.x, dy = py - n.y;
+    if (dx * dx + dy * dy < rr * rr && (!best || n.z > best.z)) best = n;
+  }
+  return best;
+}
+function kgSetHover(n) {
+  if (n === kgHover) return;
+  kgHover = n;
+  kgCvs.classList.toggle('over', !!n);
+  $('#cursor').classList.toggle('hover', !!n && kgOver);
+  $$('.kn-it.hl', knList).forEach(x => x.classList.remove('hl'));
+  if (n) $(`.kn-it[data-id="${n.id}"]`, knList)?.classList.add('hl');
+}
+function kgSelect(n) {
+  if (!n) return;
+  kgSel = n; kgCat = null; kgFocus = n.p;
+  if (!RM) n.edges.forEach(e => kgPulses.push({ e, from: n, t: 0, v: .03, burst: true }));
+  gTarget = Math.max(gTarget, 2.5);
+  knSync(true, true);
+}
+function kgClear() {
+  if (!kgSel && !kgCat) return false;
+  kgSel = kgCat = null;
+  kgFocus = kgMatch ? kgCentroid(kgMatch) : null;
+  knSync();
+  return true;
+}
+function kgFocusCat(k) {
+  if (kgCat === k) { kgClear(); return; }
+  kgSel = null; kgCat = k; kgFocus = kgCentroid(KN.byCat[k]);
+  gTarget = Math.max(gTarget, 2.5);
+  knSync(true);
+}
+function kgEnter() { kgResize(); if (!RM) { kgAppear = 0; kgVx = .045; } }
+
+// table (list by section) and the info card
+function knListRender() {
+  knList.innerHTML = KN_CATS.map((k, ci) => {
+    const items = [...KN.byCat[k]].sort((a, b) => b.hub - a.hub || b.deg - a.deg || a.title.localeCompare(b.title, LANG));
+    return `<section class="kn-sec" style="--c:var(--k-${k})"><button class="kn-sec-h" type="button" data-cat="${k}" aria-pressed="false">` +
+      `<span class="kn-idx">${pad(ci + 1)}</span><span class="kn-sec-t">${esc(t('kn.cat.' + k))}</span><span class="kn-n">${pad(items.length)}</span></button>` +
+      `<div class="kn-items">${items.map(n => `<button class="kn-it${n.hub ? ' hub' : ''}" type="button" data-id="${n.id}" aria-pressed="false">${esc(n.title)}</button>`).join('')}</div></section>`;
+  }).join('') + `<p class="kn-empty" hidden>${esc(t('kn.empty'))}</p>`;
+  knFilter();
+  knSync();
+}
+function knFilter() {
+  const q = knSearch.value.trim().toLowerCase();
+  kgMatch = q ? new Set(KN.nodes.filter(n => n.title.toLowerCase().includes(q) || (n.label || '').toLowerCase().includes(q))) : null;
+  let any = false;
+  $$('.kn-sec', knList).forEach(sec => {
+    let vis = 0;
+    $$('.kn-it', sec).forEach(b => { const on = !kgMatch || kgMatch.has(KN.byId.get(b.dataset.id)); b.hidden = !on; vis += on; });
+    sec.hidden = !vis;
+    any = any || vis > 0;
+  });
+  $('.kn-empty', knList).hidden = any;
+  if (kgMatch && !kgMatch.size) kgMatch = null;
+  if (!kgSel && !kgCat) kgFocus = kgMatch ? kgCentroid(kgMatch) : null;
+}
+function knSync(scroll, anim) {
+  $$('.kn-it', knList).forEach(b => b.setAttribute('aria-pressed', b.dataset.id === kgSel?.id));
+  $$('.kn-sec-h', knList).forEach(b => b.setAttribute('aria-pressed', b.dataset.cat === kgCat));
+  knCardRender(anim);
+  const it = scroll && (kgSel ? $(`.kn-it[data-id="${kgSel.id}"]`, knList) : kgCat && $(`.kn-sec-h[data-cat="${kgCat}"]`, knList));
+  if (it && getComputedStyle(knList).overflowY === 'auto' && (it.offsetTop < knList.scrollTop + 10 || it.offsetTop + it.offsetHeight > knList.scrollTop + knList.clientHeight - 24))
+    knList.scrollTo({ top: it.offsetTop - knList.clientHeight / 2, behavior: RM ? 'auto' : 'smooth' });
+}
+function knCardRender(anim) {
+  const n = kgSel;
+  knCard.classList.toggle('show', !!n);
+  if (!n) return; // keep the old content while the card fades out
+  knCard.style.setProperty('--c', `var(--k-${n.cat})`);
+  const nb = n.nb.slice().sort((a, b) => b.deg - a.deg || a.title.localeCompare(b.title, LANG));
+  knCard.innerHTML = `<div class="kn-card-top"><i class="kn-dot"></i><span>${esc(t('kn.cat.' + n.cat))}</span><span class="deg">${esc(t('kn.deg').replace('{n}', n.deg))}</span>` +
+    `<button class="ibtn x" type="button" data-kn-close aria-label="${esc(t('aria.close'))}"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>` +
+    `<h3>${esc(n.title)}</h3><div class="kn-rel-l">${esc(t('kn.rel'))}</div>` +
+    `<div class="kn-rel">${nb.map(m => `<button type="button" data-id="${m.id}" style="--c:var(--k-${m.cat})"><i class="kn-dot"></i>${esc(m.title)}</button>`).join('')}</div>`;
+  if (anim && !RM) scrambleText($('h3', knCard), n.title, 450);
+  knCard.scrollTop = 0;
+  kgCardSize();
+}
+function kgLang() { knListRender(); }
+
+// pointer: drag rotates (with inertia), tap/click picks a node, tap on empty space clears
+const kgXY = e => { const r = kgCvs.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+kgCvs.addEventListener('pointerdown', e => {
+  if (e.button !== 0) return;
+  kgPtr = { id: e.pointerId, x0: e.clientX, y0: e.clientY, lx: e.clientX, ly: e.clientY, lt: performance.now(), drag: false, hit: kgPick(...kgXY(e)) };
+  kgVx = kgVy = 0;
+  kgCvs.setPointerCapture?.(e.pointerId);
+});
+kgCvs.addEventListener('pointermove', e => {
+  if (kgPtr && e.pointerId === kgPtr.id) {
+    const dx = e.clientX - kgPtr.lx, dy = e.clientY - kgPtr.ly;
+    if (!kgPtr.drag && Math.hypot(e.clientX - kgPtr.x0, e.clientY - kgPtr.y0) > 6) { kgPtr.drag = true; kgFocus = null; kgCvs.classList.add('drag'); kgSetHover(null); }
+    if (kgPtr.drag) {
+      const k = 1.9 / Math.max(260, Math.min(kgW, kgH));
+      kgM = m3(m3rot(1, 0, 0, -dy * k), m3(m3rot(0, 1, 0, dx * k), kgM));
+      kgVx = kgVx * .5 + dx * k * .5; kgVy = kgVy * .5 - dy * k * .5;
+      kgPtr.lx = e.clientX; kgPtr.ly = e.clientY; kgPtr.lt = performance.now();
+    }
+    return;
+  }
+  if (e.pointerType === 'mouse') kgSetHover(kgPick(...kgXY(e)));
+});
+const kgUp = e => {
+  if (!kgPtr || e.pointerId !== kgPtr.id) return;
+  if (!kgPtr.drag && e.type === 'pointerup') { const n = kgPtr.hit; if (n && n !== kgSel) kgSelect(n); else kgClear(); }
+  else if (performance.now() - kgPtr.lt > 90) kgVx = kgVy = 0;
+  kgCvs.classList.remove('drag');
+  kgPtr = null;
+};
+kgCvs.addEventListener('pointerup', kgUp);
+kgCvs.addEventListener('pointercancel', kgUp);
+kgCvs.addEventListener('pointerenter', () => { kgOver = true; });
+kgCvs.addEventListener('pointerleave', () => { kgOver = false; if (!kgPtr) kgSetHover(null); });
+
+function knHov(e) {
+  const it = e.target.closest('[data-id]');
+  if (!it) return;
+  if (e.type === 'pointerover' ? e.pointerType === 'mouse' : e.type === 'focusin' && it.matches(':focus-visible')) kgSetHover(KN.byId.get(it.dataset.id));
+  else if (e.type === 'pointerout' || e.type === 'focusout') kgSetHover(null);
+}
+[knList, knCard].forEach(el => ['pointerover', 'pointerout', 'focusin', 'focusout'].forEach(ev => el.addEventListener(ev, knHov)));
+knList.addEventListener('click', e => {
+  const it = e.target.closest('.kn-it'), h = e.target.closest('.kn-sec-h');
+  if (it) {
+    const n = KN.byId.get(it.dataset.id);
+    if (n === kgSel) kgClear(); else kgSelect(n);
+    if (kgSel && innerWidth <= 860) knStage.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'center' });
+  } else if (h) kgFocusCat(h.dataset.cat);
+});
+knCard.addEventListener('click', e => {
+  if (e.target.closest('[data-kn-close]')) { kgClear(); kgSetHover(null); return; }
+  const b = e.target.closest('[data-id]');
+  if (b) { kgSetHover(null); kgSelect(KN.byId.get(b.dataset.id)); }
+});
+knSearch.addEventListener('input', knFilter);
+knSearch.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  e.preventDefault();
+  const first = $('.kn-it:not([hidden])', knList);
+  if (first) kgSelect(KN.byId.get(first.dataset.id));
+});
+$('#knSpin').addEventListener('click', e => { kgAuto = !kgAuto; e.currentTarget.setAttribute('aria-pressed', kgAuto); });
+$('#knReset').addEventListener('click', () => {
+  kgSel = kgCat = null; knSearch.value = ''; knFilter();
+  kgM = KG_M0.slice(); kgVx = kgVy = 0;
+  if (!RM) { kgAppear = .3; gTarget = 3; }
+  knSync();
+});
+$('#knNodes').textContent = $('#knTotal').textContent = KN.nodes.length;
+$('#knLinks').textContent = KN.edges.length;
+if (window.ResizeObserver) new ResizeObserver(kgResize).observe(knStage);
+kgSeedPulses();
 
 /* ================= CERTIFICATES ================= */
 const certGal = $('#certGal'), certStage = $('#certStage');
@@ -1851,6 +2680,7 @@ function applyLang(l, animate) {
   pcards.forEach((c, i) => c.setAttribute('aria-label', PROJECTS[i].title));
   CERTS.forEach(c => c._el && c._el.setAttribute('aria-label', t('cert.open') + ': ' + c.title));
   selectCert(activeCert, !animate);
+  kgLang();
   $('#budgetOut').textContent = t('budgets')[+$('#budget').value];
   $('#txStatus').textContent = t(txState === 'done' ? 'f.delivered' : txState === 'fix' ? 'f.fix' : 'f.ready');
   if (!$('#send').classList.contains('sending')) $('#sendTxt').textContent = t('f.send');
@@ -1909,23 +2739,25 @@ msgsEl.addEventListener('click', e => { if (e.target.closest('[data-go]') && inn
 function fallbackAnswer(q) {
   const s = q.toLowerCase();
   const rules = [
-    [/цен|стоим|сколько|бюджет|price|cost|budget|rate|preis|kost/, 'fb.price', 4],
-    [/связ|контакт|почт|mail|telegram|contact|reach|kontakt|erreich|schreib/, 'fb.contact', 4],
-    [/сертиф|certif|zertif/, 'fb.certs', 2],
+    [/цен|стоим|сколько|бюджет|price|cost|budget|rate|preis|kost/, 'fb.price', 5],
+    [/связ|контакт|почт|mail|telegram|contact|reach|kontakt|erreich|schreib/, 'fb.contact', 5],
+    [/сертиф|certif|zertif/, 'fb.certs', 3],
+    [/знани|навык|технолог|стек|java|spring|n8n|skill|stack|technolog|kenntnis|fähigkeit|wissen/, 'fb.skills', 2],
     [/опыт|путь|работал|experience|career|erfahrung|werdegang/, 'fb.exp', 1],
-    [/проект|портфол|пример|project|portfolio|example|projekt|beispiel/, 'fb.projects', 3],
+    [/проект|портфол|пример|project|portfolio|example|projekt|beispiel/, 'fb.projects', 4],
     [/услуг|умее|делае|service|offer|what do you|leistung|angebot|dienst/, 'fb.services', 0],
   ];
   for (const [re, key, go] of rules) if (re.test(s)) return { text: t(key), go };
-  return { text: t('fb.default'), go: 4 };
+  return { text: t('fb.default'), go: 5 };
 }
 function buildPrompt() {
   const convo = chatLog.slice(-10).map(m => (m.who === 'me' ? 'Visitor: ' : 'Assistant: ') + m.text).join('\n');
   return `You are a friendly assistant on the portfolio website of a freelance developer named "${t('name.full')}". ` +
     `Services: software development, web development, AI automation. ` +
     `Certificates (real facts): ${CERTS.map(c => `${c.title} — ${c.org}, ${c.dateStr}`).join('; ')}. ` +
-    `Website sections: 0 = About, 1 = Experience, 2 = Certificates, 3 = Projects, 4 = Contact form. ` +
-    `Apart from the certificates, the website content is still placeholder text, so NEVER invent specific facts (prices, employers, clients, dates, project details). ` +
+    `Skills by area (real facts, from the knowledge graph): ${KN_CATS.map(k => `${t('kn.cat.' + k)}: ${[...KN.byCat[k]].map(n => n.title).join(', ')}`).join('; ')}. ` +
+    `Website sections: 0 = About, 1 = Experience, 2 = Skills (3D knowledge graph), 3 = Certificates, 4 = Projects, 5 = Contact form. ` +
+    `Apart from the certificates and the skills, the website content is still placeholder text, so NEVER invent specific facts (prices, employers, clients, dates, project details). ` +
     `For anything specific, suggest the contact form or the email hello@example.com. ` +
     `Reply ONLY in ${t('langName')}, at most 3 short sentences, plain text without markdown. ` +
     `If one website section is relevant, end your reply with exactly one tag like [[go:3]].\n\n` +
@@ -1980,7 +2812,7 @@ $('#chatForm').addEventListener('submit', e => { e.preventDefault(); sendChat(ch
 })();
 
 /* ================= INIT ================= */
-function buildAll() { buildGears(); buildCircuits(); buildBinary(); layoutCerts(); placeRoller(current, true); layoutCar(); }
+function buildAll() { buildGears(); buildCircuits(); buildBinary(); layoutCerts(); placeRoller(current, true); layoutCar(); kgResize(); }
 let rT; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(buildAll, 150); });
 matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => setTimeout(readTheme, 50));
 new MutationObserver(() => setTimeout(readTheme, 50)).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
@@ -1996,7 +2828,7 @@ current = fromHash >= 0 ? fromHash : 0;
 slides[current].classList.add('active');
 setActiveUI(current);
 requestAnimationFrame(() => { placeRoller(current, true); layoutCerts(); });
-document.fonts?.ready.then(() => { placeRoller(current, true); layoutCerts(); });
+document.fonts?.ready.then(() => { placeRoller(current, true); layoutCerts(); KN.nodes.forEach(n => n.w = {}); });
 requestAnimationFrame(loop);
 
 // boot sequence: shutters start closed, then open
