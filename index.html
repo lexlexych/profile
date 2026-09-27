@@ -14,7 +14,7 @@
   --ink:#16202B; --muted:#48525F; --line:rgba(22,32,43,.12); --line-strong:rgba(22,32,43,.3);
   --brass:#936A1E; --verd:#1C7B69; --brass-soft:rgba(147,106,30,.12); --verd-soft:rgba(28,123,105,.12);
   --grid:rgba(22,32,43,.05); --gear-fill:rgba(22,32,43,.035); --gear-stroke:rgba(22,32,43,.14);
-  --sh:#1A222C; --sh-ink:#E4E9EE; --danger:#B8412B;
+  --sh:#1A222C; --sh-ink:#E4E9EE; --danger:#B8412B; --logo-bg:#FFFFFF;
   --shadow:0 24px 60px -24px rgba(22,32,43,.35);
   --bit:28,123,105;
   --k-java:147,106,30; --k-back:44,98,146; --k-web:182,58,102; --k-ai:118,76,156; --k-auto:28,123,105;
@@ -32,7 +32,7 @@
     --ink:#E4E9EE; --muted:#A0ABB8; --line:rgba(160,190,200,.12); --line-strong:rgba(160,190,200,.28);
     --brass:#D4A24C; --verd:#5CC7B0; --brass-soft:rgba(212,162,76,.13); --verd-soft:rgba(92,199,176,.12);
     --grid:rgba(160,190,200,.04); --gear-fill:rgba(212,162,76,.03); --gear-stroke:rgba(212,162,76,.2);
-    --sh:#0C1117; --danger:#F07A5C;
+    --sh:#0C1117; --danger:#F07A5C; --logo-bg:#E8ECF0;
     --shadow:0 30px 80px -30px rgba(0,0,0,.85);
     --bit:92,199,176;
     --k-java:212,162,76; --k-back:108,166,222; --k-web:238,120,160; --k-ai:178,146,226; --k-auto:92,199,176;
@@ -43,7 +43,7 @@
   --ink:#E4E9EE; --muted:#A0ABB8; --line:rgba(160,190,200,.12); --line-strong:rgba(160,190,200,.28);
   --brass:#D4A24C; --verd:#5CC7B0; --brass-soft:rgba(212,162,76,.13); --verd-soft:rgba(92,199,176,.12);
   --grid:rgba(160,190,200,.04); --gear-fill:rgba(212,162,76,.03); --gear-stroke:rgba(212,162,76,.2);
-  --sh:#0C1117; --danger:#F07A5C;
+  --sh:#0C1117; --danger:#F07A5C; --logo-bg:#E8ECF0;
   --shadow:0 30px 80px -30px rgba(0,0,0,.85);
   --bit:92,199,176;
   --k-java:212,162,76; --k-back:108,166,222; --k-web:238,120,160; --k-ai:178,146,226; --k-auto:92,199,176;
@@ -218,41 +218,51 @@ body.not-first .scroll-hint{opacity:0}
 .stat b{font-family:var(--f-display);font-weight:800;font-size:26px;display:block;line-height:1}
 .stat span{font-size:12px;color:var(--muted)}
 
-/* ============ 2. JOURNEY ============ */
-.bus{position:relative}
-.bus-line{position:absolute;left:0;right:0;top:12px;height:2px;background:var(--line-strong);overflow:hidden}
-.bus-line::after{content:"";position:absolute;top:0;height:2px;width:180px;background:linear-gradient(90deg,transparent,var(--verd),transparent);animation:busflow 6.8s linear infinite}
+/* ============ 2. EXPERIENCE (TIMELINE) ============ */
+/* desktop: 14 columns, the line is the middle row; job i starts at column 2i+1 and spans 4, even jobs sit above the line, odd ones below.
+   --nx: node position from the card's left edge, --stem: distance card ↔ line */
+.tl{--stem:30px;--nx:30px;display:grid;grid-template-columns:repeat(14,minmax(0,1fr));grid-template-rows:auto calc(var(--stem) * 2) auto;column-gap:16px;position:relative}
+.tl-line{grid-column:1/-1;grid-row:2;align-self:center;height:2px;background:var(--line-strong);position:relative;overflow:hidden}
+.tl-line::after{content:"";position:absolute;top:0;left:-180px;height:2px;width:180px;background:linear-gradient(90deg,transparent,var(--verd),transparent);animation:busflow 6.8s linear infinite}
 @keyframes busflow{from{left:-180px}to{left:100%}}
-.jobs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;position:relative}
-.job-w{padding-top:40px;position:relative}
-.job-w::before{content:"";position:absolute;left:34px;top:26px;height:14px;width:1px;background:var(--line-strong)}
-.node{position:absolute;top:1px;left:23px;width:24px;height:24px;border:1px solid var(--line-strong);background:var(--bg);display:grid;place-items:center;transform:rotate(45deg);transition:.4s}
-.node i{width:8px;height:8px;background:var(--brass);transition:.4s}
-.job-w:hover .node,.job-w.open .node{border-color:var(--verd);box-shadow:0 0 18px var(--verd)}
-.job-w:hover .node i,.job-w.open .node i{background:var(--verd)}
-.job-w.now .node::after{content:"";position:absolute;inset:-7px;border:1px solid var(--verd);animation:ping 2s var(--ease-out) infinite}
+@keyframes busflowY{from{top:-180px}to{top:100%}}
+.tl-item{grid-column:var(--c)/span 4;position:relative;display:flex}
+.tl-item.up{grid-row:1}
+.tl-item.down{grid-row:3}
+.tl-item::before{content:"";position:absolute;left:var(--nx);width:1px;height:var(--stem);background:var(--line-strong);transition:background .4s}
+.tl-item.up::before{top:100%}
+.tl-item.down::before{bottom:100%}
+.tl-node{position:absolute;z-index:1;left:calc(var(--nx) - 10.5px);width:22px;height:22px;border:1px solid var(--line-strong);background:var(--bg);display:grid;place-items:center;transform:rotate(45deg);transition:.4s}
+.tl-node i{width:8px;height:8px;background:var(--brass);transition:.4s}
+.tl-item.up .tl-node{top:calc(100% + var(--stem) - 11px)}
+.tl-item.down .tl-node{bottom:calc(100% + var(--stem) - 11px)}
+.tl-item.now .tl-node::after{content:"";position:absolute;inset:-7px;border:1px solid var(--verd);animation:ping 2s var(--ease-out) infinite}
 @keyframes ping{from{transform:scale(.6);opacity:1}to{transform:scale(1.5);opacity:0}}
-.job{position:relative;height:clamp(250px,calc(100vh - 400px),360px);padding:20px 20px 16px;border:1px solid var(--line);background:var(--surface);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:8px;overflow:hidden;display:flex;flex-direction:column;cursor:pointer;transition:transform .5s var(--ease-out),border-color .3s,box-shadow .3s}
-.job-w:hover .job,.job-w.open .job{transform:translateY(-6px);border-color:var(--brass);box-shadow:var(--shadow)}
-.job-top{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--muted);position:relative;z-index:1}
-.job-top .period{font-family:var(--f-mono);font-size:11.5px;color:var(--brass)}
-.job h3{font-family:var(--f-display);font-size:clamp(16px,1.35vw,19px);font-weight:600;margin:18px 0 4px;line-height:1.2;position:relative;z-index:1}
-.job .company{font-size:13.5px;color:var(--verd);font-weight:600}
-.job p{font-size:13.5px;color:var(--muted);line-height:1.55;margin:12px 0}
+.tl-year{position:absolute;left:calc(var(--nx) + 20px);font-family:var(--f-mono);font-size:13px;font-weight:600;color:var(--brass);white-space:nowrap;line-height:1}
+.tl-item.up .tl-year{top:calc(100% + var(--stem) + 9px)}
+.tl-item.down .tl-year{bottom:calc(100% + var(--stem) + 9px)}
+.tl-item:hover::before{background:var(--verd)}
+.tl-item:hover .tl-node{border-color:var(--verd);box-shadow:0 0 18px var(--verd)}
+.tl-item:hover .tl-node i{background:var(--verd)}
+.job{flex:1;min-width:0;padding:16px 18px;border:1px solid var(--line);background:var(--surface);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:8px;display:flex;flex-direction:column;transition:transform .5s var(--ease-out),border-color .3s,box-shadow .3s}
+.tl-item:hover .job{border-color:var(--brass);box-shadow:var(--shadow)}
+.tl-item.up:hover .job{transform:translateY(-4px)}
+.tl-item.down:hover .job{transform:translateY(4px)}
+.job-head{display:flex;align-items:center;gap:12px}
+.job-logo{flex:none;width:40px;height:40px;padding:6px;border-radius:8px;background:var(--logo-bg);box-shadow:inset 0 0 0 1px var(--line);display:grid;place-items:center}
+.job-logo img{max-width:100%;max-height:100%;display:block}
+.job-logo.empty{background:none;box-shadow:none;border:1px dashed var(--line-strong)}
+.job-logo.icon{background:var(--brass-soft);color:var(--brass);padding:6px}
+.job-logo.icon svg{width:100%;height:100%;display:block;overflow:visible}
+.job-logo.icon .spark{fill:var(--verd)}
+.job h3{font-family:var(--f-display);font-size:clamp(15px,1.3vw,18px);font-weight:600;margin:0;line-height:1.15;min-width:0}
+.job h3 small{display:block;margin-top:3px;font-family:var(--f-body);font-size:12px;font-weight:500;color:var(--muted)}
+.job-when{display:none;font-family:var(--f-mono);font-size:11.5px;font-weight:600;color:var(--brass)}
+.job .company{margin-top:12px;font-size:13px;color:var(--verd);font-weight:600}
+.job p{font-size:13.5px;color:var(--muted);line-height:1.5;margin:6px 0 12px}
 .tags{display:flex;flex-wrap:wrap;gap:6px}
 .tags span{font-size:11.5px;padding:3px 9px;border:1px solid var(--line-strong);border-radius:20px}
 .job .tags{margin-top:auto}
-.job-hint{margin-top:12px;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
-.job-hint svg{width:14px;height:14px;transition:transform .4s}
-.job-w:hover .job-hint svg,.job-w.open .job-hint svg{transform:rotate(180deg)}
-.job-gear{position:absolute;right:-30px;top:-30px;width:96px;height:96px;color:var(--brass);opacity:.35}
-.job-drawer{position:absolute;left:0;right:0;bottom:0;height:64%;background:var(--surface-solid);border-top:1px solid var(--brass);padding:20px 20px 16px;transform:translateY(102%);transition:transform .6s var(--ease-out);z-index:2}
-.job-drawer::before{content:"";position:absolute;top:-8px;left:0;right:0;height:7px;background:repeating-linear-gradient(90deg,var(--brass) 0 6px,transparent 6px 13px)}
-.job-w:hover .job-drawer,.job-w.open .job-drawer{transform:none}
-.job-drawer h5{margin:0 0 10px;font-size:13px;font-weight:700}
-.job-drawer ul{margin:0;padding:0;list-style:none;display:grid;gap:8px;font-size:13px;color:var(--muted)}
-.job-drawer li{display:flex;gap:8px}
-.job-drawer li::before{content:"";flex:0 0 6px;height:6px;margin-top:7px;background:var(--verd);transform:rotate(45deg)}
 
 /* ============ 3. SKILLS (KNOWLEDGE GRAPH) ============ */
 .kn{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(300px,.85fr);gap:clamp(18px,2.6vw,40px);align-items:stretch}
@@ -577,9 +587,6 @@ body.not-first .scroll-hint{opacity:0}
 @media (max-width:1100px){
   .menu{display:none}
   .prefs.nav-dd{display:flex}
-  .jobs{grid-template-columns:repeat(4,minmax(230px,1fr));overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;scrollbar-width:thin}
-  .job-w{scroll-snap-align:start}
-  .bus-line{width:calc(4 * 250px)}
   .kn{grid-template-columns:minmax(0,1.3fr) minmax(270px,1fr)}
 }
 @media (max-width:860px){
@@ -602,6 +609,28 @@ body.not-first .scroll-hint{opacity:0}
   .ghost-num{display:none}
   .foot{position:static;margin-top:24px}
   .kn{grid-template-columns:1fr}
+  /* timeline turns vertical: the line in the middle, jobs alternate left / right and overlap by half a card */
+  .tl{--stem:16px;--ny:24px;grid-template-columns:1fr 1fr;grid-template-rows:none;column-gap:calc(var(--stem) * 2);row-gap:12px}
+  .tl-line{position:absolute;grid-area:auto;align-self:stretch;left:calc(50% - 1px);top:0;bottom:0;width:2px;height:auto}
+  .tl-line::after{left:0;top:-180px;width:2px;height:180px;background:linear-gradient(180deg,transparent,var(--verd),transparent);animation-name:busflowY}
+  .tl-item.up,.tl-item.down{grid-row:var(--r)/span 2;align-self:start}
+  .tl-item.up{grid-column:1}.tl-item.down{grid-column:2}
+  .tl-item::before,.tl-item.up::before,.tl-item.down::before{top:var(--ny);bottom:auto;width:var(--stem);height:1px}
+  .tl-item.up::before{left:100%}.tl-item.down::before{left:auto;right:100%}
+  .tl-item.up .tl-node,.tl-item.down .tl-node{top:calc(var(--ny) - 11px);bottom:auto}
+  .tl-item.up .tl-node{left:calc(100% + var(--stem) - 11px)}.tl-item.down .tl-node{left:auto;right:calc(100% + var(--stem) - 11px)}
+  .tl-year{display:none}
+  .tl-item.up:hover .job,.tl-item.down:hover .job{transform:none}
+  .job{position:relative;padding:24px 10px 12px}
+  /* name to the right of the logo, like on desktop; the year is pinned to the card's top right corner */
+  .job-head{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:8px;row-gap:3px;align-items:center}
+  .job-logo{width:32px;height:32px;padding:5px}
+  .job h3{font-size:13.5px;overflow-wrap:break-word}
+  .job h3 small{font-size:11px}
+  .job-when{display:block;position:absolute;top:8px;right:10px;font-size:11px;line-height:1}
+  .job .company{margin-top:8px;font-size:12.5px}
+  .job p{font-size:13px}
+  .tags span{font-size:11px;padding:2px 8px}
   .kn-stage{height:min(62vh,440px)}
   .kn-panel{height:auto}
   .kn-list{overflow:visible;-webkit-mask-image:none;mask-image:none}
@@ -707,7 +736,7 @@ body.not-first .scroll-hint{opacity:0}
     <nav class="menu" id="menu" data-i18n-aria="aria.sections">
       <span class="menu-thumb" id="menuThumb" aria-hidden="true"></span>
       <button data-go="0" data-i18n="nav.0">О себе</button>
-      <button data-go="1" data-i18n="nav.1">Путь</button>
+      <button data-go="1" data-i18n="nav.1">Опыт</button>
       <button data-go="2" data-i18n="nav.2">Знания</button>
       <button data-go="3" data-i18n="nav.3">Сертификаты</button>
       <button data-go="4" data-i18n="nav.4">Проекты</button>
@@ -718,7 +747,7 @@ body.not-first .scroll-hint{opacity:0}
         <button class="dd-btn" aria-haspopup="menu" aria-expanded="false" data-i18n-aria="aria.sections"><span class="dd-val" id="navVal">О себе</span><svg class="dd-car" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
         <div class="dd-menu" role="menu">
           <button role="menuitemradio" data-go="0" data-i18n="nav.0">О себе</button>
-          <button role="menuitemradio" data-go="1" data-i18n="nav.1">Путь</button>
+          <button role="menuitemradio" data-go="1" data-i18n="nav.1">Опыт</button>
           <button role="menuitemradio" data-go="2" data-i18n="nav.2">Знания</button>
           <button role="menuitemradio" data-go="3" data-i18n="nav.3">Сертификаты</button>
           <button role="menuitemradio" data-go="4" data-i18n="nav.4">Проекты</button>
@@ -817,8 +846,8 @@ body.not-first .scroll-hint{opacity:0}
     </div>
   </section>
 
-  <!-- 02 JOURNEY -->
-  <section class="slide" id="journey">
+  <!-- 02 EXPERIENCE -->
+  <section class="slide" id="experience">
     <div class="ghost-num" data-a="right">02</div>
     <div class="slide-scroll">
       <div class="wrap">
@@ -827,10 +856,7 @@ body.not-first .scroll-hint{opacity:0}
           <h2 class="s-title" data-i18n="path.title"></h2>
           <p class="s-sub" data-i18n="path.sub"></p>
         </div>
-        <div class="bus">
-          <div class="bus-line"></div>
-          <div class="jobs" id="jobs"></div>
-        </div>
+        <div class="tl" id="tl"></div>
       </div>
     </div>
   </section>
@@ -1082,6 +1108,7 @@ body.not-first .scroll-hint{opacity:0}
 'use strict';
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[c]);
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const rand = (a, b) => a + Math.random() * (b - a);
 const ri = (a, b) => Math.floor(rand(a, b + 1));
@@ -1092,8 +1119,8 @@ const I18N = {
   ru: {
     'aria.home':'На первый слайд','aria.sections':'Разделы','aria.lang':'Язык','aria.theme':'Тема','aria.prev':'Предыдущий проект','aria.next':'Следующий проект','aria.close':'Закрыть',
     'name.full':'Алексей Часовской','name.first':'Алексей','name.last':'Часовской','logo.sub':'Софт · веб · AI',
-    'nav.0':'О себе','nav.1':'Путь','nav.2':'Знания','nav.3':'Сертификаты','nav.4':'Проекты','nav.5':'Контакты',
-    'word.0':'ПРИВЕТ','word.1':'ПУТЬ','word.2':'ЗНАНИЯ','word.3':'СЕРТИФИКАТЫ','word.4':'ПРОЕКТЫ','word.5':'НА СВЯЗИ',
+    'nav.0':'О себе','nav.1':'Опыт','nav.2':'Знания','nav.3':'Сертификаты','nav.4':'Проекты','nav.5':'Контакты',
+    'word.0':'ПРИВЕТ','word.1':'ОПЫТ','word.2':'ЗНАНИЯ','word.3':'СЕРТИФИКАТЫ','word.4':'ПРОЕКТЫ','word.5':'НА СВЯЗИ',
     'theme.light':'Светлая тема','theme.dark':'Тёмная тема','theme.system':'Системная тема','scroll':'Листайте','peek.next':'Прокрутите ещё раз — дальше','peek.prev':'Прокрутите ещё раз — назад','peek.next.t':'Смахните ещё раз — дальше','peek.prev.t':'Смахните ещё раз — назад',
     'hero.photo':'Фото','hero.c1':'Открыт к проектам','hero.c2':'Работаю удалённо',
     'hero.lead':'Короткое описание: кто вы, с кем работаете и какую задачу клиента решаете. Две-три строки, не больше — подробности будут дальше в презентации.',
@@ -1103,9 +1130,10 @@ const I18N = {
     'more':'Подробнее','hero.b1':'Смотреть проекты','hero.b2':'Написать мне',
     'stat.0':'лет опыта','stat.1':'проектов','stat.2':'технологий',
     'roles':['разработка ПО','веб-разработка','AI-автоматизация','фриланс, открыт к проектам'],
-    'path.title':'Профессиональный путь','path.sub':'Наведите на карточку, чтобы выдвинуть панель с достижениями.',
-    'job.role':'Должность','job.company':'Компания','job.desc':'Короткое описание: чем занимались и за что отвечали.','job.tech':'Технология','job.ach':'Достижения',
-    'job.a0':'Результат с цифрой','job.a1':'Ключевой проект','job.a2':'Чему научился','job.now':'сейчас',
+    'path.title':'Профессиональный опыт','path.sub':'Сложные процессы, данные и корпоративные системы.',
+    'job.role':'Должность','job.tech':'Технология','job.yyyy':'ГГГГ',
+    'job.tsys':'Система и E2E-диагностика: интернет, ТВ и телефония.','job.datev':'Базы данных и миграция систем.','job.vw':'Privacy-портал: GDPR-запросы клиентов.',
+    'job.lean':'Управление строительными площадками.','job.aix':'ERP и автоматизация для производителей упаковки.',
     'job.free':'Фриланс','job.freeC':'Софт, веб и AI-автоматизация','job.freeD':'Короткое описание: с какими клиентами работаете сейчас.',
     'kn.title':'Сеть знаний','kn.sub':'Точки — технологии и компетенции, линии — связи между ними. Вращайте облако и выберите узел, чтобы увидеть его окружение.',
     'kn.hint':'тяните, чтобы вращать','kn.nodes':'узлов','kn.links':'связей','kn.deg':'связей: {n}','kn.rel':'Связано с',
@@ -1148,7 +1176,7 @@ const I18N = {
     'fb.contact':'Проще всего — через форму обратной связи или по email hello@example.com.',
     'fb.projects':'Примеры работ собраны в разделе «Проекты». Нажмите на карточку, чтобы открыть подробности.',
     'fb.skills':'Технологии и компетенции собраны в разделе «Знания»: Java и Spring, бэкенд, веб, AI-консалтинг, автоматизация и AI-агенты (n8n, RAG, мультиагентные системы).',
-    'fb.exp':'Опыт работы по годам — в разделе «Путь».','fb.certs':'Сертификаты: «Специалист по AI-автоматизации бизнеса» (Beam Institute, 600 ч), n8n Professional Certificate и Oracle Certified Professional: Java SE 11. Их можно открыть в разделе «Сертификаты».',
+    'fb.exp':'Опыт работы: T-Systems (Deutsche Telekom) — с 2014 года, DATEV — 2020, Volkswagen — 2021, LeanCodes — 2022, AixPano — 2023, с 2026 года — фриланс. Подробнее — в разделе «Опыт».','fb.certs':'Сертификаты: «Специалист по AI-автоматизации бизнеса» (Beam Institute, 600 ч), n8n Professional Certificate и Oracle Certified Professional: Java SE 11. Их можно открыть в разделе «Сертификаты».',
     'fb.default':'Чтобы ответить точно, лучше написать через форму — отвечу в течение дня.',
     'langName':'Russian'
   },
@@ -1166,9 +1194,10 @@ const I18N = {
     'more':'Details','hero.b1':'View projects','hero.b2':'Contact me',
     'stat.0':'years of experience','stat.1':'projects','stat.2':'technologies',
     'roles':['software development','web development','AI automation','freelance, open to projects'],
-    'path.title':'Professional experience','path.sub':'Hover a card to slide out its achievements panel.',
-    'job.role':'Position','job.company':'Company','job.desc':'Short description: what you did and what you were responsible for.','job.tech':'Technology','job.ach':'Achievements',
-    'job.a0':'A result with a number','job.a1':'Key project','job.a2':'What I learned','job.now':'now',
+    'path.title':'Professional experience','path.sub':'Complex processes, data and enterprise systems.',
+    'job.role':'Position','job.tech':'Technology','job.yyyy':'YYYY',
+    'job.tsys':'E2E diagnostics system for internet, TV and telephony.','job.datev':'Databases and system migration.','job.vw':'Privacy portal: customer GDPR requests.',
+    'job.lean':'Construction site management.','job.aix':'ERP and automation for packaging manufacturers.',
     'job.free':'Freelance','job.freeC':'Software, web & AI automation','job.freeD':'Short description: the kind of clients you work with now.',
     'kn.title':'Knowledge graph','kn.sub':'Points are technologies and skills, lines are the links between them. Rotate the cloud and pick a node to see what it connects to.',
     'kn.hint':'drag to rotate','kn.nodes':'nodes','kn.links':'links','kn.deg':'links: {n}','kn.rel':'Connected to',
@@ -1211,15 +1240,15 @@ const I18N = {
     'fb.contact':'The easiest way is the contact form or email hello@example.com.',
     'fb.projects':'Work examples are in the Projects section. Click a card to open the details.',
     'fb.skills':'All technologies and skills are in the Skills section: Java and Spring, backend, web, AI consulting, automation and AI agents (n8n, RAG, multi-agent systems).',
-    'fb.exp':'Work history by year is in the Experience section.','fb.certs':'Certificates: AI Business Automation Specialist (Beam Institute, 600 hours), n8n Professional Certificate and Oracle Certified Professional: Java SE 11. You can open them in the Certificates section.',
+    'fb.exp':'Work history: T-Systems (Deutsche Telekom) from 2014, DATEV 2020, Volkswagen 2021, LeanCodes 2022, AixPano 2023, freelance since 2026. More in the Experience section.','fb.certs':'Certificates: AI Business Automation Specialist (Beam Institute, 600 hours), n8n Professional Certificate and Oracle Certified Professional: Java SE 11. You can open them in the Certificates section.',
     'fb.default':'To give you a precise answer, please write via the form — I\u2019ll reply within a day.',
     'langName':'English'
   },
   de: {
     'aria.home':'Zur ersten Folie','aria.sections':'Abschnitte','aria.lang':'Sprache','aria.theme':'Design','aria.prev':'Vorheriges Projekt','aria.next':'Nächstes Projekt','aria.close':'Schließen',
     'name.full':'Aleksei Chasovskoi','name.first':'Aleksei','name.last':'Chasovskoi','logo.sub':'Software · Web · KI',
-    'nav.0':'Über mich','nav.1':'Werdegang','nav.2':'Kenntnisse','nav.3':'Zertifikate','nav.4':'Projekte','nav.5':'Kontakt',
-    'word.0':'HALLO','word.1':'WERDEGANG','word.2':'KENNTNISSE','word.3':'ZERTIFIKATE','word.4':'PROJEKTE','word.5':'KONTAKT',
+    'nav.0':'Über mich','nav.1':'Erfahrung','nav.2':'Kenntnisse','nav.3':'Zertifikate','nav.4':'Projekte','nav.5':'Kontakt',
+    'word.0':'HALLO','word.1':'ERFAHRUNG','word.2':'KENNTNISSE','word.3':'ZERTIFIKATE','word.4':'PROJEKTE','word.5':'KONTAKT',
     'theme.light':'Helles Design','theme.dark':'Dunkles Design','theme.system':'Systemdesign','scroll':'Scrollen','peek.next':'Nochmals scrollen — weiter','peek.prev':'Nochmals scrollen — zurück','peek.next.t':'Nochmals wischen — weiter','peek.prev.t':'Nochmals wischen — zurück',
     'hero.photo':'Foto','hero.c1':'Offen für Projekte','hero.c2':'Arbeite remote',
     'hero.lead':'Eine kurze Vorstellung: wer Sie sind, mit wem Sie arbeiten und welches Problem Sie für Kunden lösen. Höchstens zwei, drei Zeilen — Details folgen später.',
@@ -1229,9 +1258,10 @@ const I18N = {
     'more':'Details','hero.b1':'Projekte ansehen','hero.b2':'Schreiben Sie mir',
     'stat.0':'Jahre Erfahrung','stat.1':'Projekte','stat.2':'Technologien',
     'roles':['Softwareentwicklung','Webentwicklung','KI-Automatisierung','Freelancer, offen für Projekte'],
-    'path.title':'Beruflicher Werdegang','path.sub':'Fahren Sie über eine Karte, um die Erfolge auszuklappen.',
-    'job.role':'Position','job.company':'Unternehmen','job.desc':'Kurzbeschreibung: Aufgaben und Verantwortungsbereich.','job.tech':'Technologie','job.ach':'Erfolge',
-    'job.a0':'Ergebnis mit Zahl','job.a1':'Schlüsselprojekt','job.a2':'Was ich gelernt habe','job.now':'heute',
+    'path.title':'Berufserfahrung','path.sub':'Komplexe Prozesse, Daten und Unternehmenssysteme.',
+    'job.role':'Position','job.tech':'Technologie','job.yyyy':'JJJJ',
+    'job.tsys':'System und E2E-Diagnose für Internet, TV und Telefonie.','job.datev':'Datenbanken und Systemmigration.','job.vw':'Privacy-Portal: DSGVO-Anfragen von Kunden.',
+    'job.lean':'Baustellenmanagement.','job.aix':'ERP und Automatisierung für Verpackungshersteller.',
     'job.free':'Freelance','job.freeC':'Software, Web & KI-Automatisierung','job.freeD':'Kurzbeschreibung: mit welchen Kunden Sie aktuell arbeiten.',
     'kn.title':'Wissensnetz','kn.sub':'Punkte sind Technologien und Kompetenzen, Linien ihre Verbindungen. Drehen Sie die Wolke und wählen Sie einen Knoten, um sein Umfeld zu sehen.',
     'kn.hint':'ziehen zum Drehen','kn.nodes':'Knoten','kn.links':'Verbindungen','kn.deg':'Verbindungen: {n}','kn.rel':'Verbunden mit',
@@ -1274,7 +1304,7 @@ const I18N = {
     'fb.contact':'Am einfachsten über das Kontaktformular oder per E-Mail an hello@example.com.',
     'fb.projects':'Arbeitsbeispiele finden Sie unter „Projekte“. Klicken Sie auf eine Karte für Details.',
     'fb.skills':'Alle Technologien und Kompetenzen finden Sie unter „Kenntnisse“: Java und Spring, Backend, Web, KI-Beratung, Automatisierung und KI-Agenten (n8n, RAG, Multi-Agenten-Systeme).',
-    'fb.exp':'Der Werdegang nach Jahren steht im Abschnitt „Werdegang“.','fb.certs':'Zertifikate: KI-Business-Automatisierungs-Spezialist (Beam Institute, 600 UE), n8n Professional Certificate und Oracle Certified Professional: Java SE 11. Sie lassen sich im Abschnitt „Zertifikate“ öffnen.',
+    'fb.exp':'Berufserfahrung: T-Systems (Deutsche Telekom) ab 2014, DATEV 2020, Volkswagen 2021, LeanCodes 2022, AixPano 2023, seit 2026 Freelance. Mehr im Abschnitt „Erfahrung“.','fb.certs':'Zertifikate: KI-Business-Automatisierungs-Spezialist (Beam Institute, 600 UE), n8n Professional Certificate und Oracle Certified Professional: Java SE 11. Sie lassen sich im Abschnitt „Zertifikate“ öffnen.',
     'fb.default':'Für eine genaue Antwort schreiben Sie am besten über das Formular — ich antworte innerhalb eines Tages.',
     'langName':'German'
   }
@@ -1321,24 +1351,36 @@ const CERTS = [
   info:    { get: () => t('cert.' + c.key + '.i') },
   dateStr: { get: () => fmtDate(c.date) },
 }));
+// Места работы по порядку (слева направо по линии). name/parent — без перевода, описание — i18n-ключ job.<key>,
+// logo — файл в img/logos/, icon — вместо логотипа своя иконка (inline SVG в цветах темы), без обоих — пустая плашка.
+// from — год начала (без него — заглушка job.yyyy), now — текущая работа (пульсирующий узел).
+// Должность (job.role) и технологии (tags — число заглушек job.tech) — заглушки.
 const JOBS = [
-  { from:'2018', to:'2020', tags:2 },
-  { from:'2020', to:'2022', tags:3 },
-  { from:'2022', to:'2024', tags:2 },
-  { from:'2024', to:null, tags:3, free:true },
+  { key:'tsys',  name:'T-Systems', parent:'Deutsche Telekom', logo:'img/logos/t-systems.svg', from:'2014', tags:2 },
+  { key:'datev', name:'DATEV', logo:'img/logos/datev.svg', from:'2020', tags:2 },
+  { key:'vw',    name:'Volkswagen', logo:'img/logos/volkswagen.svg', from:'2021', tags:2 },
+  { key:'lean',  name:'LeanCodes', logo:'img/logos/leancodes.png', from:'2022', tags:2 },
+  { key:'aix',   name:'AixPano', logo:'img/logos/aixpano.svg', from:'2023', tags:2 },
+  { key:'free',  free:true, now:true, icon:'free', from:'2026', tags:2 },
 ];
-// jobs markup (texts are filled by applyLang)
-$('#jobs').innerHTML = JOBS.map((j, i) => `
-  <div class="job-w${j.free ? ' now' : ''}" data-a="up" style="--d:${i + 2}">
-    <div class="node"><i></i></div>
-    <article class="job" tabindex="0">
-      <svg class="job-gear" data-gear="14" data-spin="${i % 2 ? -0.25 : 0.25}" viewBox="-50 -50 100 100"></svg>
-      <div class="job-top"><span class="period">${j.from} — ${j.to ?? '<span data-i18n="job.now"></span>'}</span></div>
-      <h3 data-i18n="${j.free ? 'job.free' : 'job.role'}"></h3><div class="company" data-i18n="${j.free ? 'job.freeC' : 'job.company'}"></div>
-      <p data-i18n="${j.free ? 'job.freeD' : 'job.desc'}"></p>
+// freelance: a laptop with code on the screen and an AI spark
+const JOB_ICONS = {
+  free: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="5.5" width="17" height="11.5" rx="1.5"/><path d="M.5 20.5h19"/><path d="M7.6 9.2 5.6 11.25l2 2.05M12.4 9.2l2 2.05-2 2.05M10.9 8.6l-1.8 5.3"/><path class="spark" d="M20.8 0l.9 2.3 2.3.9-2.3.9-.9 2.3-.9-2.3-2.3-.9 2.3-.9z" stroke="none"/></svg>',
+};
+const yr = y => y ? esc(y) : '<span data-i18n="job.yyyy"></span>';
+// timeline markup (texts are filled by applyLang); --c: grid column on desktop, --r: grid row on mobile
+$('#tl').innerHTML = '<div class="tl-line" data-a="clip" style="--d:1"></div>' + JOBS.map((j, i) => `
+  <div class="tl-item ${i % 2 ? 'down' : 'up'}${j.now ? ' now' : ''}" data-a="${i % 2 ? 'fade' : 'up'}" style="--d:${i + 2};--c:${2 * i + 1};--r:${i + 1}">
+    <span class="tl-node"><i></i></span><span class="tl-year">${yr(j.from)}</span>
+    <article class="job">
+      <div class="job-head">
+        <span class="job-logo${j.logo ? '' : j.icon ? ' icon' : ' empty'}">${j.logo ? `<img src="${j.logo}" alt="${esc(j.name)}" loading="lazy">` : j.icon ? JOB_ICONS[j.icon] : ''}</span>
+        ${j.free ? '<h3 data-i18n="job.free"></h3>' : `<h3>${esc(j.name)}${j.parent ? `<small>${esc(j.parent)}</small>` : ''}</h3>`}
+        <span class="job-when">${yr(j.from)}</span>
+      </div>
+      <div class="company" data-i18n="${j.free ? 'job.freeC' : 'job.role'}"></div>
+      <p data-i18n="${j.free ? 'job.freeD' : 'job.' + j.key}"></p>
       <div class="tags">${'<span data-i18n="job.tech"></span>'.repeat(j.tags)}</div>
-      <div class="job-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 15l6-6 6 6"/></svg><span data-i18n="job.ach"></span></div>
-      <div class="job-drawer"><h5 data-i18n="job.ach"></h5><ul><li data-i18n="job.a0"></li><li data-i18n="job.a1"></li><li data-i18n="job.a2"></li></ul></div>
     </article>
   </div>`).join('');
 
@@ -1822,7 +1864,6 @@ function canScroll(el, dy) {
 addEventListener('wheel', e => {
   if (modalOpen() || e.target.closest('.chat')) return;
   if (slides[current].id === 'projects' && Math.abs(e.deltaX) > Math.abs(e.deltaY) && e.target.closest('#carousel')) { e.preventDefault(); carWheel(e.deltaX); return; }
-  if (e.target.closest('.jobs') && Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
   if (e.target.closest('textarea')) return;
   if (canScroll(e.target.closest('.kn-list,.kn-card'), e.deltaY)) return;
   if (canScroll($('.slide-scroll', slides[current]), e.deltaY)) return;
@@ -1847,7 +1888,7 @@ addEventListener('touchstart', e => {
   const sc = $('.slide-scroll', slides[current]), inner = e.target.closest('.kn-list,.kn-card');
   const atTop = el => el.scrollTop <= 2, atBottom = el => el.scrollTop + el.clientHeight >= el.scrollHeight - 2;
   ts = { x: e.touches[0].clientX, y: e.touches[0].clientY, top: atTop(sc) && (!inner || atTop(inner)), bottom: atBottom(sc) && (!inner || atBottom(inner)),
-    inCar: !!e.target.closest('#carousel,.jobs,input[type=range]'), lock: !!e.target.closest('#kgraph') };
+    inCar: !!e.target.closest('#carousel,input[type=range]'), lock: !!e.target.closest('#kgraph') };
 }, { passive: true });
 addEventListener('touchend', e => {
   if (!ts || ts.lock) { ts = null; return; }
@@ -1940,17 +1981,10 @@ function magnetic(el) {
   el.addEventListener('pointerleave', () => el.style.transform = '');
 }
 $$('.magnetic').forEach(magnetic);
-// chips & jobs toggle on tap
+// chips toggle on tap
 $$('.chip').forEach(c => c.addEventListener('click', () => { const o = c.classList.contains('open'); $$('.chip').forEach(x => x.classList.remove('open')); if (!o) c.classList.add('open'); }));
-$$('.job').forEach(j => {
-  const w = j.parentElement;
-  j.addEventListener('click', () => { const o = w.classList.contains('open'); $$('.job-w').forEach(x => x.classList.remove('open')); if (!o) w.classList.add('open'); });
-  j.addEventListener('keydown', e => { if (e.key === 'Enter') j.click(); });
-  j.addEventListener('mouseenter', () => kick($('.job-gear g', j), 90));
-});
 
 /* ================= KNOWLEDGE GRAPH ================= */
-const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[c]);
 const hex2rgb = h => { h = h.trim().replace('#', ''); if (h.length === 3) h = h.replace(/./g, '$&$&'); const n = parseInt(h, 16) || 0; return `${n >> 16 & 255},${n >> 8 & 255},${n & 255}`; };
 // 3×3 matrices, row-major
 const m3 = (a, b) => [
@@ -2701,7 +2735,7 @@ if (matchMedia('(pointer:fine)').matches) {
   let rx = 0, ry = 0;
   addEventListener('pointermove', e => { cur.classList.add('live'); mouse.x = e.clientX; mouse.y = e.clientY; dot.style.transform = `translate(${e.clientX}px,${e.clientY}px)`; });
   (function follow() { rx += (mouse.x - rx) * .18; ry += (mouse.y - ry) * .18; ring.style.transform = `translate(${rx.toFixed(1)}px,${ry.toFixed(1)}px)`; requestAnimationFrame(follow); })();
-  document.addEventListener('pointerover', e => cur.classList.toggle('hover', !!e.target.closest('a,button,label,.pcard,.cert,.chip,.job,input[type=range]')));
+  document.addEventListener('pointerover', e => cur.classList.toggle('hover', !!e.target.closest('a,button,label,.pcard,.cert,.chip,input[type=range]')));
   addEventListener('pointerdown', () => cur.classList.add('down'));
   addEventListener('pointerup', () => cur.classList.remove('down'));
 } else {
@@ -2866,8 +2900,9 @@ function buildPrompt() {
     `Services: software development, web development, AI automation. ` +
     `Certificates (real facts): ${CERTS.map(c => `${c.title} — ${c.org}, ${c.dateStr}`).join('; ')}. ` +
     `Skills by area (real facts, from the knowledge graph): ${KN_CATS.map(k => `${t('kn.cat.' + k)}: ${[...KN.byCat[k]].map(n => n.title).join(', ')}`).join('; ')}. ` +
+    `Work experience in this order, with the start year (real facts): ${JOBS.map(j => j.free ? `since ${j.from} freelance work` : `${j.from} ${j.name}${j.parent ? ` (${j.parent})` : ''} — ${t('job.' + j.key)}`).join('; ')}. ` +
     `Website sections: 0 = About, 1 = Experience, 2 = Skills (3D knowledge graph), 3 = Certificates, 4 = Projects, 5 = Contact form. ` +
-    `Apart from the certificates and the skills, the website content is still placeholder text, so NEVER invent specific facts (prices, employers, clients, dates, project details). ` +
+    `Apart from the certificates, the skills and the list of employers above, the website content is still placeholder text, so NEVER invent specific facts (prices, job titles, clients, other dates, project details). ` +
     `For anything specific, suggest the contact form or the email hello@example.com. ` +
     `Reply ONLY in ${t('langName')}, at most 3 short sentences, plain text without markdown. ` +
     `If one website section is relevant, end your reply with exactly one tag like [[go:3]].\n\n` +
