@@ -18,7 +18,7 @@
   --shadow:0 24px 60px -24px rgba(22,32,43,.35);
   --bit:28,123,105;
   --k-java:147,106,30; --k-back:44,98,146; --k-web:182,58,102; --k-ai:118,76,156; --k-auto:28,123,105;
-  --nav-h:78px;
+  --nav-h:66px;
   --ease:cubic-bezier(.76,0,.24,1); --ease-out:cubic-bezier(.16,1,.3,1);
   --f-display:'Tektur','Russo One','Arial Black',system-ui,sans-serif;
   --f-body:'Onest',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
@@ -83,23 +83,22 @@ button{font:inherit;color:inherit}
 .logo svg{width:36px;height:36px;color:var(--brass)}
 .logo b{font-family:var(--f-display);font-weight:800;font-size:15px;letter-spacing:.02em;display:block;line-height:1.1}
 .logo small{font-size:11.5px;color:var(--muted);display:block}
-.menu{position:relative;display:flex;gap:2px;padding-bottom:22px;margin-bottom:-14px}
-.menu button{all:unset;cursor:pointer;display:flex;align-items:baseline;gap:7px;padding:10px 14px;font-weight:600;font-size:14px;color:var(--muted);transition:color .3s;border-radius:4px}
-.menu button .n{font-family:var(--f-mono);font-size:10.5px;color:var(--brass)}
-.menu button:hover,.menu button.active{color:var(--ink)}
-.menu button:focus-visible{outline:1.5px dashed var(--verd)}
-.rack{position:absolute;left:8px;right:8px;bottom:4px;height:6px;border-top:1px solid var(--line-strong);
-  background:repeating-linear-gradient(90deg,var(--line-strong) 0 3px,transparent 3px 8px)}
-.roller{position:absolute;left:0;bottom:10px;width:20px;height:20px;color:var(--brass);transition:transform 1s var(--ease);will-change:transform}
-.roller svg{width:100%;height:100%;display:block}
-.menu-glow{position:absolute;bottom:4px;left:0;height:2px;background:var(--verd);box-shadow:0 0 10px var(--verd);transition:transform 1s var(--ease),width 1s var(--ease);transform-origin:left}
+/* main menu: pill of toggle buttons, the thumb slides under the active one */
+.menu{position:relative;display:flex;padding:3px;border:1px solid var(--line-strong);border-radius:30px;background:var(--surface)}
+.menu button{all:unset;cursor:pointer;position:relative;z-index:1;height:30px;display:flex;align-items:center;padding:0 15px;border-radius:20px;font-weight:600;font-size:13.5px;color:var(--muted);white-space:nowrap;transition:color .4s}
+.menu button:hover{color:var(--ink)}
+.menu button.active{color:var(--bg)}
+.menu button:focus-visible{outline:1.5px dashed var(--verd);outline-offset:2px}
+.menu-thumb{position:absolute;top:3px;left:0;height:30px;border-radius:20px;background:var(--ink);box-shadow:0 0 0 3px var(--brass-soft);transition:transform .7s var(--ease),width .7s var(--ease)}
+.menu-thumb::before,.menu-thumb::after{content:"";position:absolute;top:50%;width:3px;height:10px;margin-top:-5px;background:repeating-linear-gradient(180deg,var(--brass) 0 2px,transparent 2px 4px)}
+.menu-thumb::before{left:-5px}.menu-thumb::after{right:-5px}
+/* narrow screens: the menu turns into a dropdown panel on the left */
+.prefs.nav-dd{display:none;margin-right:auto}
+.nav-dd .dd-btn{font-family:var(--f-body);font-size:13.5px;padding:0 10px 0 14px}
+.nav-dd .dd-menu{left:-4px;right:auto}
 
 /* ============ HUD ============ */
 .hud{position:fixed;z-index:40;color:var(--muted);font-size:12px}
-.hud-l{left:clamp(16px,3vw,44px);bottom:calc(env(safe-area-inset-bottom,0px) + 22px);display:flex;align-items:center;gap:14px}
-.hud-l .num{font-family:var(--f-display);font-weight:800;font-size:30px;color:var(--ink);line-height:1;min-width:1.6em}
-.hud-l .of{font-family:var(--f-mono);font-size:11px}
-.hud-l .name{padding-left:14px;border-left:1px solid var(--line-strong)}
 .hud-r{right:clamp(10px,1.6vw,26px);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:16px;align-items:flex-end}
 .hud-r button{all:unset;cursor:pointer;display:flex;align-items:center;gap:10px}
 .hud-r .bits{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);opacity:0;transform:translateX(8px);transition:.4s var(--ease-out)}
@@ -571,25 +570,21 @@ body.not-first .scroll-hint{opacity:0}
 }
 
 /* ============ RESPONSIVE ============ */
-.menu button{white-space:nowrap}
 @media (max-width:1360px){
   .nav-inner{gap:16px}
-  .menu button{padding:10px 8px;gap:5px}
-}
-@media (max-width:1240px){
-  .menu button .n{display:none}
+  .menu button{padding:0 11px;font-size:13px}
 }
 @media (max-width:1100px){
-  .menu button .t{display:none}
-  .menu button .n{display:inline}
+  .menu{display:none}
+  .prefs.nav-dd{display:flex}
   .jobs{grid-template-columns:repeat(4,minmax(230px,1fr));overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;scrollbar-width:thin}
   .job-w{scroll-snap-align:start}
   .bus-line{width:calc(4 * 250px)}
   .kn{grid-template-columns:minmax(0,1.3fr) minmax(270px,1fr)}
 }
 @media (max-width:860px){
-  :root{--nav-h:66px}
-  .logo span,.hud-l,.scroll-hint{display:none}
+  :root{--nav-h:60px}
+  .logo span,.scroll-hint{display:none}
   .nav-inner{gap:10px}
   .chat{right:10px;left:10px;width:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 84px);height:min(560px,calc(100vh - 170px))}
   .hud-r{display:none}
@@ -614,7 +609,6 @@ body.not-first .scroll-hint{opacity:0}
   .kn-card.show~.kn-hint{opacity:0}
 }
 @media (max-width:520px){
-  .menu button{padding:10px 7px}
   .logo b{font-size:13px}
   .stats{gap:18px}
   .kn-hud{left:12px;top:10px;flex-direction:column}
@@ -711,16 +705,27 @@ body.not-first .scroll-hint{opacity:0}
       <span><b data-i18n="name.full">Алексей Часовской</b><small data-i18n="logo.sub">Софт · веб · AI</small></span>
     </button>
     <nav class="menu" id="menu" data-i18n-aria="aria.sections">
-      <button data-go="0"><span class="n">01</span><span class="t" data-i18n="nav.0">О себе</span></button>
-      <button data-go="1"><span class="n">02</span><span class="t" data-i18n="nav.1">Путь</span></button>
-      <button data-go="2"><span class="n">03</span><span class="t" data-i18n="nav.2">Знания</span></button>
-      <button data-go="3"><span class="n">04</span><span class="t" data-i18n="nav.3">Сертификаты</span></button>
-      <button data-go="4"><span class="n">05</span><span class="t" data-i18n="nav.4">Проекты</span></button>
-      <button data-go="5"><span class="n">06</span><span class="t" data-i18n="nav.5">Контакты</span></button>
-      <div class="rack"></div>
-      <div class="menu-glow" id="menuGlow"></div>
-      <div class="roller" id="roller"><svg data-gear="10" viewBox="-50 -50 100 100"></svg></div>
+      <span class="menu-thumb" id="menuThumb" aria-hidden="true"></span>
+      <button data-go="0" data-i18n="nav.0">О себе</button>
+      <button data-go="1" data-i18n="nav.1">Путь</button>
+      <button data-go="2" data-i18n="nav.2">Знания</button>
+      <button data-go="3" data-i18n="nav.3">Сертификаты</button>
+      <button data-go="4" data-i18n="nav.4">Проекты</button>
+      <button data-go="5" data-i18n="nav.5">Контакты</button>
     </nav>
+    <div class="prefs nav-dd">
+      <div class="dd" id="navDd">
+        <button class="dd-btn" aria-haspopup="menu" aria-expanded="false" data-i18n-aria="aria.sections"><span class="dd-val" id="navVal">О себе</span><svg class="dd-car" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="dd-menu" role="menu">
+          <button role="menuitemradio" data-go="0" data-i18n="nav.0">О себе</button>
+          <button role="menuitemradio" data-go="1" data-i18n="nav.1">Путь</button>
+          <button role="menuitemradio" data-go="2" data-i18n="nav.2">Знания</button>
+          <button role="menuitemradio" data-go="3" data-i18n="nav.3">Сертификаты</button>
+          <button role="menuitemradio" data-go="4" data-i18n="nav.4">Проекты</button>
+          <button role="menuitemradio" data-go="5" data-i18n="nav.5">Контакты</button>
+        </div>
+      </div>
+    </div>
     <div class="nav-right">
       <div class="prefs">
         <div class="dd" id="lang">
@@ -746,9 +751,6 @@ body.not-first .scroll-hint{opacity:0}
 </header>
 
 <!-- ========== HUD ========== -->
-<div class="hud hud-l" aria-hidden="true">
-  <span class="num" id="hudNum">01</span><span class="of">/ 06</span><span class="name" id="hudName"></span>
-</div>
 <div class="hud hud-r" id="hudR"></div>
 <div class="peek" id="peek" role="status" aria-live="polite"><span class="peek-arr" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></span><span class="peek-t"><span class="peek-k" id="peekK"></span><span class="peek-n" id="peekN"></span></span><span class="peek-bar" aria-hidden="true"></span></div>
 <div class="scroll-hint" aria-hidden="true"><i></i><span data-i18n="scroll">Листайте</span></div>
@@ -1721,29 +1723,25 @@ function loop(now) {
 const slides = $$('.slide');
 const N = slides.length;
 let current = 0, busy = false, lastNav = 0;
-const menu = $('#menu'), menuBtns = $$('#menu button'), roller = $('#roller'), glow = $('#menuGlow');
+const menu = $('#menu'), menuBtns = $$('#menu button'), menuThumb = $('#menuThumb');
 const shutter = $('#shutter');
 
 // HUD right: binary index
 $('#hudR').innerHTML = slides.map((s, i) => `<button data-go="${i}" aria-label="${t('nav.' + i)}"><span class="bits">${(i + 1).toString(2).padStart(3, '0')}</span><span class="pip"></span></button>`).join('');
 
-function placeRoller(i, instant) {
-  const b = menuBtns[i]; if (!b) return;
-  const mr = menu.getBoundingClientRect(), br = b.getBoundingClientRect();
-  const x = br.left - mr.left + br.width / 2 - 10;
-  const rot = x / 8 * 180 / Math.PI; // roll along rack: arc = r·θ
-  if (instant) { roller.style.transition = glow.style.transition = 'none'; }
-  roller.style.transform = `translateX(${x}px) rotate(${rot}deg)`;
-  glow.style.width = (br.width - 16) + 'px';
-  glow.style.transform = `translateX(${br.left - mr.left + 8}px)`;
-  if (instant) { roller.offsetWidth; roller.style.transition = glow.style.transition = ''; }
+function placeMenuThumb(i, instant) {
+  const b = menuBtns[i]; if (!b || !b.offsetWidth) return;
+  if (instant) menuThumb.style.transition = 'none';
+  menuThumb.style.width = b.offsetWidth + 'px';
+  menuThumb.style.transform = `translateX(${b.offsetLeft}px)`;
+  if (instant) { menuThumb.offsetWidth; menuThumb.style.transition = ''; }
 }
 function setActiveUI(i) {
   menuBtns.forEach((b, k) => { b.classList.toggle('active', k === i); b.setAttribute('aria-current', k === i ? 'true' : 'false'); });
   $$('#hudR button').forEach((b, k) => b.classList.toggle('active', k === i));
-  placeRoller(i);
-  $('#hudNum').textContent = pad(i + 1);
-  $('#hudName').textContent = t('nav.' + i);
+  placeMenuThumb(i);
+  $$('#navDd [data-go]').forEach((b, k) => b.setAttribute('aria-checked', k === i));
+  $('#navVal').textContent = t('nav.' + i);
   document.body.classList.toggle('not-first', i !== 0);
   history.replaceState(null, '', '#' + slides[i].id);
 }
@@ -2736,7 +2734,7 @@ function applyLang(l, animate) {
   $$('[data-i18n-ph]').forEach(el => el.setAttribute('placeholder', t(el.dataset.i18nPh)));
   // dynamic bits
   $$('#hudR button').forEach((b, i) => b.setAttribute('aria-label', t('nav.' + i)));
-  $('#hudName').textContent = t('nav.' + current);
+  $('#navVal').textContent = t('nav.' + current);
   dots.forEach((d, i) => d.setAttribute('aria-label', t('proj.n') + ' ' + (i + 1)));
   pcards.forEach((c, i) => c.setAttribute('aria-label', PROJECTS[i].title));
   CERTS.forEach(c => c._el && c._el.setAttribute('aria-label', t('cert.open') + ': ' + c.title));
@@ -2749,7 +2747,7 @@ function applyLang(l, animate) {
   if (pm.classList.contains('show')) { $('#pmMeta').textContent = `${PROJECTS[pmIdx].id} · ${PROJECTS[pmIdx].catName}`; $('#pmTitle').textContent = PROJECTS[pmIdx].title; }
   if (cm.classList.contains('show')) { const c = CERTS[activeCert]; $('#cmMeta').textContent = `${c.id} · ${c.org} · ${c.dateStr}`; $('#cmTitle').textContent = c.title; $('.cert-img', cm)?.setAttribute('alt', c.title); }
   chatLang();
-  setTimeout(() => placeRoller(current), animate ? 560 : 0);
+  setTimeout(() => placeMenuThumb(current), animate ? 560 : 0);
 }
 $$('#lang [data-lang]').forEach(b => b.addEventListener('click', () => {
   ddClose(true);
@@ -2792,6 +2790,7 @@ $$('.dd').forEach(dd => {
   });
 });
 document.addEventListener('pointerdown', e => { if (ddCur && !ddCur.contains(e.target)) ddClose(); });
+$$('#navDd [data-go]').forEach(b => b.addEventListener('click', () => ddClose(true)));
 
 /* ================= THEME ================= */
 function applyTheme(m) {
@@ -2923,7 +2922,7 @@ $('#chatForm').addEventListener('submit', e => { e.preventDefault(); sendChat(ch
 })();
 
 /* ================= INIT ================= */
-function buildAll() { buildGears(); buildCircuits(); buildBinary(); layoutCerts(); placeRoller(current, true); layoutCar(); kgResize(); }
+function buildAll() { buildGears(); buildCircuits(); buildBinary(); layoutCerts(); placeMenuThumb(current, true); layoutCar(); kgResize(); }
 let rT; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(buildAll, 150); });
 matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => setTimeout(readTheme, 50));
 new MutationObserver(() => setTimeout(readTheme, 50)).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
@@ -2938,8 +2937,8 @@ const fromHash = slides.findIndex(s => '#' + s.id === location.hash);
 current = fromHash >= 0 ? fromHash : 0;
 slides[current].classList.add('active');
 setActiveUI(current);
-requestAnimationFrame(() => { placeRoller(current, true); layoutCerts(); });
-document.fonts?.ready.then(() => { placeRoller(current, true); layoutCerts(); KN.nodes.forEach(n => n.w = {}); });
+requestAnimationFrame(() => { placeMenuThumb(current, true); layoutCerts(); });
+document.fonts?.ready.then(() => { placeMenuThumb(current, true); layoutCerts(); KN.nodes.forEach(n => n.w = {}); });
 requestAnimationFrame(loop);
 
 // boot sequence: shutters start closed, then open
