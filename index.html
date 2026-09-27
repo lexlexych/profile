@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Имя Фамилия — разработка ПО, веб и AI-автоматизация</title>
+<title>Алексей Часовской — разработка ПО, веб и AI-автоматизация</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400;600;800&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -93,9 +93,6 @@ button{font:inherit;color:inherit}
 .roller{position:absolute;left:0;bottom:10px;width:20px;height:20px;color:var(--brass);transition:transform 1s var(--ease);will-change:transform}
 .roller svg{width:100%;height:100%;display:block}
 .menu-glow{position:absolute;bottom:4px;left:0;height:2px;background:var(--verd);box-shadow:0 0 10px var(--verd);transition:transform 1s var(--ease),width 1s var(--ease);transform-origin:left}
-.nav-cta{all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;padding:10px 16px 10px 12px;border:1px solid var(--line-strong);border-radius:40px;font-weight:600;font-size:14px;transition:border-color .3s,background .3s}
-.nav-cta svg{width:22px;height:22px;color:var(--brass)}
-.nav-cta:hover{border-color:var(--brass);background:var(--brass-soft)}
 
 /* ============ HUD ============ */
 .hud{position:fixed;z-index:40;color:var(--muted);font-size:12px}
@@ -186,7 +183,7 @@ body.not-first .scroll-hint{opacity:0}
 .typer{margin:18px 0 0;font-family:var(--f-mono);font-size:clamp(14px,1.3vw,17px);color:var(--verd);min-height:1.6em}
 .typer .caret{display:inline-block;width:9px;height:1.1em;vertical-align:-3px;background:var(--verd);margin-left:3px;animation:blink 1s steps(1) infinite}
 .lead{color:var(--muted);font-size:clamp(14.5px,1.15vw,16.5px);max-width:52ch;margin:14px 0 0}
-.chips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:30px 0 26px}
+.chips{position:relative;z-index:5;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:30px 0 26px}
 .chip{position:relative;padding:16px 14px 14px;border:1px solid var(--line-strong);background:var(--surface);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:6px;cursor:pointer;transition:transform .45s var(--ease-out),border-color .3s,box-shadow .3s;outline-offset:4px}
 .chip::before,.chip::after{content:"";position:absolute;left:16px;right:16px;height:6px;background:repeating-linear-gradient(90deg,var(--line-strong) 0 4px,transparent 4px 10px);transition:background .3s}
 .chip::before{top:-7px}.chip::after{bottom:-7px}
@@ -556,7 +553,7 @@ body.not-first .scroll-hint{opacity:0}
 }
 
 /* ============ RESPONSIVE ============ */
-.menu button,.nav-cta{white-space:nowrap}
+.menu button{white-space:nowrap}
 @media (max-width:1360px){
   .nav-inner{gap:16px}
   .menu button{padding:10px 8px;gap:5px}
@@ -574,7 +571,7 @@ body.not-first .scroll-hint{opacity:0}
 }
 @media (max-width:860px){
   :root{--nav-h:66px}
-  .nav-cta span,.logo span,.hud-l,.scroll-hint{display:none}
+  .logo span,.hud-l,.scroll-hint{display:none}
   .nav-inner{gap:10px}
   .chat{right:10px;left:10px;width:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 84px);height:min(560px,calc(100vh - 170px))}
   .hud-r{display:none}
@@ -600,7 +597,6 @@ body.not-first .scroll-hint{opacity:0}
 }
 @media (max-width:520px){
   .menu button{padding:10px 7px}
-  .nav-cta{display:none}
   .lang{--lw:28px}
   .logo b{font-size:13px}
   .stats{gap:18px}
@@ -626,6 +622,7 @@ body.not-first .scroll-hint{opacity:0}
 .lang .thumb{position:absolute;top:3px;left:3px;width:var(--lw);height:28px;border-radius:20px;background:var(--ink);transition:transform .7s var(--ease);box-shadow:0 0 0 3px var(--brass-soft)}
 .lang .thumb::before,.lang .thumb::after{content:"";position:absolute;top:50%;width:3px;height:10px;margin-top:-5px;background:repeating-linear-gradient(180deg,var(--brass) 0 2px,transparent 2px 4px)}
 .lang .thumb::before{left:-5px}.lang .thumb::after{right:-5px}
+.lang.theme button svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 /* ============ CHATBOT ============ */
 .chat-fab{all:unset;cursor:pointer;position:fixed;z-index:70;right:clamp(14px,2vw,28px);bottom:calc(env(safe-area-inset-bottom,0px) + 18px);width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--bg);box-shadow:var(--shadow);transition:transform .4s var(--ease-out)}
 .chat-fab:hover{transform:scale(1.06)}
@@ -666,6 +663,7 @@ body.not-first .scroll-hint{opacity:0}
 .chat-form button:disabled{opacity:.4;cursor:default}
 .chat-form button svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2}
 </style>
+<script>try{var m=localStorage.getItem('pf-theme');if(m=='light'||m=='dark')document.documentElement.dataset.theme=m}catch(e){}</script>
 </head>
 <body>
 
@@ -682,7 +680,7 @@ body.not-first .scroll-hint{opacity:0}
   <div class="nav-inner">
     <button class="logo" data-go="0" data-i18n-aria="aria.home">
       <svg data-gear="12" data-spin="0.6" viewBox="-50 -50 100 100"></svg>
-      <span><b data-i18n="name.full">Имя Фамилия</b><small data-i18n="logo.sub">Софт · веб · AI</small></span>
+      <span><b data-i18n="name.full">Алексей Часовской</b><small data-i18n="logo.sub">Софт · веб · AI</small></span>
     </button>
     <nav class="menu" id="menu" data-i18n-aria="aria.sections">
       <button data-go="0"><span class="n">01</span><span class="t" data-i18n="nav.0">О себе</span></button>
@@ -702,9 +700,12 @@ body.not-first .scroll-hint{opacity:0}
         <button data-lang="en" lang="en" aria-label="English">EN</button>
         <button data-lang="ru" lang="ru" aria-label="Русский">RU</button>
       </div>
-      <button class="nav-cta magnetic" data-go="5" data-spinhost>
-        <svg data-gear="10" data-spin="1" viewBox="-50 -50 100 100"></svg><span data-i18n="cta">Обсудить проект</span>
-      </button>
+      <div class="lang theme" id="theme" role="group" data-i18n-aria="aria.theme">
+        <span class="thumb"></span>
+        <button data-theme-opt="light" data-i18n-aria="theme.light"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+        <button data-theme-opt="dark" data-i18n-aria="theme.dark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
+        <button data-theme-opt="system" data-i18n-aria="theme.system"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></button>
+      </div>
     </div>
   </div>
 </header>
@@ -742,7 +743,7 @@ body.not-first .scroll-hint{opacity:0}
           </div>
         </div>
         <div>
-          <div data-a="clip" style="--d:2"><h1 class="hero-name"><span data-i18n="name.first">Имя</span><span class="l2" data-i18n="name.last">Фамилия</span></h1></div>
+          <div data-a="clip" style="--d:2"><h1 class="hero-name"><span data-i18n="name.first">Алексей</span><span class="l2" data-i18n="name.last">Часовской</span></h1></div>
           <div data-a="fade" style="--d:4"><p class="typer" aria-live="polite">&gt; <span id="typed"></span><span class="caret"></span></p></div>
           <div data-a="up" style="--d:5"><p class="lead" data-i18n="hero.lead"></p></div>
           <div class="chips" data-a="up" style="--d:6">
@@ -1051,11 +1052,11 @@ const pad = n => String(n).padStart(2, '0');
 /* ================= I18N ================= */
 const I18N = {
   ru: {
-    'aria.home':'На первый слайд','aria.sections':'Разделы','aria.lang':'Язык','aria.prev':'Предыдущий проект','aria.next':'Следующий проект','aria.close':'Закрыть',
-    'name.full':'Имя Фамилия','name.first':'Имя','name.last':'Фамилия','logo.sub':'Софт · веб · AI',
+    'aria.home':'На первый слайд','aria.sections':'Разделы','aria.lang':'Язык','aria.theme':'Тема','aria.prev':'Предыдущий проект','aria.next':'Следующий проект','aria.close':'Закрыть',
+    'name.full':'Алексей Часовской','name.first':'Алексей','name.last':'Часовской','logo.sub':'Софт · веб · AI',
     'nav.0':'О себе','nav.1':'Путь','nav.2':'Знания','nav.3':'Сертификаты','nav.4':'Проекты','nav.5':'Контакты',
     'word.0':'ПРИВЕТ','word.1':'ПУТЬ','word.2':'ЗНАНИЯ','word.3':'СЕРТИФИКАТЫ','word.4':'ПРОЕКТЫ','word.5':'НА СВЯЗИ',
-    'cta':'Обсудить проект','scroll':'Листайте',
+    'theme.light':'Светлая тема','theme.dark':'Тёмная тема','theme.system':'Системная тема','scroll':'Листайте',
     'hero.photo':'Фото','hero.c1':'Открыт к проектам','hero.c2':'Работаю удалённо',
     'hero.lead':'Короткое описание: кто вы, с кем работаете и какую задачу клиента решаете. Две-три строки, не больше — подробности будут дальше в презентации.',
     'svc.0.t':'Разработка ПО','svc.0.d':'Описание услуги: десктоп и серверные приложения, API, интеграции между системами.',
@@ -1114,11 +1115,11 @@ const I18N = {
     'langName':'Russian'
   },
   en: {
-    'aria.home':'Go to first slide','aria.sections':'Sections','aria.lang':'Language','aria.prev':'Previous project','aria.next':'Next project','aria.close':'Close',
-    'name.full':'First Last','name.first':'First','name.last':'Last','logo.sub':'Software · Web · AI',
+    'aria.home':'Go to first slide','aria.sections':'Sections','aria.lang':'Language','aria.theme':'Theme','aria.prev':'Previous project','aria.next':'Next project','aria.close':'Close',
+    'name.full':'Aleksei Chasovskoi','name.first':'Aleksei','name.last':'Chasovskoi','logo.sub':'Software · Web · AI',
     'nav.0':'About','nav.1':'Experience','nav.2':'Skills','nav.3':'Certificates','nav.4':'Projects','nav.5':'Contact',
     'word.0':'HELLO','word.1':'EXPERIENCE','word.2':'SKILLS','word.3':'CERTIFICATES','word.4':'PROJECTS','word.5':'CONTACT',
-    'cta':'Discuss a project','scroll':'Scroll',
+    'theme.light':'Light theme','theme.dark':'Dark theme','theme.system':'System theme','scroll':'Scroll',
     'hero.photo':'Photo','hero.c1':'Open to projects','hero.c2':'Working remotely',
     'hero.lead':'A short intro: who you are, who you work with and which client problem you solve. Two or three lines at most — the details come later in the presentation.',
     'svc.0.t':'Software development','svc.0.d':'Service description: desktop and server applications, APIs, integrations between systems.',
@@ -1177,11 +1178,11 @@ const I18N = {
     'langName':'English'
   },
   de: {
-    'aria.home':'Zur ersten Folie','aria.sections':'Abschnitte','aria.lang':'Sprache','aria.prev':'Vorheriges Projekt','aria.next':'Nächstes Projekt','aria.close':'Schließen',
-    'name.full':'Vorname Nachname','name.first':'Vorname','name.last':'Nachname','logo.sub':'Software · Web · KI',
+    'aria.home':'Zur ersten Folie','aria.sections':'Abschnitte','aria.lang':'Sprache','aria.theme':'Design','aria.prev':'Vorheriges Projekt','aria.next':'Nächstes Projekt','aria.close':'Schließen',
+    'name.full':'Aleksei Chasovskoi','name.first':'Aleksei','name.last':'Chasovskoi','logo.sub':'Software · Web · KI',
     'nav.0':'Über mich','nav.1':'Werdegang','nav.2':'Kenntnisse','nav.3':'Zertifikate','nav.4':'Projekte','nav.5':'Kontakt',
     'word.0':'HALLO','word.1':'WERDEGANG','word.2':'KENNTNISSE','word.3':'ZERTIFIKATE','word.4':'PROJEKTE','word.5':'KONTAKT',
-    'cta':'Projekt besprechen','scroll':'Scrollen',
+    'theme.light':'Helles Design','theme.dark':'Dunkles Design','theme.system':'Systemdesign','scroll':'Scrollen',
     'hero.photo':'Foto','hero.c1':'Offen für Projekte','hero.c2':'Arbeite remote',
     'hero.lead':'Eine kurze Vorstellung: wer Sie sind, mit wem Sie arbeiten und welches Problem Sie für Kunden lösen. Höchstens zwei, drei Zeilen — Details folgen später.',
     'svc.0.t':'Softwareentwicklung','svc.0.d':'Leistungsbeschreibung: Desktop- und Serveranwendungen, APIs, Integrationen zwischen Systemen.',
@@ -1939,35 +1940,38 @@ const KN = (() => {
   return { nodes, edges, byId, byCat, order: nodes.slice() };
 })();
 
-// 3D layout: seeded force simulation — springs on links, repulsion between all nodes,
-// every section pulled to its own anchor on a ring, so auto-rotation shows the areas in turn
+// 3D layout: every node lives on the surface of a unit sphere. Seeded simulation:
+// strong mutual repulsion (spreads the points evenly, as charges on a sphere) + weak springs on links
+// + a pull to the section anchor, so sections form areas on the sphere and linked nodes stay close.
+// Anchors go round the vertical axis, so auto-rotation shows the areas in turn.
 (() => {
   let seed = 20260927;
   const rnd = () => { seed = seed + 0x6D2B79F5 | 0; let x = Math.imul(seed ^ seed >>> 15, 1 | seed); x = x + Math.imul(x ^ x >>> 7, 61 | x) ^ x; return ((x ^ x >>> 14) >>> 0) / 4294967296; };
-  const { nodes, edges } = KN, n = nodes.length, K = KN_CATS.length, IT = 360;
-  const anc = KN_CATS.map((_, i) => { const a = i / K * Math.PI * 2; return [Math.cos(a) * .78, i % 2 ? .3 : -.3, Math.sin(a) * .78]; });
-  const P = nodes.map(nd => { const a = anc[nd.ci] || [0, 0, 0]; return a.map(v => v * .8 + (rnd() - .5) * .5); });
-  const V = nodes.map(() => [0, 0, 0]);
+  const norm = p => { const l = Math.hypot(p[0], p[1], p[2]) || 1; p[0] /= l; p[1] /= l; p[2] /= l; return p; };
+  const { nodes, edges } = KN, n = nodes.length, K = KN_CATS.length, IT = 500;
+  const anc = KN_CATS.map((_, i) => { const a = i / K * Math.PI * 2; return norm([Math.cos(a), i % 2 ? .35 : -.35, Math.sin(a)]); });
+  const P = nodes.map(nd => norm((anc[nd.ci] || [0, 0, 1]).map(v => v + (rnd() - .5) * .8)));
   for (let it = 0; it < IT; it++) {
-    const F = nodes.map(() => [0, 0, 0]), heat = 1 - it / IT * .8;
+    const F = nodes.map(() => [0, 0, 0]), step = .05 * (1 - it / IT * .9);
     for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) {
-      const dx = P[i][0] - P[j][0], dy = P[i][1] - P[j][1], dz = P[i][2] - P[j][2], f = .0012 / (dx*dx + dy*dy + dz*dz + .003);
+      const dx = P[i][0] - P[j][0], dy = P[i][1] - P[j][1], dz = P[i][2] - P[j][2], l2 = dx*dx + dy*dy + dz*dz + 1e-4, f = .008 / (l2 * Math.sqrt(l2));
       F[i][0] += dx*f; F[i][1] += dy*f; F[i][2] += dz*f; F[j][0] -= dx*f; F[j][1] -= dy*f; F[j][2] -= dz*f;
     }
     for (const e of edges) {
-      const i = e.a.i, j = e.b.i, dx = P[j][0] - P[i][0], dy = P[j][1] - P[i][1], dz = P[j][2] - P[i][2];
-      const d = Math.hypot(dx, dy, dz) + 1e-6, f = (d - (e.a.cat === e.b.cat ? .3 : .6)) * .05 / d;
+      const i = e.a.i, j = e.b.i, f = e.a.cat === e.b.cat ? .02 : .007;
+      const dx = P[j][0] - P[i][0], dy = P[j][1] - P[i][1], dz = P[j][2] - P[i][2];
       F[i][0] += dx*f; F[i][1] += dy*f; F[i][2] += dz*f; F[j][0] -= dx*f; F[j][1] -= dy*f; F[j][2] -= dz*f;
     }
-    nodes.forEach((nd, i) => { // + pull to the section anchor (hubs sit deeper) + weak gravity to the centre
-      const a = anc[nd.ci] || [0, 0, 0], k = nd.hub ? .06 : .02, ar = nd.hub ? .6 : .85, p = P[i], v = V[i];
-      for (let c = 0; c < 3; c++) { v[c] = (v[c] + F[i][c] + (a[c] * ar - p[c]) * k - p[c] * .006) * .8; p[c] += v[c] * heat; }
+    nodes.forEach((nd, i) => {
+      const a = anc[nd.ci] || [0, 0, 1], p = P[i], f = F[i];
+      for (let c = 0; c < 3; c++) f[c] += (a[c] - p[c]) * .015;
+      // move only along the sphere (tangential part of the force), with a capped step, then back onto the surface
+      const dot = f[0]*p[0] + f[1]*p[1] + f[2]*p[2], tx = f[0] - dot*p[0], ty = f[1] - dot*p[1], tz = f[2] - dot*p[2];
+      const l = Math.hypot(tx, ty, tz), s = l > step ? step / l : 1;
+      p[0] += tx * s; p[1] += ty * s; p[2] += tz * s; norm(p);
     });
   }
-  const c = [0, 1, 2].map(k => P.reduce((s, p) => s + p[k], 0) / n);
-  P.forEach(p => { p[0] -= c[0]; p[1] -= c[1]; p[2] -= c[2]; });
-  const m = Math.max(...P.map(p => Math.hypot(p[0], p[1], p[2]))) || 1;
-  nodes.forEach((nd, i) => { nd.p = P[i].map(v => v / m); nd.ph = rnd() * 6.283; });
+  nodes.forEach((nd, i) => { nd.p = P[i]; nd.ph = rnd() * 6.283; });
 })();
 
 // renderer: canvas 2D with a perspective projection; camera looks along −z, +z is towards the viewer
@@ -1999,7 +2003,7 @@ function kgResize() {
   if (!w || !h) return;
   kgW = w; kgH = h; kgDpr = Math.min(devicePixelRatio || 1, 2);
   kgCvs.width = Math.round(w * kgDpr); kgCvs.height = Math.round(h * kgDpr);
-  kgR = Math.min(w * (w < 500 ? .39 : .36), h * .43);
+  kgR = Math.min(w * (w < 500 ? .39 : .35), h * .4);
   kgCardSize();
 }
 function kgCardSize() { kgCardW = knCard.offsetWidth; kgCardH = knCard.offsetHeight; }
@@ -2695,6 +2699,20 @@ $$('#lang button').forEach(b => b.addEventListener('click', () => {
   boost(LANGS.indexOf(b.dataset.lang) > LANGS.indexOf(LANG) ? 4 : -4);
   applyLang(b.dataset.lang, true);
 }));
+
+/* ================= THEME ================= */
+function applyTheme(m) {
+  if (m === 'light' || m === 'dark') document.documentElement.dataset.theme = m;
+  else { m = 'system'; delete document.documentElement.dataset.theme; }
+  try { localStorage.setItem('pf-theme', m); } catch (e) {}
+  $$('#theme button').forEach((b, i) => {
+    const on = b.dataset.themeOpt === m;
+    b.classList.toggle('active', on); b.setAttribute('aria-pressed', on);
+    if (on) $('#theme .thumb').style.transform = `translateX(${i * 100}%)`;
+  });
+}
+$$('#theme button').forEach(b => b.addEventListener('click', () => applyTheme(b.dataset.themeOpt)));
+applyTheme(document.documentElement.dataset.theme || 'system');
 
 /* ================= CHATBOT ================= */
 const chat = $('#chat'), fab = $('#chatFab'), msgsEl = $('#chatMsgs'), chatIn = $('#chatIn');
