@@ -162,9 +162,8 @@ body.not-first .scroll-hint{opacity:0}
 .portrait svg.ticks{inset:7%;width:86%;height:86%;color:var(--line-strong)}
 .photo{position:absolute;inset:17%;border-radius:50%;overflow:hidden;border:1px solid var(--line-strong);
   background:radial-gradient(circle at 50% 30%,var(--bg2),var(--surface-solid) 70%);box-shadow:inset 0 0 40px rgba(0,0,0,.15)}
-.photo .ph{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted)}
-.photo .ph svg{width:62%;height:62%;opacity:.55;margin-top:18%}
-.photo .ph span{position:absolute;bottom:24%;font-size:12px;background:var(--surface);padding:4px 10px;border-radius:20px;border:1px solid var(--line)}
+.photo:has(img){background:#fff}
+.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
 .photo .scan{position:absolute;left:0;right:0;top:-40%;height:40%;background:linear-gradient(to bottom,transparent,rgba(var(--bit),.18) 85%,rgba(var(--bit),.6));animation:scan 4s var(--ease) infinite}
 @keyframes scan{0%{top:-40%}60%,100%{top:110%}}
 .orbit{position:absolute;inset:3%;border-radius:50%;animation:orbit 14s linear infinite;pointer-events:none}
@@ -253,7 +252,10 @@ body.not-first .scroll-hint{opacity:0}
 .ci-body dt{color:var(--muted)}
 .ci-body dd{margin:0;font-weight:600}
 .ci-check{display:flex;align-items:center;gap:10px;font-family:var(--f-mono);font-size:11.5px;color:var(--muted);padding:10px 12px;border:1px dashed var(--line-strong);border-radius:6px;margin-bottom:18px;overflow:hidden;white-space:nowrap}
-.ci-check .ok{color:var(--verd);font-weight:600}
+.ci-check .ok{color:var(--verd);font-weight:600;flex:0 0 auto}
+.ci-check #ciHash{overflow:hidden;text-overflow:ellipsis}
+.ci-btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn[hidden]{display:none}
 .ci-list{display:flex;gap:8px;margin-top:14px}
 .ci-list button{all:unset;cursor:pointer;flex:1;padding:10px;border:1px solid var(--line);border-radius:6px;font-size:12px;color:var(--muted);text-align:center;transition:.3s}
 .ci-list button.active{border-color:var(--brass);color:var(--ink);background:var(--brass-soft)}
@@ -275,14 +277,7 @@ body.not-first .scroll-hint{opacity:0}
 .screw::after{content:"";position:absolute;left:1px;right:1px;top:50%;height:1px;margin-top:-.5px;background:var(--muted)}
 .screw.s1{top:8px;left:8px}.screw.s2{top:8px;right:8px}.screw.s3{bottom:8px;left:8px}.screw.s4{bottom:8px;right:8px}
 .cert:hover .screw{transform:rotate(180deg)}
-.cert-ph{position:absolute;inset:9%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6%;color:var(--muted);text-align:center}
-.cert-ph .t{font-family:var(--f-display);font-weight:600;font-size:clamp(10px,1.1vw,15px);color:var(--ink);letter-spacing:.06em}
-.cert-ph .lines{width:70%;display:grid;gap:6px}
-.cert-ph .lines i{height:5px;border-radius:3px;background:var(--line)}
-.cert-ph .lines i:nth-child(2){width:80%;margin:0 auto}
-.cert-ph .lines i:nth-child(3){width:60%;margin:0 auto}
-.cert-ph .seal{width:22%;max-width:70px;aspect-ratio:1;color:var(--brass)}
-.cert-ph .fmt{font-size:11px}
+.cert-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:#fff}
 .glare{position:absolute;inset:0;background:radial-gradient(circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.22),transparent 45%);opacity:0;transition:opacity .3s;pointer-events:none}
 .cert:hover .glare{opacity:1}
 
@@ -474,7 +469,7 @@ body.not-first .scroll-hint{opacity:0}
 .stag{opacity:0}
 .cm .m-panel{width:auto;max-width:92vw;display:flex;flex-direction:column}
 .cm .m-body{display:flex;align-items:center;justify-content:center;padding:24px;background:var(--bg2)}
-.cm .cert-big{position:relative;border:1px solid var(--line-strong);background:var(--surface-solid);border-radius:4px}
+.cm .cert-big{position:relative;border:1px solid var(--line-strong);background:#fff;border-radius:4px;overflow:hidden}
 
 /* ============ CURSOR ============ */
 .cursor{display:none}
@@ -645,10 +640,8 @@ body.not-first .scroll-hint{opacity:0}
               <div class="orbit o2"><span>0</span></div>
               <div class="orbit o3"><span>1</span></div>
               <div class="photo">
-                <div class="ph">
-                  <svg viewBox="0 0 100 100" fill="currentColor"><circle cx="50" cy="34" r="18"/><path d="M14 100c2-24 17-38 36-38s34 14 36 38z"/></svg>
-                  <span data-i18n="hero.photo">Ваше фото</span>
-                </div>
+                <img src="img/photo.jpg" width="827" height="1063" data-i18n-aria="hero.photo" aria-label="Фото">
+
                 <div class="scan"></div>
               </div>
             </div>
@@ -727,9 +720,12 @@ body.not-first .scroll-hint{opacity:0}
               <div class="ci-body">
                 <div class="ci-id" id="ciId">C-01</div>
                 <h3 id="ciTitle"></h3>
-                <dl><dt data-i18n="cert.org"></dt><dd id="ciOrg">—</dd><dt data-i18n="cert.date"></dt><dd id="ciDate">—</dd><dt data-i18n="cert.fmt"></dt><dd id="ciFmt">—</dd></dl>
-                <div class="ci-check"><span class="ok" data-i18n="cert.ok"></span><span id="ciHash">0000 0000 0000</span></div>
-                <button class="btn btn-ghost magnetic" id="ciOpen"><span data-i18n="cert.open"></span></button>
+                <dl><dt data-i18n="cert.org"></dt><dd id="ciOrg">—</dd><dt data-i18n="cert.date"></dt><dd id="ciDate">—</dd><dt data-i18n="cert.info"></dt><dd id="ciInfo">—</dd></dl>
+                <div class="ci-check"><span class="ok" data-i18n="cert.ok"></span><span id="ciHash"></span></div>
+                <div class="ci-btns">
+                  <button class="btn btn-ghost magnetic" id="ciOpen"><span data-i18n="cert.open"></span></button>
+                  <a class="btn btn-ghost magnetic" id="ciVerify" target="_blank" rel="noopener" hidden><span data-i18n="cert.check"></span></a>
+                </div>
               </div>
             </div>
             <div class="ci-list" id="ciList"></div>
@@ -932,7 +928,7 @@ const I18N = {
     'nav.0':'О себе','nav.1':'Путь','nav.2':'Сертификаты','nav.3':'Проекты','nav.4':'Контакты',
     'word.0':'ПРИВЕТ','word.1':'ПУТЬ','word.2':'СЕРТИФИКАТЫ','word.3':'ПРОЕКТЫ','word.4':'НА СВЯЗИ',
     'cta':'Обсудить проект','scroll':'Листайте',
-    'hero.photo':'Ваше фото','hero.c1':'Открыт к проектам','hero.c2':'Работаю удалённо',
+    'hero.photo':'Фото','hero.c1':'Открыт к проектам','hero.c2':'Работаю удалённо',
     'hero.lead':'Короткое описание: кто вы, с кем работаете и какую задачу клиента решаете. Две-три строки, не больше — подробности будут дальше в презентации.',
     'svc.0.t':'Разработка ПО','svc.0.d':'Описание услуги: десктоп и серверные приложения, API, интеграции между системами.',
     'svc.1.t':'Веб-разработка','svc.1.d':'Описание услуги: лендинги, веб-приложения, личные кабинеты и админ-панели.',
@@ -944,8 +940,10 @@ const I18N = {
     'job.role':'Должность','job.company':'Компания','job.desc':'Короткое описание: чем занимались и за что отвечали.','job.tech':'Технология','job.ach':'Достижения',
     'job.a0':'Результат с цифрой','job.a1':'Ключевой проект','job.a2':'Чему научился','job.now':'сейчас',
     'job.free':'Фриланс','job.freeC':'Софт, веб и AI-автоматизация','job.freeD':'Короткое описание: с какими клиентами работаете сейчас.',
-    'cert.verify':'Проверка подлинности','cert.org':'Организация','cert.date':'Дата','cert.fmt':'Формат','cert.ok':'✓ Подтверждён','cert.open':'Открыть сертификат',
-    'cert.title':'Название сертификата','cert.orgv':'Организация','cert.word':'СЕРТИФИКАТ','cert.p':'Вертикальный','cert.l':'Горизонтальный','cert.scan':'место для скана',
+    'cert.verify':'Проверка подлинности','cert.org':'Организация','cert.date':'Дата','cert.info':'Подробности','cert.ok':'ID','cert.open':'Открыть сертификат','cert.check':'Проверить онлайн',
+    'cert.beam':'Специалист по AI-автоматизации бизнеса','cert.beam.i':'Переподготовка 600 ак. часов (27.04–21.08.2026): 15 модулей — AI-агенты и мультиагентные системы, RAG, промпт-инжиниринг, анализ бизнес-процессов, GDPR и EU AI Act. Все модули — «отлично».',
+    'cert.n8n':'n8n Professional Certificate','cert.n8n.i':'Пройдены все курсы программы n8n Academy по автоматизации рабочих процессов в n8n.',
+    'cert.oracle':'Oracle Certified Professional: Java SE 11 Developer','cert.oracle.i':'Профессиональная сертификация Oracle по разработке на Java SE 11.',
     'proj.title':'Название проекта','proj.desc':'Короткое описание проекта в одну-две строки: суть задачи и результат.',
     'cat.web':'Веб','cat.ai':'AI-автоматизация','cat.soft':'ПО','media.video':'Видео','media.image':'Изображение','proj.n':'Проект','proj.frame':'Кадр',
     'pm.lead':'Расширенное описание проекта: для кого он сделан, что умеет и почему это было интересно. Здесь 2–3 предложения.',
@@ -969,7 +967,7 @@ const I18N = {
     'fb.price':'Стоимость зависит от задачи. Опишите проект в форме — отвечу с оценкой сроков и бюджета.',
     'fb.contact':'Проще всего — через форму обратной связи или по email hello@example.com.',
     'fb.projects':'Примеры работ собраны в разделе «Проекты». Нажмите на карточку, чтобы открыть подробности.',
-    'fb.exp':'Опыт работы по годам — в разделе «Путь».','fb.certs':'Сертификаты можно открыть и рассмотреть в отдельном разделе.',
+    'fb.exp':'Опыт работы по годам — в разделе «Путь».','fb.certs':'Сертификаты: «Специалист по AI-автоматизации бизнеса» (Beam Institute, 600 ч), n8n Professional Certificate и Oracle Certified Professional: Java SE 11. Их можно открыть в разделе «Сертификаты».',
     'fb.default':'Чтобы ответить точно, лучше написать через форму — отвечу в течение дня.',
     'langName':'Russian'
   },
@@ -979,7 +977,7 @@ const I18N = {
     'nav.0':'About','nav.1':'Experience','nav.2':'Certificates','nav.3':'Projects','nav.4':'Contact',
     'word.0':'HELLO','word.1':'EXPERIENCE','word.2':'CERTIFICATES','word.3':'PROJECTS','word.4':'CONTACT',
     'cta':'Discuss a project','scroll':'Scroll',
-    'hero.photo':'Your photo','hero.c1':'Open to projects','hero.c2':'Working remotely',
+    'hero.photo':'Photo','hero.c1':'Open to projects','hero.c2':'Working remotely',
     'hero.lead':'A short intro: who you are, who you work with and which client problem you solve. Two or three lines at most — the details come later in the presentation.',
     'svc.0.t':'Software development','svc.0.d':'Service description: desktop and server applications, APIs, integrations between systems.',
     'svc.1.t':'Web development','svc.1.d':'Service description: landing pages, web apps, customer portals and admin panels.',
@@ -991,8 +989,10 @@ const I18N = {
     'job.role':'Position','job.company':'Company','job.desc':'Short description: what you did and what you were responsible for.','job.tech':'Technology','job.ach':'Achievements',
     'job.a0':'A result with a number','job.a1':'Key project','job.a2':'What I learned','job.now':'now',
     'job.free':'Freelance','job.freeC':'Software, web & AI automation','job.freeD':'Short description: the kind of clients you work with now.',
-    'cert.verify':'Verification','cert.org':'Issuer','cert.date':'Date','cert.fmt':'Format','cert.ok':'✓ Verified','cert.open':'Open certificate',
-    'cert.title':'Certificate title','cert.orgv':'Organization','cert.word':'CERTIFICATE','cert.p':'Portrait','cert.l':'Landscape','cert.scan':'scan goes here',
+    'cert.verify':'Verification','cert.org':'Issuer','cert.date':'Date','cert.info':'Details','cert.ok':'ID','cert.open':'Open certificate','cert.check':'Verify online',
+    'cert.beam':'AI Business Automation Specialist','cert.beam.i':'600-hour further education program (27.04–21.08.2026): 15 modules — AI agents and multi-agent systems, RAG, prompt engineering, business process analysis, GDPR and the EU AI Act. All modules graded “very good”.',
+    'cert.n8n':'n8n Professional Certificate','cert.n8n.i':'Completed all courses of the n8n Academy program on workflow automation with n8n.',
+    'cert.oracle':'Oracle Certified Professional: Java SE 11 Developer','cert.oracle.i':'Oracle professional certification in Java SE 11 development.',
     'proj.title':'Project title','proj.desc':'A one- or two-line project summary: the task and the result.',
     'cat.web':'Web','cat.ai':'AI automation','cat.soft':'Software','media.video':'Video','media.image':'Image','proj.n':'Project','proj.frame':'Frame',
     'pm.lead':'Extended project description: who it was built for, what it does and why it was interesting. Two or three sentences here.',
@@ -1016,7 +1016,7 @@ const I18N = {
     'fb.price':'The price depends on the task. Describe your project in the form and I\u2019ll reply with a time and budget estimate.',
     'fb.contact':'The easiest way is the contact form or email hello@example.com.',
     'fb.projects':'Work examples are in the Projects section. Click a card to open the details.',
-    'fb.exp':'Work history by year is in the Experience section.','fb.certs':'Certificates can be opened and viewed in their own section.',
+    'fb.exp':'Work history by year is in the Experience section.','fb.certs':'Certificates: AI Business Automation Specialist (Beam Institute, 600 hours), n8n Professional Certificate and Oracle Certified Professional: Java SE 11. You can open them in the Certificates section.',
     'fb.default':'To give you a precise answer, please write via the form — I\u2019ll reply within a day.',
     'langName':'English'
   },
@@ -1026,7 +1026,7 @@ const I18N = {
     'nav.0':'Über mich','nav.1':'Werdegang','nav.2':'Zertifikate','nav.3':'Projekte','nav.4':'Kontakt',
     'word.0':'HALLO','word.1':'WERDEGANG','word.2':'ZERTIFIKATE','word.3':'PROJEKTE','word.4':'KONTAKT',
     'cta':'Projekt besprechen','scroll':'Scrollen',
-    'hero.photo':'Ihr Foto','hero.c1':'Offen für Projekte','hero.c2':'Arbeite remote',
+    'hero.photo':'Foto','hero.c1':'Offen für Projekte','hero.c2':'Arbeite remote',
     'hero.lead':'Eine kurze Vorstellung: wer Sie sind, mit wem Sie arbeiten und welches Problem Sie für Kunden lösen. Höchstens zwei, drei Zeilen — Details folgen später.',
     'svc.0.t':'Softwareentwicklung','svc.0.d':'Leistungsbeschreibung: Desktop- und Serveranwendungen, APIs, Integrationen zwischen Systemen.',
     'svc.1.t':'Webentwicklung','svc.1.d':'Leistungsbeschreibung: Landingpages, Web-Apps, Kundenportale und Admin-Panels.',
@@ -1038,8 +1038,10 @@ const I18N = {
     'job.role':'Position','job.company':'Unternehmen','job.desc':'Kurzbeschreibung: Aufgaben und Verantwortungsbereich.','job.tech':'Technologie','job.ach':'Erfolge',
     'job.a0':'Ergebnis mit Zahl','job.a1':'Schlüsselprojekt','job.a2':'Was ich gelernt habe','job.now':'heute',
     'job.free':'Freelance','job.freeC':'Software, Web & KI-Automatisierung','job.freeD':'Kurzbeschreibung: mit welchen Kunden Sie aktuell arbeiten.',
-    'cert.verify':'Echtheitsprüfung','cert.org':'Aussteller','cert.date':'Datum','cert.fmt':'Format','cert.ok':'✓ Bestätigt','cert.open':'Zertifikat öffnen',
-    'cert.title':'Name des Zertifikats','cert.orgv':'Organisation','cert.word':'ZERTIFIKAT','cert.p':'Hochformat','cert.l':'Querformat','cert.scan':'Platz für den Scan',
+    'cert.verify':'Echtheitsprüfung','cert.org':'Aussteller','cert.date':'Datum','cert.info':'Details','cert.ok':'ID','cert.open':'Zertifikat öffnen','cert.check':'Online prüfen',
+    'cert.beam':'KI-Business-Automatisierungs-Spezialist','cert.beam.i':'Weiterbildung mit 600 UE (27.04.–21.08.2026): 15 Module — KI-Agenten und Multi-Agenten-Systeme, RAG, Prompt Engineering, Geschäftsprozessanalyse, DSGVO und EU AI Act. Alle Module „sehr gut“.',
+    'cert.n8n':'n8n Professional Certificate','cert.n8n.i':'Alle Kurse des n8n-Academy-Programms zur Workflow-Automatisierung mit n8n abgeschlossen.',
+    'cert.oracle':'Oracle Certified Professional: Java SE 11 Developer','cert.oracle.i':'Oracle-Profizertifizierung für die Entwicklung mit Java SE 11.',
     'proj.title':'Projekttitel','proj.desc':'Kurze Projektbeschreibung in ein, zwei Zeilen: Aufgabe und Ergebnis.',
     'cat.web':'Web','cat.ai':'KI-Automatisierung','cat.soft':'Software','media.video':'Video','media.image':'Bild','proj.n':'Projekt','proj.frame':'Bild',
     'pm.lead':'Ausführliche Projektbeschreibung: für wen es gebaut wurde, was es kann und warum es spannend war. Zwei, drei Sätze.',
@@ -1063,7 +1065,7 @@ const I18N = {
     'fb.price':'Der Preis hängt von der Aufgabe ab. Beschreiben Sie Ihr Projekt im Formular — ich antworte mit einer Schätzung zu Zeit und Budget.',
     'fb.contact':'Am einfachsten über das Kontaktformular oder per E-Mail an hello@example.com.',
     'fb.projects':'Arbeitsbeispiele finden Sie unter „Projekte“. Klicken Sie auf eine Karte für Details.',
-    'fb.exp':'Der Werdegang nach Jahren steht im Abschnitt „Werdegang“.','fb.certs':'Die Zertifikate lassen sich im eigenen Abschnitt öffnen.',
+    'fb.exp':'Der Werdegang nach Jahren steht im Abschnitt „Werdegang“.','fb.certs':'Zertifikate: KI-Business-Automatisierungs-Spezialist (Beam Institute, 600 UE), n8n Professional Certificate und Oracle Certified Professional: Java SE 11. Sie lassen sich im Abschnitt „Zertifikate“ öffnen.',
     'fb.default':'Für eine genaue Antwort schreiben Sie am besten über das Formular — ich antworte innerhalb eines Tages.',
     'langName':'German'
   }
@@ -1091,14 +1093,24 @@ const PROJECTS = [
   desc:  { get: () => t('proj.desc') },
   catName: { get: () => t('cat.' + p.cat) },
 }));
-// orient: 'portrait' | 'landscape' — раскладка подстраивается автоматически
+// date: 'YYYY-MM-DD' или 'YYYY-MM'; w/h — размер картинки, по нему считается ориентация и раскладка
+// title/info — i18n-ключи cert.<key> и cert.<key>.i; verify — ссылка на онлайн-проверку (если есть)
+const fmtDate = s => {
+  const [y, m, d] = s.split('-').map(Number);
+  return new Intl.DateTimeFormat(LANG, d ? { day: 'numeric', month: 'long', year: 'numeric' } : { month: 'long', year: 'numeric' }).format(new Date(y, m - 1, d || 1));
+};
 const CERTS = [
-  { id:'C-01', orient:'portrait',  date:'2024' },
-  { id:'C-02', orient:'landscape', date:'2023' },
-  { id:'C-03', orient:'landscape', date:'2022' },
-].map((c, i) => Object.defineProperties(c, {
-  title: { get: () => t('cert.title') + ' ' + pad(i + 1) },
-  org:   { get: () => t('cert.orgv') },
+  { id:'C-01', key:'beam', short:'Beam', org:'Beam Institute of Technology, Berlin', date:'2026-08-21', no:'№ 27042612',
+    img:'img/certs/beam-ki-automation.jpg', w:1247, h:1754 },
+  { id:'C-02', key:'n8n', short:'n8n', org:'n8n Academy', date:'2026-09', no:'c4dac917cdda4d3ba02a5eb0e42f55c6',
+    img:'img/certs/n8n-professional.jpg', w:1546, h:907,
+    verify:'https://credentials.learn.n8n.io/credentials/c4dac917cdda4d3ba02a5eb0e42f55c6/' },
+  { id:'C-03', key:'oracle', short:'Oracle', org:'Oracle University', date:'2020-06-09', no:'242653379OCPJSE11',
+    img:'img/certs/oracle-java-se11.jpg', w:1650, h:1275 },
+].map(c => Object.defineProperties(Object.assign(c, { ratio: c.w / c.h, orient: c.h > c.w ? 'portrait' : 'landscape' }), {
+  title:   { get: () => t('cert.' + c.key) },
+  info:    { get: () => t('cert.' + c.key + '.i') },
+  dateStr: { get: () => fmtDate(c.date) },
 }));
 const JOBS = [
   { from:'2018', to:'2020', tags:2 },
@@ -1532,9 +1544,8 @@ $$('.job').forEach(j => {
 /* ================= CERTIFICATES ================= */
 const certGal = $('#certGal'), certStage = $('#certStage');
 let certCols = [], activeCert = 0;
-function certPh(c) {
-  return `<div class="cert-ph"><svg class="seal" viewBox="-50 -50 100 100"><path d="${gearPath(20, 38, 0, 6)}" fill="currentColor" fill-opacity=".15" stroke="currentColor" stroke-width="2"/><circle r="22" fill="none" stroke="currentColor" stroke-width="2"/><path d="M-9 0l6 6 12-13" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
-    <span class="t" data-i18n="cert.word">${t('cert.word')}</span><div class="lines"><i></i><i></i><i></i></div><span class="fmt"><span data-i18n="cert.${c.orient === 'portrait' ? 'p' : 'l'}">${t(c.orient === 'portrait' ? 'cert.p' : 'cert.l')}</span> · <span data-i18n="cert.scan">${t('cert.scan')}</span></span></div>`;
+function certImg(c) {
+  return `<img class="cert-img" src="${c.img}" width="${c.w}" height="${c.h}" alt="" decoding="async">`;
 }
 function buildCerts() {
   const P = CERTS.filter(c => c.orient === 'portrait'), L = CERTS.filter(c => c.orient !== 'portrait');
@@ -1550,7 +1561,7 @@ function buildCerts() {
       const el = document.createElement('div');
       el.className = 'cert'; el.tabIndex = 0; el.dataset.idx = idx;
       el.setAttribute('role', 'button'); el.setAttribute('aria-label', t('cert.open') + ': ' + c.title);
-      el.innerHTML = `<div class="cert-in">${certPh(c)}<div class="glare"></div></div><span class="br tl"></span><span class="br tr"></span><span class="br bl"></span><span class="br brr"></span><span class="screw s1"></span><span class="screw s2"></span><span class="screw s3"></span><span class="screw s4"></span>`;
+      el.innerHTML = `<div class="cert-in">${certImg(c)}<div class="glare"></div></div><span class="br tl"></span><span class="br tr"></span><span class="br bl"></span><span class="br brr"></span><span class="screw s1"></span><span class="screw s2"></span><span class="screw s3"></span><span class="screw s4"></span>`;
       tilt(el, $('.cert-in', el), 12, $('.glare', el));
       el.addEventListener('mouseenter', () => selectCert(idx));
       el.addEventListener('focus', () => selectCert(idx));
@@ -1561,22 +1572,25 @@ function buildCerts() {
     });
     certGal.appendChild(ce);
   });
-  $('#ciList').innerHTML = CERTS.map((c, i) => `<button data-i="${i}">${c.id}</button>`).join('');
+  $('#ciList').innerHTML = CERTS.map((c, i) => `<button data-i="${i}">${c.short}</button>`).join('');
   $$('#ciList button').forEach(b => b.addEventListener('click', () => selectCert(+b.dataset.i)));
   $('#ciOpen').addEventListener('click', () => openCert(activeCert, CERTS[activeCert]._el));
   selectCert(0, true);
 }
 function layoutCerts() {
-  const R = 1.414, gap = 18;
+  const gap = 18;
   const W = certStage.clientWidth, Hmax = certStage.clientHeight;
   if (!W || !Hmax) return;
-  const nP = certCols.filter(c => c.type === 'p').length, nL = certCols.length - nP;
-  const a = nP / R + nL * R / 2, b = -nL * gap * R / 2 + gap * (certCols.length - 1) + 24;
+  // total width is linear in H: portrait column = ratio·H, landscape column (2 stacked) = maxRatio·(H − gap)/2
+  let a = 0, b = gap * (certCols.length - 1) + 24;
+  certCols.forEach(col => {
+    const r = Math.max(...col.items.map(c => c.ratio));
+    if (col.type === 'p') a += r; else { a += r / 2; b -= r * gap / 2; }
+  });
   const H = Math.max(160, Math.min(Hmax - 20, (W - b) / a));
   certCols.forEach(col => col.items.forEach(c => {
-    let w, h;
-    if (col.type === 'p') { h = H; w = H / R; } else { h = (H - gap) / 2; w = h * R; }
-    c._el.style.width = w.toFixed(1) + 'px'; c._el.style.height = h.toFixed(1) + 'px';
+    const h = col.type === 'p' ? H : (H - gap) / 2;
+    c._el.style.width = (h * c.ratio).toFixed(1) + 'px'; c._el.style.height = h.toFixed(1) + 'px';
   }));
 }
 function selectCert(i, silent) {
@@ -1585,11 +1599,11 @@ function selectCert(i, silent) {
   CERTS.forEach((x, k) => x._el && x._el.classList.toggle('active', k === i));
   $$('#ciList button').forEach((b, k) => b.classList.toggle('active', k === i));
   $('#ciId').textContent = c.id;
-  $('#ciOrg').textContent = c.org; $('#ciDate').textContent = c.date;
-  $('#ciFmt').textContent = t(c.orient === 'portrait' ? 'cert.p' : 'cert.l');
-  const hash = Array.from({ length: 3 }, () => Math.floor(Math.random() * 65535).toString(16).toUpperCase().padStart(4, '0')).join(' ');
-  if (silent) { $('#ciTitle').textContent = c.title; $('#ciHash').textContent = hash; }
-  else { scrambleText($('#ciTitle'), c.title, 500); scrambleText($('#ciHash'), hash, 700); }
+  $('#ciOrg').textContent = c.org; $('#ciDate').textContent = c.dateStr;
+  $('#ciInfo').textContent = c.info;
+  const v = $('#ciVerify'); v.hidden = !c.verify; if (c.verify) v.href = c.verify; else v.removeAttribute('href');
+  if (silent) { $('#ciTitle').textContent = c.title; $('#ciHash').textContent = c.no; }
+  else { scrambleText($('#ciTitle'), c.title, 500); scrambleText($('#ciHash'), c.no, 700); }
 }
 
 /* ================= PROJECTS CAROUSEL ================= */
@@ -1747,15 +1761,12 @@ tabBtns.forEach((b, k) => b.addEventListener('click', () => setTab(k)));
 
 function openCert(i, srcEl) {
   const c = CERTS[i];
-  $('#cmMeta').textContent = `${c.id} · ${c.org} · ${c.date}`;
+  $('#cmMeta').textContent = `${c.id} · ${c.org} · ${c.dateStr}`;
   $('#cmTitle').textContent = c.title;
   const big = $('#cmBig');
-  const H = Math.min(innerHeight * .72, 760), R = 1.414;
-  let h = c.orient === 'portrait' ? H : Math.min(H, innerWidth * .8 / R);
-  let w = c.orient === 'portrait' ? h / R : h * R;
-  if (w > innerWidth * .82) { w = innerWidth * .82; h = c.orient === 'portrait' ? w * R : w / R; }
+  let h = Math.min(innerHeight * .72, 760, innerWidth * .82 / c.ratio), w = h * c.ratio;
   big.style.width = w + 'px'; big.style.height = h + 'px';
-  big.innerHTML = certPh(c);
+  big.innerHTML = certImg(c).replace('alt=""', `alt="${c.title}"`);
   openModal(cm, srcEl);
 }
 
@@ -1845,7 +1856,7 @@ function applyLang(l, animate) {
   if (!$('#send').classList.contains('sending')) $('#sendTxt').textContent = t('f.send');
   else if (txState === 'done') $('#sendTxt').textContent = t('f.sent');
   if (pm.classList.contains('show')) { $('#pmMeta').textContent = `${PROJECTS[pmIdx].id} · ${PROJECTS[pmIdx].catName}`; $('#pmTitle').textContent = PROJECTS[pmIdx].title; }
-  if (cm.classList.contains('show')) { const c = CERTS[activeCert]; $('#cmMeta').textContent = `${c.id} · ${c.org} · ${c.date}`; $('#cmTitle').textContent = c.title; }
+  if (cm.classList.contains('show')) { const c = CERTS[activeCert]; $('#cmMeta').textContent = `${c.id} · ${c.org} · ${c.dateStr}`; $('#cmTitle').textContent = c.title; $('.cert-img', cm)?.setAttribute('alt', c.title); }
   chatLang();
   setTimeout(() => placeRoller(current), animate ? 560 : 0);
 }
@@ -1912,8 +1923,9 @@ function buildPrompt() {
   const convo = chatLog.slice(-10).map(m => (m.who === 'me' ? 'Visitor: ' : 'Assistant: ') + m.text).join('\n');
   return `You are a friendly assistant on the portfolio website of a freelance developer named "${t('name.full')}". ` +
     `Services: software development, web development, AI automation. ` +
+    `Certificates (real facts): ${CERTS.map(c => `${c.title} — ${c.org}, ${c.dateStr}`).join('; ')}. ` +
     `Website sections: 0 = About, 1 = Experience, 2 = Certificates, 3 = Projects, 4 = Contact form. ` +
-    `The website content is still placeholder text, so NEVER invent specific facts (prices, employers, clients, dates, project details). ` +
+    `Apart from the certificates, the website content is still placeholder text, so NEVER invent specific facts (prices, employers, clients, dates, project details). ` +
     `For anything specific, suggest the contact form or the email hello@example.com. ` +
     `Reply ONLY in ${t('langName')}, at most 3 short sentences, plain text without markdown. ` +
     `If one website section is relevant, end your reply with exactly one tag like [[go:3]].\n\n` +
