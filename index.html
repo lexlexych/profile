@@ -106,13 +106,13 @@ button{font:inherit;color:inherit}
 .hud-r button.active .bits{color:var(--verd)}
 .hud-r .pip{width:9px;height:9px;border:1px solid var(--line-strong);transform:rotate(45deg);transition:.4s}
 .hud-r button.active .pip{background:var(--verd);border-color:var(--verd);box-shadow:0 0 12px var(--verd)}
-/* pager: previous / next slide buttons at the bottom centre */
-.pager{position:fixed;z-index:40;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);transform:translateX(-50%);display:flex;gap:10px}
+/* pager: previous / next slide buttons at the bottom left */
+.pager{position:fixed;z-index:40;left:clamp(14px,2vw,28px);bottom:calc(env(safe-area-inset-bottom,0px) + 16px);display:flex;gap:10px}
 .pg{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:10px;height:42px;padding:0 16px 0 5px;border:1px solid var(--line-strong);border-radius:30px;background:var(--surface-solid);box-shadow:var(--shadow);font-weight:600;font-size:13.5px;color:var(--ink);white-space:nowrap;transition:border-color .3s,box-shadow .3s,opacity .4s,visibility .4s}
 .pg-next{flex-direction:row-reverse;padding:0 5px 0 16px}
 .pg:hover{border-color:var(--verd);box-shadow:var(--shadow),0 0 0 4px var(--verd-soft)}
 .pg:focus-visible{outline:1.5px dashed var(--verd);outline-offset:3px}
-.pg:disabled{opacity:0;visibility:hidden}
+.pg:disabled{display:none}
 .pg-arr{width:30px;height:30px;flex:none;display:grid;place-items:center;border-radius:50%;background:var(--verd);color:var(--bg);transition:transform .4s var(--ease-out)}
 .pg-arr svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .pg-prev:hover .pg-arr{transform:translateX(-3px)}
@@ -470,7 +470,7 @@ button{font:inherit;color:inherit}
 .tx-done svg.big{width:92px;height:92px;color:var(--verd)}
 .tx-done h3{font-family:var(--f-display);font-size:24px;margin:6px 0 0}
 .tx-done p{color:var(--muted);margin:0;max-width:34ch;font-size:14px}
-.foot{position:absolute;left:clamp(20px,6vw,110px);bottom:calc(env(safe-area-inset-bottom,0px) + 28px);font-size:12px;color:var(--muted);pointer-events:none}
+.foot{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 28px);text-align:center;font-size:12px;color:var(--muted);pointer-events:none}
 
 /* ============ SHUTTER TRANSITION ============ */
 .shutter{position:fixed;inset:0;z-index:80;pointer-events:none}
@@ -634,7 +634,7 @@ button{font:inherit;color:inherit}
   .kn-hud .kn-rot{display:none}
   .kn-card{left:8px;bottom:8px;width:calc(100% - 16px);padding:12px 14px 14px}
   /* the pager takes the space left of the chat button, names shrink with an ellipsis */
-  .pager{left:12px;right:calc(clamp(14px,2vw,28px) + 68px);transform:none;justify-content:center;gap:8px}
+  .pager{left:12px;right:calc(clamp(14px,2vw,28px) + 68px);gap:8px}
   .pg{min-width:0;flex:0 1 auto;height:40px;gap:7px;font-size:12.5px;padding:0 12px 0 4px}
   .pg-next{padding:0 4px 0 12px}
   .pg-n b{display:none}
