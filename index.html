@@ -323,7 +323,14 @@ button{font:inherit;color:inherit}
 .kn-empty{margin:18px 0;font-size:13px;color:var(--muted);text-align:center}
 
 /* ============ 4. CERTIFICATES ============ */
-.certs{display:grid;grid-template-columns:minmax(250px,.72fr) minmax(0,1.6fr);gap:clamp(24px,4vw,64px);align-items:center}
+.certs{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,.72fr);gap:clamp(24px,3vw,48px);align-items:stretch}
+.certs-main{display:flex;flex-direction:column;min-width:0}
+/* details panel takes the whole column height, from the title down */
+.certs-main .cert-stage{align-items:flex-start}
+.certs-side{display:flex;flex-direction:column;min-width:0}
+.certs-side .panel{flex:1;display:flex;flex-direction:column}
+.certs-side .ci-body{flex:1;display:flex;flex-direction:column}
+.certs-side .ci-btns{margin-top:auto}
 .panel{border:1px solid var(--line-strong);background:var(--surface);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:8px;overflow:hidden}
 .panel-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}
 .leds{display:flex;gap:6px}
@@ -344,7 +351,7 @@ button{font:inherit;color:inherit}
 .ci-list{display:flex;gap:8px;margin-top:14px}
 .ci-list button{all:unset;cursor:pointer;flex:1;padding:10px;border:1px solid var(--line);border-radius:6px;font-size:12px;color:var(--muted);text-align:center;transition:.3s}
 .ci-list button.active{border-color:var(--brass);color:var(--ink);background:var(--brass-soft)}
-.cert-stage{height:clamp(280px,calc(100vh - 330px),600px);display:flex;align-items:center;justify-content:center}
+.cert-stage{height:clamp(300px,calc(100vh - 250px),720px);display:flex;align-items:center;justify-content:center}
 .cert-gal{display:flex;gap:18px;align-items:center}
 .cert-col{display:flex;flex-direction:column;gap:18px;align-items:center}
 .cert{position:relative;perspective:1000px;cursor:pointer;outline-offset:8px}
@@ -445,18 +452,16 @@ button{font:inherit;color:inherit}
 .soc svg{width:16px;height:16px;flex:none}
 .tx{position:relative}
 .tx form{padding:22px 22px 20px}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.field{position:relative;margin-bottom:18px}
-.field input,.field textarea{width:100%;background:transparent;border:0;border-bottom:1px solid var(--line-strong);padding:20px 0 8px;font:inherit;font-size:15px;color:var(--ink);outline:none;resize:none;border-radius:0}
-.field textarea{height:120px}
-.field label{position:absolute;left:0;top:20px;color:var(--muted);font-size:14.5px;transition:.3s var(--ease-out);pointer-events:none}
-.field input:focus+label,.field input:not(:placeholder-shown)+label,.field textarea:focus+label,.field textarea:not(:placeholder-shown)+label{top:0;font-size:12px;color:var(--verd)}
-.field .bar{position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--verd);transform:scaleX(0);transform-origin:left;transition:transform .6s var(--ease-out)}
-.field input:focus~.bar,.field textarea:focus~.bar{transform:scaleX(1)}
-.field.err .bar{background:var(--danger);transform:scaleX(1)}
-.field.err label{color:var(--danger)}
-.field .ferr{position:absolute;right:0;top:2px;font-size:11.5px;color:var(--danger);opacity:0;transition:opacity .3s}
-.field.err .ferr{opacity:1}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-size:13px;font-weight:600;color:var(--ink)}
+.field.req label::after{content:" *";color:var(--brass)}
+.field input,.field textarea{box-sizing:border-box;width:100%;background:var(--bg);border:1px solid var(--line-strong);border-radius:8px;padding:11px 14px;font:inherit;font-size:15px;line-height:1.4;color:var(--ink);outline:none;resize:vertical;transition:border-color .25s,box-shadow .25s}
+.field textarea{height:130px;min-height:90px}
+.field input:hover,.field textarea:hover{border-color:var(--muted)}
+.field input:focus,.field textarea:focus{border-color:var(--verd);box-shadow:0 0 0 3px var(--verd-soft)}
+.field.err input,.field.err textarea{border-color:var(--danger);box-shadow:0 0 0 3px color-mix(in srgb,var(--danger) 15%,transparent)}
+.field .ferr{display:none;font-size:12px;color:var(--danger)}
+.field.err .ferr{display:block}
 .field.err{animation:shake .45s}
 @keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
 .flabel{font-size:12px;color:var(--muted);margin-bottom:8px;display:flex;justify-content:space-between}
@@ -465,7 +470,10 @@ button{font:inherit;color:inherit}
 .send .fill{position:absolute;inset:0;background:var(--verd);transform:scaleX(0);transform-origin:left}
 .send.sending .fill{transition:transform 2s var(--ease);transform:scaleX(1)}
 .send .lbl{position:relative;display:flex;align-items:center;gap:10px}
-.send svg{width:22px;height:22px;color:var(--brass)}
+.send .plane{width:20px;height:20px;color:var(--brass);fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .4s var(--ease-out)}
+.send:hover .plane{transform:translate(3px,-3px)}
+.send.sending .plane{animation:planeFly 1s var(--ease-out) infinite}
+@keyframes planeFly{0%{transform:none;opacity:1}55%{transform:translate(18px,-18px);opacity:0}56%{transform:translate(-14px,14px);opacity:0}100%{transform:none;opacity:1}}
 .send.sending svg{color:var(--bg)}
 .tx-done{position:absolute;inset:44px 0 0 0;background:var(--surface-solid);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px;gap:10px;clip-path:inset(0 0 100% 0);transition:clip-path .8s var(--ease)}
 .tx.done .tx-done{clip-path:inset(0 0 0 0)}
@@ -596,7 +604,6 @@ button{font:inherit;color:inherit}
   .chip-drawer{position:static;clip-path:none;opacity:1;transform:none;margin-top:10px;display:none;box-shadow:none}
   .chip.open .chip-drawer,.chip:hover .chip-drawer{display:block}
   .cert-stage{height:min(62vh,440px)}
-  .row2{grid-template-columns:1fr;gap:0}
   .m-body{grid-template-columns:1fr}
   .m-media{border-right:0;border-bottom:1px solid var(--line)}
   .ghost-num{display:none}
@@ -913,12 +920,14 @@ button{font:inherit;color:inherit}
   <section class="slide" id="certs">
     <div class="ghost-num" data-a="right">04</div>
     <div class="slide-scroll">
-      <div class="wrap">
-        <div class="s-head" data-a="left">
-          <h2 class="s-title" data-i18n="nav.3"></h2>
+      <div class="wrap certs">
+        <div class="certs-main">
+          <div class="s-head" data-a="left">
+            <h2 class="s-title" data-i18n="nav.3"></h2>
+          </div>
+          <div class="cert-stage" id="certStage" data-a="up" style="--d:3"><div class="cert-gal" id="certGal"></div></div>
         </div>
-        <div class="certs">
-          <div data-a="left" style="--d:2">
+        <div class="certs-side" data-a="right" style="--d:2">
             <div class="panel">
               <div class="panel-bar"><span class="leds"><i></i><i></i><i></i></span><span data-i18n="cert.verify"></span></div>
               <div class="ci-body">
@@ -933,8 +942,6 @@ button{font:inherit;color:inherit}
               </div>
             </div>
             <div class="ci-list" id="ciList"></div>
-          </div>
-          <div class="cert-stage" id="certStage" data-a="up" style="--d:3"><div class="cert-gal" id="certGal"></div></div>
         </div>
       </div>
     </div>
@@ -993,13 +1000,11 @@ button{font:inherit;color:inherit}
         <div class="tx panel" id="tx" data-a="right" style="--d:2">
           <div class="panel-bar"><span class="leds"><i></i><i></i><i></i></span><span id="txStatus"></span></div>
           <form id="form" novalidate>
-            <div class="row2">
-              <div class="field"><input id="fMail" name="email" type="email" placeholder=" " autocomplete="email" required><label for="fMail" data-i18n="f.mail"></label><span class="bar"></span><span class="ferr" data-i18n="f.mailErr"></span></div>
-              <div class="field"><input id="fName" name="name" placeholder=" " autocomplete="name" required><label for="fName" data-i18n="f.name"></label><span class="bar"></span><span class="ferr" data-i18n="f.nameErr"></span></div>
-            </div>
-            <div class="field"><input id="fCompany" name="company" placeholder=" " autocomplete="organization"><label for="fCompany" data-i18n="f.company"></label><span class="bar"></span></div>
-            <div class="field"><textarea id="fMsg" name="message" placeholder=" " required></textarea><label for="fMsg" data-i18n="f.msg"></label><span class="bar"></span><span class="ferr" data-i18n="f.msgErr"></span></div>
-            <button class="send" type="submit" id="send"><span class="fill"></span><span class="lbl" data-spinhost><svg data-gear="10" data-spin="0.8" id="sendGear" viewBox="-50 -50 100 100"></svg><span id="sendTxt"></span></span></button>
+            <div class="field req"><label for="fMail" data-i18n="f.mail"></label><input id="fMail" name="email" type="email" autocomplete="email" required aria-describedby="fMailErr"><span class="ferr" id="fMailErr" data-i18n="f.mailErr"></span></div>
+            <div class="field req"><label for="fName" data-i18n="f.name"></label><input id="fName" name="name" autocomplete="name" required aria-describedby="fNameErr"><span class="ferr" id="fNameErr" data-i18n="f.nameErr"></span></div>
+            <div class="field"><label for="fCompany" data-i18n="f.company"></label><input id="fCompany" name="company" autocomplete="organization"></div>
+            <div class="field req"><label for="fMsg" data-i18n="f.msg"></label><textarea id="fMsg" name="message" required aria-describedby="fMsgErr"></textarea><span class="ferr" id="fMsgErr" data-i18n="f.msgErr"></span></div>
+            <button class="send" type="submit" id="send"><span class="fill"></span><span class="lbl"><svg class="plane" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 2.5 10.5 13.5M21.5 2.5l-7 19-4-8-8-4z"/></svg><span id="sendTxt"></span></span></button>
           </form>
           <div class="tx-done" aria-live="polite">
             <svg class="big" viewBox="-50 -50 100 100"><g data-spin="0.5" id="doneGear"></g><path d="M-14 0l9 9 18-19" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -2967,14 +2972,15 @@ form.addEventListener('submit', e => {
   const checks = [['#fMail', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())], ['#fName', v => v.trim().length > 1], ['#fMsg', v => v.trim().length > 1]];
   let ok = true;
   checks.forEach(([s, fn]) => {
-    const f = $(s).closest('.field'); f.classList.remove('err');
-    if (!fn($(s).value)) { void f.offsetWidth; f.classList.add('err'); ok = false; }
+    const f = $(s).closest('.field'), bad = !fn($(s).value); f.classList.remove('err');
+    $(s).setAttribute('aria-invalid', bad);
+    if (bad) { void f.offsetWidth; f.classList.add('err'); ok = false; }
   });
   if (!ok) { txState = 'fix'; $('#txStatus').textContent = t('f.fix'); return; }
   txState = 'ready';
   const btn = $('#send'); if (btn.classList.contains('sending')) return;
   btn.classList.add('sending');
-  $('#sendGear g')._sp.localT = 12; gTarget = 6;
+  gTarget = 6;
   const t0 = performance.now();
   (function f(now) {
     const p = Math.min(1, (now - t0) / 2000);
@@ -2986,11 +2992,11 @@ form.addEventListener('submit', e => {
     else setTimeout(() => { tx.classList.add('done'); boost(3); }, 250);
   })(t0);
 });
-$$('#form input, #form textarea').forEach(i => i.addEventListener('input', () => i.closest('.field')?.classList.remove('err')));
+$$('#form input, #form textarea').forEach(i => i.addEventListener('input', () => { i.closest('.field')?.classList.remove('err'); i.removeAttribute('aria-invalid'); }));
 $('#again').addEventListener('click', () => {
   tx.classList.remove('done'); form.reset(); txState = 'ready';
   const btn = $('#send'); btn.classList.remove('sending'); $('#sendTxt').textContent = t('f.send');
-  $('#sendGear g')._sp.localT = 1; $('#txStatus').textContent = t('f.ready');
+  $('#txStatus').textContent = t('f.ready');
 });
 
 /* ================= CURSOR ================= */
