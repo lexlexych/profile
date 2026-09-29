@@ -128,6 +128,8 @@ button{font:inherit;color:inherit}
   padding:calc(env(safe-area-inset-top,0px) + var(--nav-h) + 14px) clamp(20px,6vw,110px) calc(env(safe-area-inset-bottom,0px) + 70px);
   display:flex;flex-direction:column;justify-content:center}
 .slide-scroll::-webkit-scrollbar{display:none}
+/* content slides: title at the same height on every slide instead of centering */
+#experience .slide-scroll,#skills .slide-scroll,#certs .slide-scroll,#projects .slide-scroll{justify-content:flex-start;padding-top:calc(env(safe-area-inset-top,0px) + var(--nav-h) + var(--top-gap,clamp(12px,2.8vh,34px)))}
 .wrap{width:100%;max-width:1320px;margin:0 auto}
 .ghost-num{position:absolute;right:clamp(10px,4vw,70px);bottom:calc(env(safe-area-inset-bottom,0px) + 10px);font-family:var(--f-display);font-weight:800;font-size:clamp(120px,22vw,300px);line-height:.8;color:transparent;-webkit-text-stroke:1px var(--line);pointer-events:none;z-index:-1}
 
@@ -143,9 +145,6 @@ button{font:inherit;color:inherit}
 @keyframes a-fade{from{opacity:0}to{opacity:1}}
 
 .s-head{margin-bottom:clamp(18px,3vh,34px)}
-.s-meta{display:flex;align-items:center;gap:14px;margin-bottom:10px;font-size:13px;color:var(--muted)}
-.s-meta .idx{font-family:var(--f-mono);color:var(--brass);font-size:12px}
-.s-meta .bitline{font-family:var(--f-mono);font-size:10.5px;color:rgba(var(--bit),.6);letter-spacing:.18em;white-space:nowrap;overflow:hidden;max-width:220px}
 .s-title{font-family:var(--f-display);font-weight:800;font-size:clamp(28px,3.8vw,54px);line-height:1.02;margin:0;letter-spacing:-.01em}
 .s-sub{margin:10px 0 0;color:var(--muted);max-width:62ch;font-size:15px}
 
@@ -376,14 +375,14 @@ button{font:inherit;color:inherit}
 .gbtn .ar{width:18px;height:18px;position:relative;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .car-count{font-family:var(--f-mono);font-size:13px;min-width:64px;text-align:center}
 .car-count b{color:var(--brass);font-weight:600}
-.carousel{position:relative;height:clamp(320px,calc(100vh - 380px),520px);margin-top:clamp(14px,2.4vh,26px);perspective:1800px;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.carousel{position:relative;height:calc(min(470px,76vw) * 9 / 16 + 198px);margin-top:clamp(14px,2.4vh,26px);perspective:1800px;touch-action:pan-y;user-select:none;-webkit-user-select:none}
 .pcard{--w:min(470px,76vw);position:absolute;top:0;left:50%;width:var(--w);height:100%;margin-left:calc(var(--w) / -2);transition:transform .9s var(--ease-out),opacity .7s,filter .7s;will-change:transform;outline-offset:6px}
 .carousel.dragging .pcard{transition:transform .12s linear,opacity .3s}
 .pc-in{position:relative;height:100%;display:flex;flex-direction:column;border:1px solid var(--line-strong);background:var(--surface-solid);border-radius:12px;overflow:hidden;transition:transform .3s ease-out,box-shadow .5s;cursor:pointer}
 .pcard.center .pc-in{box-shadow:var(--shadow),0 0 0 1px var(--brass-soft)}
 .pcard.center::before{content:"";position:absolute;inset:-2px;border-radius:14px;padding:2px;background:conic-gradient(from var(--ang),var(--brass),transparent 28%,var(--verd) 50%,transparent 78%,var(--brass));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:angspin 5s linear infinite;z-index:2;pointer-events:none}
 @keyframes angspin{to{--ang:360deg}}
-.pc-media{position:relative;flex:0 0 54%;overflow:hidden;background:var(--bg2)}
+.pc-media{position:relative;flex:none;aspect-ratio:16/9;overflow:hidden;background:var(--bg2)}
 .ph-media{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);
   background:linear-gradient(135deg,var(--brass-soft),var(--verd-soft)),
   linear-gradient(var(--line) 1px,transparent 1px) 0 0/24px 24px,linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/24px 24px;
@@ -393,6 +392,17 @@ button{font:inherit;color:inherit}
 .pcard.center:hover .pc-media .shot{transform:scale(1.04)}
 .m-screen.real{max-height:62vh}
 .m-screen.real .shot{object-fit:contain}
+.m-screen.real,.cm .cert-big{cursor:zoom-in}
+/* full-screen shot viewer: wheel / buttons / double click / pinch zoom, drag to pan */
+.zoomer{position:fixed;inset:0;z-index:95;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:fxswap .3s var(--ease-out)}
+.zoomer[hidden]{display:none}
+.zm-stage{position:absolute;inset:0;overflow:hidden;touch-action:none;cursor:zoom-in}
+.zm-stage.zoomed{cursor:grab}.zm-stage.drag{cursor:grabbing}
+.zm-stage img{position:absolute;left:0;top:0;transform-origin:0 0;max-width:none;user-select:none;-webkit-user-select:none}
+.zm-stage:not(.drag) img{transition:transform .25s var(--ease-out)}
+.zm-ctl{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:6px;border:1px solid var(--line-strong);border-radius:30px;background:var(--surface-solid);box-shadow:var(--shadow)}
+.zm-ctl .ibtn{width:36px;height:36px}
+.zm-val{min-width:48px;text-align:center;font-family:var(--f-mono);font-size:12px;color:var(--muted)}
 .ph-media svg{width:52px;height:52px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;opacity:.7}
 .badge{position:absolute;top:12px;left:12px;font-size:11.5px;padding:4px 10px;background:var(--surface);border:1px solid var(--line-strong);border-radius:20px;z-index:1}
 .play{position:absolute;left:50%;top:50%;width:62px;height:62px;margin:-31px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;z-index:1}
@@ -406,7 +416,7 @@ button{font:inherit;color:inherit}
 .pc-meta h3{min-width:0}
 .pc-meta .cat{flex:0 0 auto;white-space:nowrap}
 .pc-body h3{font-family:var(--f-display);font-weight:600;font-size:clamp(17px,1.5vw,21px);margin:0;line-height:1.2}
-.pc-body p{margin:0;font-size:13.5px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pc-body p{margin:0;font-size:13.5px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .pc-foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:10px}
 .pc-open{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;color:var(--ink);white-space:nowrap}
 .pc-open svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;transition:transform .4s var(--ease-out)}
@@ -432,37 +442,24 @@ button{font:inherit;color:inherit}
 .socials{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
 .soc{all:unset;cursor:pointer;display:flex;align-items:center;gap:8px;padding:10px 16px;border:1px solid var(--line-strong);border-radius:40px;font-size:13.5px;font-weight:600;transition:border-color .3s,color .3s}
 .soc:hover{border-color:var(--brass);color:var(--brass)}
+.soc svg{width:16px;height:16px;flex:none}
 .tx{position:relative}
 .tx form{padding:22px 22px 20px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .field{position:relative;margin-bottom:18px}
 .field input,.field textarea{width:100%;background:transparent;border:0;border-bottom:1px solid var(--line-strong);padding:20px 0 8px;font:inherit;font-size:15px;color:var(--ink);outline:none;resize:none;border-radius:0}
-.field textarea{height:84px}
+.field textarea{height:120px}
 .field label{position:absolute;left:0;top:20px;color:var(--muted);font-size:14.5px;transition:.3s var(--ease-out);pointer-events:none}
 .field input:focus+label,.field input:not(:placeholder-shown)+label,.field textarea:focus+label,.field textarea:not(:placeholder-shown)+label{top:0;font-size:12px;color:var(--verd)}
 .field .bar{position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--verd);transform:scaleX(0);transform-origin:left;transition:transform .6s var(--ease-out)}
 .field input:focus~.bar,.field textarea:focus~.bar{transform:scaleX(1)}
 .field.err .bar{background:var(--danger);transform:scaleX(1)}
 .field.err label{color:var(--danger)}
-.field .msg{position:absolute;right:0;top:2px;font-size:11.5px;color:var(--danger);opacity:0;transition:opacity .3s}
-.field.err .msg{opacity:1}
+.field .ferr{position:absolute;right:0;top:2px;font-size:11.5px;color:var(--danger);opacity:0;transition:opacity .3s}
+.field.err .ferr{opacity:1}
 .field.err{animation:shake .45s}
 @keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
 .flabel{font-size:12px;color:var(--muted);margin-bottom:8px;display:flex;justify-content:space-between}
-.opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
-.opt input{position:absolute;opacity:0;pointer-events:none}
-.opt span{display:flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--line-strong);border-radius:30px;font-size:13px;cursor:pointer;transition:.3s}
-.opt span::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--line-strong);transition:.3s}
-.opt input:checked+span{border-color:var(--verd);background:var(--verd-soft)}
-.opt input:checked+span::before{background:var(--verd);box-shadow:0 0 8px var(--verd)}
-.opt input:focus-visible+span{outline:1.5px dashed var(--verd);outline-offset:3px}
-.range{margin-bottom:20px}
-.range output{font-family:var(--f-mono);color:var(--brass);font-size:12.5px}
-.range input{-webkit-appearance:none;appearance:none;width:100%;height:22px;background:transparent;margin:0}
-.range input::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:repeating-linear-gradient(90deg,var(--line-strong) 0 2px,transparent 2px 10px),var(--bg2)}
-.range input::-moz-range-track{height:6px;border-radius:3px;background:repeating-linear-gradient(90deg,var(--line-strong) 0 2px,transparent 2px 10px),var(--bg2)}
-.range input::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;margin-top:-8px;border-radius:50%;background:var(--surface-solid);border:5px solid var(--brass);box-shadow:0 0 0 4px var(--brass-soft)}
-.range input::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--surface-solid);border:5px solid var(--brass)}
 .send{all:unset;cursor:pointer;box-sizing:border-box;position:relative;overflow:hidden;width:100%;padding:16px 20px;border-radius:40px;background:var(--ink);color:var(--bg);font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:12px;transition:box-shadow .3s}
 .send:hover{box-shadow:0 0 0 4px var(--brass-soft),0 14px 30px -12px var(--brass)}
 .send .fill{position:absolute;inset:0;background:var(--verd);transform:scaleX(0);transform-origin:left}
@@ -591,7 +588,7 @@ button{font:inherit;color:inherit}
   .nav-inner{gap:10px}
   .chat{right:10px;left:10px;width:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 84px);height:min(560px,calc(100vh - 170px))}
   .hud-r{display:none}
-  .slide-scroll{justify-content:flex-start}
+  .slide-scroll{justify-content:flex-start;--top-gap:14px}
   .hero,.contact,.certs{grid-template-columns:1fr}
   .portrait{--s:min(62vw,300px)}
   .callout.c1{right:-10%}.callout.c2{left:-10%}
@@ -644,6 +641,20 @@ button{font:inherit;color:inherit}
   .pg{min-width:0;flex:0 1 auto;height:40px;gap:7px;font-size:12.5px;padding:0 12px 0 4px}
   .pg-next{padding:0 4px 0 12px}
   .pg-n b{display:none}
+  /* narrow cards wrap the description into more lines */
+  .carousel{height:calc(min(470px,76vw) * 9 / 16 + 248px)}
+  .pc-body p{-webkit-line-clamp:6}
+}
+/* narrow phones: one column of cards right of the line, the year sits left of each node */
+@media (max-width:419.98px){
+  .tl{--yw:52px;grid-template-columns:minmax(0,1fr);padding-left:calc(var(--yw) + var(--stem))}
+  .tl-line{left:calc(var(--yw) - 1px)}
+  .tl-item.up,.tl-item.down{grid-column:1;grid-row:auto}
+  .tl-item.up::before,.tl-item.down::before{left:auto;right:100%}
+  .tl-item.up .tl-node,.tl-item.down .tl-node{left:auto;right:calc(100% + var(--stem) - 11px)}
+  .tl-year,.tl-item.up .tl-year,.tl-item.down .tl-year{display:block;left:auto;bottom:auto;right:calc(100% + var(--stem) + 19px);top:var(--ny);transform:translateY(-50%);font-size:12px}
+  .job{padding-top:12px}
+  .job-when{display:none}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -855,7 +866,6 @@ button{font:inherit;color:inherit}
     <div class="slide-scroll">
       <div class="wrap">
         <div class="s-head" data-a="left">
-          <div class="s-meta"><span class="idx">02 / 06</span><span class="bitline" data-bits></span></div>
           <h2 class="s-title" data-i18n="path.title"></h2>
           <p class="s-sub" data-i18n="path.sub"></p>
         </div>
@@ -870,7 +880,6 @@ button{font:inherit;color:inherit}
     <div class="slide-scroll">
       <div class="wrap">
         <div class="s-head" data-a="left">
-          <div class="s-meta"><span class="idx">03 / 06</span><span class="bitline" data-bits></span></div>
           <h2 class="s-title" data-i18n="kn.title"></h2>
           <p class="s-sub" data-i18n="kn.sub"></p>
         </div>
@@ -906,7 +915,6 @@ button{font:inherit;color:inherit}
     <div class="slide-scroll">
       <div class="wrap">
         <div class="s-head" data-a="left">
-          <div class="s-meta"><span class="idx">04 / 06</span><span class="bitline" data-bits></span></div>
           <h2 class="s-title" data-i18n="nav.3"></h2>
         </div>
         <div class="certs">
@@ -938,7 +946,6 @@ button{font:inherit;color:inherit}
       <div class="wrap">
         <div class="proj-head">
           <div class="s-head" data-a="left" style="margin-bottom:0">
-            <div class="s-meta"><span class="idx">05 / 06</span><span class="bitline" data-bits></span></div>
             <h2 class="s-title" data-i18n="nav.4"></h2>
           </div>
           <div class="car-ctrl" data-a="right" style="--d:1">
@@ -966,44 +973,32 @@ button{font:inherit;color:inherit}
       <div class="wrap contact">
         <div>
           <div class="s-head" data-a="left" style="margin-bottom:0">
-            <div class="s-meta"><span class="idx">06 / 06</span><span class="bitline" data-bits></span></div>
             <h2 class="s-title" data-i18n="c.title"></h2>
             <p class="s-sub" data-i18n="c.sub"></p>
           </div>
           <div class="term" data-a="up" style="--d:2">
             <div class="panel-bar"><span class="leds"><i></i><i></i><i></i></span><span>contacts.sh</span></div>
             <div class="term-body">
-              <div><span class="p">$</span> email &nbsp;<a href="mailto:hello@example.com">hello@example.com</a></div>
-              <div><span class="p">$</span> telegram &nbsp;<a href="#" onclick="return false">@username</a></div>
-              <div><span class="p">$</span> <span data-i18n="c.tz"></span> &nbsp;UTC+1</div>
+              <div><span class="p">$</span> email &nbsp;<a href="mailto:info@profidev.de">info@profidev.de</a></div>
+              <div><span class="p">$</span> telegram &nbsp;<a href="https://t.me/a1exeych" target="_blank" rel="noopener">@a1exeych</a></div>
+              <div><span class="p">$</span> <span data-i18n="c.loc"></span> &nbsp;<span data-i18n="c.city"></span></div>
               <div><span class="p">$</span> <span class="cur"></span></div>
             </div>
           </div>
           <div class="socials" data-a="up" style="--d:3">
-            <a class="soc magnetic" href="#" onclick="return false">GitHub</a>
-            <a class="soc magnetic" href="#" onclick="return false">LinkedIn</a>
-            <a class="soc magnetic" href="#" onclick="return false">Telegram</a>
+            <a class="soc magnetic" href="https://www.linkedin.com/in/aleksei-chasovskoi/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>LinkedIn</a>
+            <a class="soc magnetic" href="https://t.me/a1exeych" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.94 4.3 18.9 18.63c-.23 1.01-.83 1.26-1.68.78l-4.63-3.41-2.23 2.15c-.25.25-.45.45-.93.45l.33-4.71 8.58-7.75c.37-.33-.08-.52-.58-.19L7.16 12.63 2.6 11.2c-.99-.31-1.01-.99.21-1.47L20.63 2.87c.83-.31 1.55.19 1.31 1.43z"/></svg><span data-i18n="c.tg"></span></a>
           </div>
         </div>
         <div class="tx panel" id="tx" data-a="right" style="--d:2">
           <div class="panel-bar"><span class="leds"><i></i><i></i><i></i></span><span id="txStatus"></span></div>
           <form id="form" novalidate>
             <div class="row2">
-              <div class="field"><input id="fName" name="name" placeholder=" " autocomplete="name"><label for="fName" data-i18n="f.name"></label><span class="bar"></span><span class="msg" data-i18n="f.nameErr"></span></div>
-              <div class="field"><input id="fMail" name="email" type="email" placeholder=" " autocomplete="email"><label for="fMail" data-i18n="f.mail"></label><span class="bar"></span><span class="msg" data-i18n="f.mailErr"></span></div>
+              <div class="field"><input id="fMail" name="email" type="email" placeholder=" " autocomplete="email" required><label for="fMail" data-i18n="f.mail"></label><span class="bar"></span><span class="ferr" data-i18n="f.mailErr"></span></div>
+              <div class="field"><input id="fName" name="name" placeholder=" " autocomplete="name" required><label for="fName" data-i18n="f.name"></label><span class="bar"></span><span class="ferr" data-i18n="f.nameErr"></span></div>
             </div>
-            <div class="flabel" data-i18n="f.type"></div>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="type" value="soft" checked><span data-i18n="f.o0"></span></label>
-              <label class="opt"><input type="radio" name="type" value="web"><span data-i18n="f.o1"></span></label>
-              <label class="opt"><input type="radio" name="type" value="ai"><span data-i18n="f.o2"></span></label>
-              <label class="opt"><input type="radio" name="type" value="other"><span data-i18n="f.o3"></span></label>
-            </div>
-            <div class="range">
-              <div class="flabel"><span data-i18n="f.budget"></span><output id="budgetOut"></output></div>
-              <input type="range" id="budget" min="0" max="3" step="1" value="1" data-i18n-aria="f.budget">
-            </div>
-            <div class="field"><textarea id="fMsg" placeholder=" "></textarea><label for="fMsg" data-i18n="f.msg"></label><span class="bar"></span><span class="msg" data-i18n="f.msgErr"></span></div>
+            <div class="field"><input id="fCompany" name="company" placeholder=" " autocomplete="organization"><label for="fCompany" data-i18n="f.company"></label><span class="bar"></span></div>
+            <div class="field"><textarea id="fMsg" name="message" placeholder=" " required></textarea><label for="fMsg" data-i18n="f.msg"></label><span class="bar"></span><span class="ferr" data-i18n="f.msgErr"></span></div>
             <button class="send" type="submit" id="send"><span class="fill"></span><span class="lbl" data-spinhost><svg data-gear="10" data-spin="0.8" id="sendGear" viewBox="-50 -50 100 100"></svg><span id="sendTxt"></span></span></button>
           </form>
           <div class="tx-done" aria-live="polite">
@@ -1090,6 +1085,17 @@ button{font:inherit;color:inherit}
   </div>
 </div>
 
+<!-- ========== SHOT ZOOM ========== -->
+<div class="zoomer" id="zoomer" role="dialog" aria-modal="true" data-i18n-aria="zm.title" hidden>
+  <div class="zm-stage" id="zmStage"><img id="zmImg" alt="" draggable="false"></div>
+  <div class="zm-ctl">
+    <button class="ibtn" id="zmOut" type="button" data-i18n-aria="zm.out"><svg viewBox="0 0 24 24"><path d="M6 12h12"/></svg></button>
+    <span class="zm-val" id="zmVal">100%</span>
+    <button class="ibtn" id="zmIn" type="button" data-i18n-aria="zm.in"><svg viewBox="0 0 24 24"><path d="M6 12h12M12 6v12"/></svg></button>
+    <button class="ibtn" id="zmX" type="button" data-i18n-aria="zm.close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
+</div>
+
 <!-- ========== CERT MODAL ========== -->
 <div class="modal cm" id="cm" aria-hidden="true">
   <div class="m-back" data-close></div>
@@ -1156,7 +1162,7 @@ const I18N = {
     'cert.n8n':'n8n Professional Certificate','cert.n8n.i':'Пройдены все курсы программы n8n Academy по автоматизации рабочих процессов в n8n.',
     'cert.oracle':'Oracle Certified Professional: Java SE 11 Developer','cert.oracle.i':'Профессиональная сертификация Oracle по разработке на Java SE 11.',
     'proj.title':'Название проекта','proj.desc':'Короткое описание проекта в одну-две строки: суть задачи и результат.',
-    'cat.web':'Веб','cat.ai':'AI-автоматизация','cat.soft':'ПО','media.video':'Видео','media.image':'Изображение','proj.n':'Проект','proj.frame':'Кадр',
+    'cat.web':'Веб','cat.ai':'AI-автоматизация','cat.soft':'ПО','media.video':'Видео','media.image':'Изображение','proj.n':'Проект','proj.frame':'Кадр','zm.title':'Просмотр кадра','zm.in':'Увеличить','zm.out':'Уменьшить','zm.close':'Закрыть',
     'pm.lead':'Расширенное описание проекта: для кого он сделан, что умеет и почему это было интересно. Здесь 2–3 предложения.',
     'pm.t0':'Задача','pm.t1':'Решение','pm.t2':'Результат',
     'pm.p0':'Текст о задаче клиента: что было до начала работы и какую проблему нужно было решить.',
@@ -1225,12 +1231,11 @@ const I18N = {
     'prj.benefita.s1':'Раздел баллов: задания для заработка баллов — email, Instagram, уведомления, приглашение друга, пост о заведении',
     'prj.benefita.s2':'Витрина: заведения-участники и их скидки и подарки за баллы',
     'prj.benefita.s3':'Страница заведения: описание, адрес, часы работы и доступные купоны',
-    'c.title':'Расскажите о задаче','c.sub':'Опишите, что нужно сделать — отвечу с вопросами и примерной оценкой сроков.','c.tz':'часовой пояс',
-    'f.name':'Имя','f.nameErr':'Укажите имя','f.mail':'Email или Telegram','f.mailErr':'Нужен контакт для ответа','f.type':'Что нужно сделать',
-    'f.o0':'Программа','f.o1':'Сайт или веб-приложение','f.o2':'AI-автоматизация','f.o3':'Другое','f.budget':'Бюджет','f.msg':'Коротко о задаче','f.msgErr':'Опишите задачу',
-    'f.send':'Отправить заявку','f.sending':'отправка','f.sent':'Отправлено','f.ready':'Готов к отправке','f.fix':'Заполните отмеченные поля','f.tx':'Передача данных…','f.delivered':'Доставлено',
-    'f.doneT':'Заявка отправлена','f.doneP':'Отвечу в течение дня. Это демо-версия: форма пока никуда не отправляет данные.','f.again':'Отправить ещё одну',
-    'budgets':['до 500 €','500–1 500 €','1 500–5 000 €','от 5 000 €'],
+    'c.title':'Обратная связь','c.sub':'Есть вопрос или идея? Напишите — я отвечу.','c.loc':'место','c.city':'Нюрнберг','c.tg':'Написать в Telegram',
+    'f.name':'Имя','f.nameErr':'Укажите имя','f.mail':'Email','f.mailErr':'Укажите корректный email','f.company':'Фирма (необязательно)',
+    'f.msg':'Сообщение','f.msgErr':'Напишите сообщение',
+    'f.send':'Отправить сообщение','f.sending':'отправка','f.sent':'Отправлено','f.ready':'Готов к отправке','f.fix':'Заполните отмеченные поля','f.tx':'Передача данных…','f.delivered':'Доставлено',
+    'f.doneT':'Сообщение отправлено','f.doneP':'Отвечу в течение дня. Это демо-версия: форма пока никуда не отправляет данные.','f.again':'Отправить ещё одну',
     'sh.module':'МОДУЛЬ','sh.loading':'загрузка раздела «{x}»','sh.boot':'ЗАПУСК','sh.init':'ИНИЦИАЛИЗАЦИЯ СИСТЕМЫ','sh.bootSub':'портфолио загружается',
     'chat.tip':'Задать вопрос ассистенту','chat.title':'Ассистент','chat.online':'Онлайн, отвечает AI','chat.demo':'Демо-режим: готовые ответы','chat.ph':'Напишите вопрос…','chat.send':'Отправить',
     'chat.hello':'Привет! Помогу разобраться с услугами, проектами и тем, как связаться. Что вас интересует?',
@@ -1238,7 +1243,7 @@ const I18N = {
     'chat.err':'Не получилось ответить. Попробуйте ещё раз или напишите через форму.','chat.rate':'Слишком много вопросов подряд — подождите немного.','chat.go':'Открыть',
     'fb.services':'Три направления: веб, мобильные и десктоп-приложения (включая PWA), AI-автоматизация и AI-агенты, голосовые AI-ассистенты. Подробности — в первом разделе.',
     'fb.price':'Стоимость зависит от задачи. Опишите проект в форме — отвечу с оценкой сроков и бюджета.',
-    'fb.contact':'Проще всего — через форму обратной связи или по email hello@example.com.',
+    'fb.contact':'Проще всего — через форму обратной связи, по email info@profidev.de или в Telegram @a1exeych.',
     'fb.projects':'Примеры работ собраны в разделе «Проекты». Например, drafta — SaaS, в котором AI готовит черновики ответов клиентам во всех мессенджерах и соцсетях. Нажмите на карточку, чтобы открыть подробности.',
     'fb.skills':'Технологии и компетенции собраны в разделе «Навыки»: Java и Spring, бэкенд, веб, AI-консалтинг, автоматизация и AI-агенты (n8n, RAG, мультиагентные системы).',
     'fb.exp':'Опыт работы: T-Systems (Deutsche Telekom) — с 2014 года, DATEV — 2020, Volkswagen — 2021, LeanCodes — 2022, AixPano — 2023, с 2026 года — фриланс. Подробнее — в разделе «Опыт».','fb.certs':'Сертификаты: «Специалист по AI-автоматизации бизнеса» (Beam Institute, 600 ч), n8n Professional Certificate и Oracle Certified Professional: Java SE 11. Их можно открыть в разделе «Сертификаты».',
@@ -1282,7 +1287,7 @@ const I18N = {
     'cert.n8n':'n8n Professional Certificate','cert.n8n.i':'Completed all courses of the n8n Academy program on workflow automation with n8n.',
     'cert.oracle':'Oracle Certified Professional: Java SE 11 Developer','cert.oracle.i':'Oracle professional certification in Java SE 11 development.',
     'proj.title':'Project title','proj.desc':'A one- or two-line project summary: the task and the result.',
-    'cat.web':'Web','cat.ai':'AI automation','cat.soft':'Software','media.video':'Video','media.image':'Image','proj.n':'Project','proj.frame':'Frame',
+    'cat.web':'Web','cat.ai':'AI automation','cat.soft':'Software','media.video':'Video','media.image':'Image','proj.n':'Project','proj.frame':'Frame','zm.title':'Frame viewer','zm.in':'Zoom in','zm.out':'Zoom out','zm.close':'Close',
     'pm.lead':'Extended project description: who it was built for, what it does and why it was interesting. Two or three sentences here.',
     'pm.t0':'Challenge','pm.t1':'Solution','pm.t2':'Result',
     'pm.p0':'About the client\u2019s challenge: the situation before the work started and the problem to solve.',
@@ -1351,12 +1356,11 @@ const I18N = {
     'prj.benefita.s1':'Points section: tasks for earning points (email, Instagram, notifications, inviting a friend, a post about a venue)',
     'prj.benefita.s2':'Showcase: participating venues and their discounts and gifts for points',
     'prj.benefita.s3':'Venue page: description, address, opening hours and available vouchers',
-    'c.title':'Tell me about your project','c.sub':'Describe what needs to be done — I\u2019ll reply with questions and a rough time estimate.','c.tz':'timezone',
-    'f.name':'Name','f.nameErr':'Enter your name','f.mail':'Email or Telegram','f.mailErr':'I need a way to reply','f.type':'What do you need?',
-    'f.o0':'An application','f.o1':'Website or web app','f.o2':'AI automation','f.o3':'Something else','f.budget':'Budget','f.msg':'Briefly about the task','f.msgErr':'Describe the task',
-    'f.send':'Send request','f.sending':'sending','f.sent':'Sent','f.ready':'Ready to send','f.fix':'Fill in the highlighted fields','f.tx':'Transmitting…','f.delivered':'Delivered',
-    'f.doneT':'Request sent','f.doneP':'I\u2019ll reply within a day. This is a demo: the form doesn\u2019t send data anywhere yet.','f.again':'Send another',
-    'budgets':['under €500','€500–1,500','€1,500–5,000','€5,000+'],
+    'c.title':'Get in touch','c.sub':'Have a question or an idea? Drop me a line — I\u2019ll get back to you.','c.loc':'location','c.city':'Nuremberg','c.tg':'Message on Telegram',
+    'f.name':'Name','f.nameErr':'Enter your name','f.mail':'Email','f.mailErr':'Enter a valid email','f.company':'Company (optional)',
+    'f.msg':'Message','f.msgErr':'Write a message',
+    'f.send':'Send message','f.sending':'sending','f.sent':'Sent','f.ready':'Ready to send','f.fix':'Fill in the highlighted fields','f.tx':'Transmitting…','f.delivered':'Delivered',
+    'f.doneT':'Message sent','f.doneP':'I\u2019ll reply within a day. This is a demo: the form doesn\u2019t send data anywhere yet.','f.again':'Send another',
     'sh.module':'MODULE','sh.loading':'loading section \u201c{x}\u201d','sh.boot':'BOOT','sh.init':'SYSTEM INITIALIZATION','sh.bootSub':'loading portfolio',
     'chat.tip':'Ask the assistant','chat.title':'Assistant','chat.online':'Online, answered by AI','chat.demo':'Demo mode: preset answers','chat.ph':'Type a question…','chat.send':'Send',
     'chat.hello':'Hi! I can help with services, projects and how to get in touch. What would you like to know?',
@@ -1364,7 +1368,7 @@ const I18N = {
     'chat.err':'Couldn\u2019t answer. Try again or use the contact form.','chat.rate':'Too many questions in a row — please wait a moment.','chat.go':'Open',
     'fb.services':'Three areas: web, mobile and desktop apps (including PWAs), AI automation and AI agents, and voice AI assistants. See the first section for details.',
     'fb.price':'The price depends on the task. Describe your project in the form and I\u2019ll reply with a time and budget estimate.',
-    'fb.contact':'The easiest way is the contact form or email hello@example.com.',
+    'fb.contact':'The easiest way is the contact form, email info@profidev.de or Telegram @a1exeych.',
     'fb.projects':'Work examples are in the Projects section. For example, drafta is a SaaS where AI drafts replies to customers across all messengers and social networks. Click a card to open the details.',
     'fb.skills':'All technologies and skills are in the Skills section: Java and Spring, backend, web, AI consulting, automation and AI agents (n8n, RAG, multi-agent systems).',
     'fb.exp':'Work history: T-Systems (Deutsche Telekom) from 2014, DATEV 2020, Volkswagen 2021, LeanCodes 2022, AixPano 2023, freelance since 2026. More in the Experience section.','fb.certs':'Certificates: AI Business Automation Specialist (Beam Institute, 600 hours), n8n Professional Certificate and Oracle Certified Professional: Java SE 11. You can open them in the Certificates section.',
@@ -1408,7 +1412,7 @@ const I18N = {
     'cert.n8n':'n8n Professional Certificate','cert.n8n.i':'Alle Kurse des n8n-Academy-Programms zur Workflow-Automatisierung mit n8n abgeschlossen.',
     'cert.oracle':'Oracle Certified Professional: Java SE 11 Developer','cert.oracle.i':'Oracle-Profizertifizierung für die Entwicklung mit Java SE 11.',
     'proj.title':'Projekttitel','proj.desc':'Kurze Projektbeschreibung in ein, zwei Zeilen: Aufgabe und Ergebnis.',
-    'cat.web':'Web','cat.ai':'KI-Automatisierung','cat.soft':'Software','media.video':'Video','media.image':'Bild','proj.n':'Projekt','proj.frame':'Bild',
+    'cat.web':'Web','cat.ai':'KI-Automatisierung','cat.soft':'Software','media.video':'Video','media.image':'Bild','proj.n':'Projekt','proj.frame':'Bild','zm.title':'Bildansicht','zm.in':'Vergrößern','zm.out':'Verkleinern','zm.close':'Schließen',
     'pm.lead':'Ausführliche Projektbeschreibung: für wen es gebaut wurde, was es kann und warum es spannend war. Zwei, drei Sätze.',
     'pm.t0':'Aufgabe','pm.t1':'Lösung','pm.t2':'Ergebnis',
     'pm.p0':'Zur Aufgabe des Kunden: die Ausgangslage und das zu lösende Problem.',
@@ -1477,12 +1481,11 @@ const I18N = {
     'prj.benefita.s1':'Punktebereich: Aufgaben zum Punktesammeln (E-Mail, Instagram, Benachrichtigungen, Freunde einladen, Beitrag über einen Betrieb)',
     'prj.benefita.s2':'Vitrine: teilnehmende Betriebe und ihre Rabatte und Geschenke gegen Punkte',
     'prj.benefita.s3':'Seite eines Betriebs: Beschreibung, Adresse, Öffnungszeiten und verfügbare Gutscheine',
-    'c.title':'Erzählen Sie von Ihrem Projekt','c.sub':'Beschreiben Sie, was zu tun ist — ich antworte mit Rückfragen und einer groben Zeitschätzung.','c.tz':'Zeitzone',
-    'f.name':'Name','f.nameErr':'Bitte Namen angeben','f.mail':'E-Mail oder Telegram','f.mailErr':'Ich brauche einen Kontakt für die Antwort','f.type':'Was brauchen Sie?',
-    'f.o0':'Eine Anwendung','f.o1':'Website oder Web-App','f.o2':'KI-Automatisierung','f.o3':'Etwas anderes','f.budget':'Budget','f.msg':'Kurz zur Aufgabe','f.msgErr':'Bitte Aufgabe beschreiben',
-    'f.send':'Anfrage senden','f.sending':'wird gesendet','f.sent':'Gesendet','f.ready':'Bereit zum Senden','f.fix':'Bitte markierte Felder ausfüllen','f.tx':'Daten werden übertragen…','f.delivered':'Zugestellt',
-    'f.doneT':'Anfrage gesendet','f.doneP':'Ich antworte innerhalb eines Tages. Das ist eine Demo: Das Formular sendet noch keine Daten.','f.again':'Weitere senden',
-    'budgets':['bis 500 €','500–1.500 €','1.500–5.000 €','ab 5.000 €'],
+    'c.title':'Kontakt','c.sub':'Eine Frage oder eine Idee? Schreiben Sie mir — ich melde mich.','c.loc':'Ort','c.city':'Nürnberg','c.tg':'Auf Telegram schreiben',
+    'f.name':'Name','f.nameErr':'Bitte Namen angeben','f.mail':'E-Mail','f.mailErr':'Bitte gültige E-Mail angeben','f.company':'Firma (optional)',
+    'f.msg':'Nachricht','f.msgErr':'Bitte Nachricht schreiben',
+    'f.send':'Nachricht senden','f.sending':'wird gesendet','f.sent':'Gesendet','f.ready':'Bereit zum Senden','f.fix':'Bitte markierte Felder ausfüllen','f.tx':'Daten werden übertragen…','f.delivered':'Zugestellt',
+    'f.doneT':'Nachricht gesendet','f.doneP':'Ich antworte innerhalb eines Tages. Das ist eine Demo: Das Formular sendet noch keine Daten.','f.again':'Weitere senden',
     'sh.module':'MODUL','sh.loading':'Abschnitt \u201e{x}\u201c wird geladen','sh.boot':'START','sh.init':'SYSTEMINITIALISIERUNG','sh.bootSub':'Portfolio wird geladen',
     'chat.tip':'Assistenten fragen','chat.title':'Assistent','chat.online':'Online, antwortet per KI','chat.demo':'Demo-Modus: vorbereitete Antworten','chat.ph':'Frage eingeben…','chat.send':'Senden',
     'chat.hello':'Hallo! Ich helfe bei Fragen zu Leistungen, Projekten und Kontakt. Was möchten Sie wissen?',
@@ -1490,7 +1493,7 @@ const I18N = {
     'chat.err':'Keine Antwort möglich. Bitte erneut versuchen oder das Formular nutzen.','chat.rate':'Zu viele Fragen hintereinander — bitte kurz warten.','chat.go':'Öffnen',
     'fb.services':'Drei Schwerpunkte: Web-, Mobile- und Desktop-Apps (inklusive PWAs), KI-Automatisierung und KI-Agenten sowie KI-Sprachassistenten. Details im ersten Abschnitt.',
     'fb.price':'Der Preis hängt von der Aufgabe ab. Beschreiben Sie Ihr Projekt im Formular — ich antworte mit einer Schätzung zu Zeit und Budget.',
-    'fb.contact':'Am einfachsten über das Kontaktformular oder per E-Mail an hello@example.com.',
+    'fb.contact':'Am einfachsten über das Kontaktformular per E-Mail an info@profidev.de oder über Telegram @a1exeych.',
     'fb.projects':'Arbeitsbeispiele finden Sie unter „Projekte“. Zum Beispiel drafta: ein SaaS, in dem KI Antworten an Kunden in allen Messengern und sozialen Netzwerken entwirft. Klicken Sie auf eine Karte für Details.',
     'fb.skills':'Alle Technologien und Kompetenzen finden Sie unter „Kenntnisse“: Java und Spring, Backend, Web, KI-Beratung, Automatisierung und KI-Agenten (n8n, RAG, Multi-Agenten-Systeme).',
     'fb.exp':'Berufserfahrung: T-Systems (Deutsche Telekom) ab 2014, DATEV 2020, Volkswagen 2021, LeanCodes 2022, AixPano 2023, seit 2026 Freelance. Mehr im Abschnitt „Erfahrung“.','fb.certs':'Zertifikate: KI-Business-Automatisierungs-Spezialist (Beam Institute, 600 UE), n8n Professional Certificate und Oracle Certified Professional: Java SE 11. Sie lassen sich im Abschnitt „Zertifikate“ öffnen.',
@@ -2019,7 +2022,6 @@ function prepShutter(i) {
 function enterSlide(i) {
   const s = slides[i];
   s.classList.remove('in'); void s.offsetWidth; s.classList.add('in');
-  $$('[data-bits]', s).forEach(scrambleBits);
   $$('[data-count]', s).forEach(countUp);
   if (s.id === 'certs') layoutCerts();
   if (s === knSlide) kgEnter();
@@ -2065,6 +2067,14 @@ addEventListener('wheel', e => {
 
 // keyboard
 addEventListener('keydown', e => {
+  if (zmOpen()) {
+    if (e.key === 'Escape') zmHide();
+    else if (e.key === '+' || e.key === '=') zmTo(zs * 1.5);
+    else if (e.key === '-') zmTo(zs / 1.5);
+    else if (e.key === '0') zmTo(1);
+    else if (e.key === 'Tab') { e.preventDefault(); const b = $$('.zm-ctl button'), i = b.indexOf(document.activeElement); b[(i + (e.shiftKey ? -1 : 1) + b.length) % b.length].focus(); }
+    return;
+  }
   if (e.key === 'Escape') { if (chatOpen()) toggleChat(false); else if (modalOpen()) closeAllModals(); else kgClear(); return; }
   if (modalOpen()) {
     if ($('#pm').classList.contains('open')) { if (e.key === 'ArrowRight') pmStep(1); if (e.key === 'ArrowLeft') pmStep(-1); }
@@ -2080,15 +2090,6 @@ addEventListener('keydown', e => {
 });
 
 /* ================= SMALL EFFECTS ================= */
-function scrambleBits(el) {
-  const target = Array.from({ length: 24 }, () => Math.random() < .5 ? '0' : '1').join('');
-  let n = 0;
-  const iv = setInterval(() => {
-    n++;
-    el.textContent = target.slice(0, n) + Array.from({ length: 24 - n }, () => '01<>/#'[ri(0, 5)]).join('');
-    if (n >= 24) clearInterval(iv);
-  }, 28);
-}
 function scrambleText(el, text, dur = 600) {
   const chars = '01<>/{}#%&*+=';
   const t0 = performance.now();
@@ -2795,6 +2796,84 @@ function clipFrom(panel, srcEl) {
   const t = Math.max(0, s.top - p.top), l = Math.max(0, s.left - p.left), r = Math.max(0, p.right - s.right), b = Math.max(0, p.bottom - s.bottom);
   return `inset(${t}px ${r}px ${b}px ${l}px round 12px)`;
 }
+/* ================= SHOT ZOOM ================= */
+// scale 1 = the shot fitted into the screen; wheel, +/-, double click and pinch zoom around a point, drag pans
+const zm = $('#zoomer'), zmStage = $('#zmStage'), zmImg = $('#zmImg');
+const ZM_MAX = 6;
+let zs = 1, zx = 0, zy = 0, zFit = 1, zBack = null;
+const zmOpen = () => !zm.hidden;
+function zmFit() {
+  const r = zmStage.getBoundingClientRect(), w = zmImg.naturalWidth || 1, h = zmImg.naturalHeight || 1;
+  zFit = Math.min((r.width - 32) / w, (r.height - 110) / h, 1.5);
+  zmImg.style.width = w * zFit + 'px'; zmImg.style.height = h * zFit + 'px';
+}
+function zmApply() {
+  const r = zmStage.getBoundingClientRect(), w = zmImg.naturalWidth * zFit * zs, h = zmImg.naturalHeight * zFit * zs;
+  // keep the picture centered while it is smaller than the screen, otherwise don't let it leave the edges
+  zx = w <= r.width ? (r.width - w) / 2 : Math.min(0, Math.max(r.width - w, zx));
+  zy = h <= r.height - 70 ? (r.height - 70 - h) / 2 : Math.min(0, Math.max(r.height - h, zy));
+  zmImg.style.transform = `translate(${zx}px,${zy}px) scale(${zs})`;
+  zmStage.classList.toggle('zoomed', zs > 1);
+  $('#zmVal').textContent = Math.round(zs * 100) + '%';
+}
+function zmTo(s, px, py) {
+  const r = zmStage.getBoundingClientRect();
+  s = Math.min(ZM_MAX, Math.max(1, s));
+  if (px == null) { px = r.width / 2; py = r.height / 2; }
+  zx = px - (px - zx) * s / zs; zy = py - (py - zy) * s / zs; zs = s;
+  zmApply();
+}
+function zmShow(img) {
+  zBack = document.activeElement;
+  zmImg.alt = img.alt;
+  zmImg.onload = () => { zmFit(); zs = 1; zmApply(); };
+  zmImg.src = img.currentSrc || img.src;
+  zm.hidden = false;
+  if (zmImg.complete && zmImg.naturalWidth) zmImg.onload();
+  $('#zmX').focus({ preventScroll: true });
+}
+function zmHide() { zm.hidden = true; zmImg.removeAttribute('src'); zBack?.focus({ preventScroll: true }); }
+$('#pmScreen').addEventListener('click', e => { const img = $('img', e.currentTarget); if (img && e.currentTarget.classList.contains('real')) zmShow(img); });
+$('#cmBig').addEventListener('click', e => { const img = $('img', e.currentTarget); if (img) zmShow(img); });
+$('#zmIn').addEventListener('click', () => zmTo(zs * 1.5));
+$('#zmOut').addEventListener('click', () => zmTo(zs / 1.5));
+$('#zmX').addEventListener('click', zmHide);
+addEventListener('resize', () => { if (zmOpen()) { zmFit(); zmApply(); } });
+zmStage.addEventListener('wheel', e => {
+  e.preventDefault();
+  const r = zmStage.getBoundingClientRect();
+  zmTo(zs * Math.exp(-e.deltaY * .0025), e.clientX - r.left, e.clientY - r.top);
+}, { passive: false });
+zmStage.addEventListener('dblclick', e => {
+  const r = zmStage.getBoundingClientRect();
+  zmTo(zs > 1 ? 1 : 2.5, e.clientX - r.left, e.clientY - r.top);
+});
+// pointers: one drags, two pinch; a click on the empty backdrop closes
+const zPts = new Map(); let zPinch = 0, zMoved = false;
+zmStage.addEventListener('pointerdown', e => {
+  zmStage.setPointerCapture(e.pointerId); zPts.set(e.pointerId, { x: e.clientX, y: e.clientY }); zMoved = false;
+  if (zPts.size === 2) { const [a, b] = [...zPts.values()]; zPinch = Math.hypot(a.x - b.x, a.y - b.y) / zs; }
+  zmStage.classList.add('drag');
+});
+zmStage.addEventListener('pointermove', e => {
+  const p = zPts.get(e.pointerId); if (!p) return;
+  const dx = e.clientX - p.x, dy = e.clientY - p.y;
+  if (Math.abs(dx) + Math.abs(dy) > 3) zMoved = true;
+  p.x = e.clientX; p.y = e.clientY;
+  if (zPts.size === 2) {
+    const [a, b] = [...zPts.values()], r = zmStage.getBoundingClientRect();
+    zmTo(Math.hypot(a.x - b.x, a.y - b.y) / zPinch, (a.x + b.x) / 2 - r.left, (a.y + b.y) / 2 - r.top);
+  } else if (zs > 1) { zx += dx; zy += dy; zmApply(); }
+});
+const zUp = e => {
+  if (!zPts.delete(e.pointerId)) return;
+  if (!zPts.size) {
+    zmStage.classList.remove('drag');
+    if (!zMoved && e.type === 'pointerup' && e.target === zmStage) zmHide();
+  }
+};
+zmStage.addEventListener('pointerup', zUp); zmStage.addEventListener('pointercancel', zUp);
+
 function openModal(m, srcEl) {
   const panel = $('.m-panel', m);
   modalSource = srcEl;
@@ -2883,10 +2962,9 @@ function openCert(i, srcEl) {
 
 /* ================= FORM ================= */
 const form = $('#form'), tx = $('#tx');
-$('#budget').addEventListener('input', e => { $('#budgetOut').textContent = t('budgets')[+e.target.value]; kick($('#sendGear g'), 40); });
 form.addEventListener('submit', e => {
   e.preventDefault();
-  const checks = [['#fName', v => v.trim().length > 1], ['#fMail', v => v.trim().length > 3], ['#fMsg', v => v.trim().length > 5]];
+  const checks = [['#fMail', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())], ['#fName', v => v.trim().length > 1], ['#fMsg', v => v.trim().length > 1]];
   let ok = true;
   checks.forEach(([s, fn]) => {
     const f = $(s).closest('.field'); f.classList.remove('err');
@@ -2910,7 +2988,7 @@ form.addEventListener('submit', e => {
 });
 $$('#form input, #form textarea').forEach(i => i.addEventListener('input', () => i.closest('.field')?.classList.remove('err')));
 $('#again').addEventListener('click', () => {
-  tx.classList.remove('done'); form.reset(); $('#budgetOut').textContent = t('budgets')[1]; txState = 'ready';
+  tx.classList.remove('done'); form.reset(); txState = 'ready';
   const btn = $('#send'); btn.classList.remove('sending'); $('#sendTxt').textContent = t('f.send');
   $('#sendGear g')._sp.localT = 1; $('#txStatus').textContent = t('f.ready');
 });
@@ -2963,7 +3041,6 @@ function applyLang(l, animate) {
   CERTS.forEach(c => c._el && c._el.setAttribute('aria-label', t('cert.open') + ': ' + c.title));
   selectCert(activeCert, !animate);
   kgLang();
-  $('#budgetOut').textContent = t('budgets')[+$('#budget').value];
   $('#txStatus').textContent = t(txState === 'done' ? 'f.delivered' : txState === 'fix' ? 'f.fix' : 'f.ready');
   if (!$('#send').classList.contains('sending')) $('#sendTxt').textContent = t('f.send');
   else if (txState === 'done') $('#sendTxt').textContent = t('f.sent');
@@ -3094,7 +3171,7 @@ function buildPrompt() {
     `Projects (real facts): ${PROJECTS.filter(p => p.key).map(p => `${p.title} — ${t(`prj.${p.key}.lead`)} ${t(`prj.${p.key}.p1`)}${p.url ? ` Website: ${p.url}` : ''}`).join('; ')}. ${PROJECTS.some(p => !p.key) ? 'The other project cards are placeholders. ' : ''}` +
     `Website sections: 0 = About, 1 = Experience, 2 = Skills (3D knowledge graph), 3 = Certificates, 4 = Projects, 5 = Contact form. ` +
     `Apart from the certificates, the skills, the list of employers and the projects above, the website content is still placeholder text, so NEVER invent specific facts (prices, job titles, clients, other dates, project details). ` +
-    `For anything specific, suggest the contact form or the email hello@example.com. ` +
+    `For anything specific, suggest the contact form or the email info@profidev.de or Telegram @a1exeych (LinkedIn: https://www.linkedin.com/in/aleksei-chasovskoi/, based in Nuremberg). ` +
     `Reply ONLY in ${t('langName')}, at most 3 short sentences, plain text without markdown. ` +
     `If one website section is relevant, end your reply with exactly one tag like [[go:3]].\n\n` +
     `${convo}\nAssistant:`;
