@@ -391,6 +391,7 @@ button{font:inherit;color:inherit}
 .pcard.center:hover .ph-media{transform:scale(1.06)}
 .pc-media .shot,.m-screen .shot,.thumbs .shot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.2s var(--ease-out)}
 .pcard.center:hover .pc-media .shot{transform:scale(1.04)}
+.m-screen.real{max-height:62vh}
 .m-screen.real .shot{object-fit:contain}
 .ph-media svg{width:52px;height:52px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;opacity:.7}
 .badge{position:absolute;top:12px;left:12px;font-size:11.5px;padding:4px 10px;background:var(--surface);border:1px solid var(--line-strong);border-radius:20px;z-index:1}
@@ -401,8 +402,9 @@ button{font:inherit;color:inherit}
 .vbar i{position:absolute;inset:0;background:var(--verd);transform-origin:left;animation:vprog 7s linear infinite}
 @keyframes vprog{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 .pc-body{padding:18px 20px 16px;display:flex;flex-direction:column;gap:8px;flex:1;min-height:0}
-.pc-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
-.pc-meta .id{font-family:var(--f-mono);color:var(--brass)}
+.pc-meta{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:12px;color:var(--muted)}
+.pc-meta h3{min-width:0}
+.pc-meta .cat{flex:0 0 auto;white-space:nowrap}
 .pc-body h3{font-family:var(--f-display);font-weight:600;font-size:clamp(17px,1.5vw,21px);margin:0;line-height:1.2}
 .pc-body p{margin:0;font-size:13.5px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .pc-foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:10px}
@@ -1082,7 +1084,7 @@ button{font:inherit;color:inherit}
         </div>
         <div class="metrics stag" style="--d:3" id="pmMetrics"><div class="metric"><b>+00%</b><span data-i18n="pm.metric"></span></div><div class="metric"><b>00 h</b><span data-i18n="pm.metric"></span></div><div class="metric"><b>0.0×</b><span data-i18n="pm.metric"></span></div></div>
         <div class="stag" style="--d:4" id="pmStack"><div class="flabel" data-i18n="pm.stack"></div><div class="tags" id="pmTags"></div></div>
-        <div class="m-links stag" style="--d:5" id="pmLinks"><button class="btn btn-primary magnetic" data-spinhost><svg data-gear="10" data-spin="1" viewBox="-50 -50 100 100"></svg><span data-i18n="pm.demo"></span></button><button class="btn btn-ghost magnetic"><span data-i18n="pm.code"></span></button></div>
+        <div class="m-links stag" style="--d:5" id="pmLinks"><button class="btn btn-primary magnetic" data-spinhost data-ph><svg data-gear="10" data-spin="1" viewBox="-50 -50 100 100"></svg><span data-i18n="pm.demo"></span></button><button class="btn btn-ghost magnetic" data-ph><span data-i18n="pm.code"></span></button><a class="btn btn-primary magnetic" id="pmSite" target="_blank" rel="noopener" hidden><span data-i18n="pm.site"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8 7h9v9"/></svg></a></div>
       </div>
     </div>
   </div>
@@ -1160,7 +1162,7 @@ const I18N = {
     'pm.p0':'Текст о задаче клиента: что было до начала работы и какую проблему нужно было решить.',
     'pm.p1':'Текст о решении: архитектура, ключевые технические решения, интеграции.',
     'pm.p2':'Текст о результате: что изменилось для клиента после запуска.',
-    'pm.metric':'Метрика','pm.stack':'Стек','pm.demo':'Открыть демо','pm.code':'Исходный код',
+    'pm.metric':'Метрика','pm.stack':'Стек','pm.demo':'Открыть демо','pm.site':'Открыть сайт','pm.code':'Исходный код',
     'cat.saas':'SaaS',
     'prj.drafta.d':'SaaS для малого и среднего бизнеса: AI готовит черновики ответов клиентам во всех мессенджерах и соцсетях, остаётся нажать «Отправить».',
     'prj.drafta.lead':'drafta — SaaS-приложение для малого и среднего бизнеса, которое упрощает общение с клиентами. Оно берёт на себя работу агента, который ведёт соцсети и мессенджеры компании: готовит ответы и публикует контент.',
@@ -1190,12 +1192,39 @@ const I18N = {
     'prj.cards.d':'AI-ассистент для продавцов: из любительского фото товара делает готовую карточку для Amazon, Etsy, eBay или Shopify.',
     'prj.cards.lead':'Чат-бот, который превращает сырую фотографию товара в готовую карточку для маркетплейса. Достаточно отправить снимок — например, слегка помятое платье на кровати, — и ассистент сгенерирует профессиональные фото, заголовок и описание товара.',
     'prj.cards.p0':'Чтобы выставить товар на маркетплейс, продавцу нужны качественные фотографии, продающий заголовок и описание с ключевыми характеристиками. Фотосессия с моделью и тексты под требования каждой площадки отнимают время и деньги, особенно когда товаров много.',
-    'prj.cards.p1':'Пользователь загружает фото в чат, а ассистент распознаёт товар, генерирует серию изображений — на нейтральном фоне, в интерьере и на модели, которая его «примерила», — и пишет заголовок, описание и список ключевых особенностей. Кнопками выбирается площадка, под которую готовится карточка: Amazon, Etsy, eBay, Shopify и другие, а также язык: английский, немецкий или русский.',
+    'prj.cards.p1':'Пользователь загружает фото в чат, а ассистент распознаёт товар, генерирует серию изображений — на нейтральном фоне, в интерьере и на модели, которая его «примерила», — и пишет заголовок, описание и список ключевых особенностей. Кнопками выбирается площадка, под которую готовится карточка: Amazon, Etsy, eBay, Shopify и другие, а также язык: английский, немецкий или русский. Стек: React, модели Gemini через API, хостинг на Vercel.',
     'prj.cards.p2':'Из одного любительского снимка за несколько минут получается готовая карточка товара: набор фотографий, заголовок и описание, которые можно скачать или отредактировать перед публикацией.',
     'prj.cards.s0':'Карточка товара для Etsy: из фото платья на кровати сгенерированы снимки на модели, заголовок и описание',
     'prj.cards.s1':'Карточка товара для Amazon: микроволновая печь с новыми фото и списком ключевых особенностей',
     'prj.cards.s2':'Карточка товара для Shopify: кроссовки на модели в городском образе',
     'prj.cards.s3':'Карточка товара для eBay на русском: скутер с фото на улице и характеристиками',
+    'prj.oliva.d':'Голосовой ассистент для ресторана: отвечает на звонки, бронирует столики и принимает заказы на вынос, а сложные вопросы передаёт сотруднику.',
+    'prj.oliva.lead':'Голосовой AI-ассистент и портал для ресторана. Гость звонит по обычному номеру ресторана, а ассистент отвечает на вопросы, бронирует столик или оформляет заказ на вынос. Всё, что он делает, сразу попадает в портал ресторана, связанный и с ассистентом, и с сайтом.',
+    'prj.oliva.p0':'В часы пик сотрудники ресторана не успевают отвечать на звонки: гости не могут дозвониться, чтобы забронировать столик или заказать еду, и ресторан теряет заказы. Брони и заказы при этом приходят из разных каналов — по телефону, через сайт и в самом зале — и их нужно сводить вручную.',
+    'prj.oliva.p1':'Голосовой ассистент принимает звонки на номер ресторана: отвечает на вопросы гостей, бронирует столики и принимает заказы на вынос. Если он не может выполнить действие или ответить на вопрос, звонок переводится на сотрудника. Вторая часть проекта — портал ресторана: сайт для гостей с меню, бронированием и заказом на вынос и панель для персонала со схемой зала, бронями и заказами из всех каналов в реальном времени. Стек: голос — LiveKit и ElevenLabs, портал — Next.js и PostgreSQL на собственном сервере.',
+    'prj.oliva.p2':'Ресторан отвечает на каждый звонок, даже когда персонал занят. Брони и заказы от голосового ассистента, с сайта и из зала собираются в одном месте, а у каждой записи видно, из какого канала она пришла.',
+    'prj.oliva.s0':'Схема работы: гость звонит, голосовой ассистент отвечает на вопросы, бронирует столик или принимает заказ, а при необходимости передаёт звонок сотруднику',
+    'prj.oliva.s1':'Панель ресторана: схема зала и заказы в реальном времени с отметкой канала — телефонный бот, сайт или ресторан',
+    'prj.oliva.s2':'Бронирование столиков: схема зала, карточка брони от Telegram-бота и список предстоящих бронирований',
+    'prj.oliva.s3':'Сайт ресторана для гостей: меню, бронирование столика и заказ на вынос',
+    'prj.lingvy.d':'Приложение для изучения немецкого по книгам и фильмам: чтение с переводом, аудиопересказы, личный словарь и упражнения со словами.',
+    'prj.lingvy.lead':'Lingvy — Telegram Mini App для изучения иностранного языка на текстах по мотивам известных книг и фильмов. Пользователь читает и слушает истории, переводит незнакомые слова, собирает их в личный словарь и закрепляет в упражнениях.',
+    'prj.lingvy.p0':'Учебники и приложения с карточками быстро надоедают: слова заучиваются вне контекста и так же быстро забываются. Хотелось, чтобы язык можно было учить на интересных историях и при этом тренировать сразу чтение, восприятие на слух и словарный запас.',
+    'prj.lingvy.p1':'В приложении есть библиотека текстов по мотивам книг и фильмов, разбитых на главы. При чтении можно выделить слово или фразу, увидеть перевод и одним нажатием добавить слово в словарь. Тексты можно не только читать, но и слушать в виде аудиопересказов, а в разделе видео — смотреть ролики с немецкими субтитрами. Слова из словаря закрепляются в заданиях: вставить слово в предложение, прослушать и написать его. Стек: Telegram Mini App на React, данные в Supabase, хостинг на Vercel.',
+    'prj.lingvy.p2':'Пользователь учит язык на историях, которые ему интересны, а не на отдельных словах. В одном приложении тренируются чтение, аудирование и запоминание слов, а словарный запас пополняется прямо во время чтения.',
+    'prj.lingvy.s0':'Lingvy на трёх экранах: библиотека книг, чтение главы с переводом фразы и упражнение со словом',
+    'prj.lingvy.s1':'Чтение главы: выделенная фраза и её перевод на русский, внизу — плеер аудиопересказа',
+    'prj.lingvy.s2':'Раздел видео: короткие ролики и видео с немецкими субтитрами',
+    'prj.lingvy.s3':'Упражнение: прослушать слово и написать его по-немецки с артиклем',
+    'prj.benefita.d':'Кооперативная программа лояльности для местного бизнеса: баллы, заработанные в одном заведении, тратятся на скидки в других.',
+    'prj.benefita.lead':'Benefita — платформа, которая объединяет местные заведения в общую программу лояльности. Пользователь зарабатывает баллы, выполняя задания в одних заведениях, и тратит их на скидки и подарки в других, а бизнес получает новых клиентов от партнёров по сети без рекламного бюджета.',
+    'prj.benefita.p0':'Малому бизнесу сложно привлекать новых клиентов: реклама дорогая, а собственная программа лояльности удерживает только тех, кто уже пришёл. Кафе, салону или мастерской нужен способ получать клиентов от соседних заведений и мотивировать их возвращаться.',
+    'prj.benefita.p1':'Пользователь находит заведения в витрине приложения и выполняет задания за баллы. Самое простое — прийти в заведение и отсканировать NFC-чип на стойке, чтобы отметить визит. Есть и другие задания: опубликовать пост о заведении в соцсетях, подписаться на аккаунт, пригласить друга, подключить уведомления. Баллы обмениваются на скидки и подарки, которые предлагают заведения-участники. Стек: Next.js, Supabase, приложение работает как PWA — без установки из магазина.',
+    'prj.benefita.p2':'Клиенты одного заведения узнают о других и приходят к ним за скидками, а каждый визит и каждая публикация в соцсетях приносят бизнесу новую аудиторию. Для пользователя это единая программа бонусов по всему городу вместо десятка отдельных карт.',
+    'prj.benefita.s0':'Benefita на ноутбуке и телефоне: сайт для бизнеса и витрина заведений с предложениями',
+    'prj.benefita.s1':'Раздел баллов: задания для заработка баллов — email, Instagram, уведомления, приглашение друга, пост о заведении',
+    'prj.benefita.s2':'Витрина: заведения-участники и их скидки и подарки за баллы',
+    'prj.benefita.s3':'Страница заведения: описание, адрес, часы работы и доступные купоны',
     'c.title':'Расскажите о задаче','c.sub':'Опишите, что нужно сделать — отвечу с вопросами и примерной оценкой сроков.','c.tz':'часовой пояс',
     'f.name':'Имя','f.nameErr':'Укажите имя','f.mail':'Email или Telegram','f.mailErr':'Нужен контакт для ответа','f.type':'Что нужно сделать',
     'f.o0':'Программа','f.o1':'Сайт или веб-приложение','f.o2':'AI-автоматизация','f.o3':'Другое','f.budget':'Бюджет','f.msg':'Коротко о задаче','f.msgErr':'Опишите задачу',
@@ -1259,7 +1288,7 @@ const I18N = {
     'pm.p0':'About the client\u2019s challenge: the situation before the work started and the problem to solve.',
     'pm.p1':'About the solution: architecture, key technical decisions, integrations.',
     'pm.p2':'About the result: what changed for the client after launch.',
-    'pm.metric':'Metric','pm.stack':'Stack','pm.demo':'Open demo','pm.code':'Source code',
+    'pm.metric':'Metric','pm.stack':'Stack','pm.demo':'Open demo','pm.site':'Visit website','pm.code':'Source code',
     'cat.saas':'SaaS',
     'prj.drafta.d':'SaaS for small and mid-sized businesses: AI drafts replies to customers across messengers and social networks, you just press Send.',
     'prj.drafta.lead':'drafta is a SaaS app that makes customer communication easier for small and mid-sized businesses. It takes over the job of an agent who runs the company’s social networks and messengers: it drafts replies and publishes content.',
@@ -1289,12 +1318,39 @@ const I18N = {
     'prj.cards.d':'An AI assistant for sellers: turns an amateur product photo into a ready listing for Amazon, Etsy, eBay or Shopify.',
     'prj.cards.lead':'A chatbot that turns a raw product photo into a ready marketplace listing. Just send a snapshot, say a slightly creased dress lying on a bed, and the assistant generates professional photos, a product title and a description.',
     'prj.cards.p0':'To list a product on a marketplace, a seller needs good photos, a compelling title and a description with key features. A photo shoot with a model and copy tailored to every platform cost time and money, especially with many products.',
-    'prj.cards.p1':'The user uploads a photo to the chat, and the assistant recognises the product, generates a set of images (on a clean background, in an interior and on a model \u201cwearing\u201d it) and writes a title, a description and a list of key features. Buttons choose the target platform (Amazon, Etsy, eBay, Shopify and others) and the language: English, German or Russian.',
+    'prj.cards.p1':'The user uploads a photo to the chat, and the assistant recognises the product, generates a set of images (on a clean background, in an interior and on a model \u201cwearing\u201d it) and writes a title, a description and a list of key features. Buttons choose the target platform (Amazon, Etsy, eBay, Shopify and others) and the language: English, German or Russian. Stack: React, Gemini models via API, hosted on Vercel.',
     'prj.cards.p2':'One amateur snapshot becomes a ready product listing in minutes: a set of photos, a title and a description that can be downloaded or edited before publishing.',
     'prj.cards.s0':'Etsy listing: model shots, a title and a description generated from a photo of a dress on a bed',
     'prj.cards.s1':'Amazon listing: a microwave oven with new photos and a list of key features',
     'prj.cards.s2':'Shopify listing: sneakers on a model in a casual city look',
     'prj.cards.s3':'eBay listing in Russian: a scooter with outdoor photos and specifications',
+    'prj.oliva.d':'A voice assistant for a restaurant: answers calls, books tables and takes takeaway orders, handing complex questions to a staff member.',
+    'prj.oliva.lead':'An AI voice assistant and portal for a restaurant. A guest calls the restaurant\u2019s regular number, and the assistant answers questions, books a table or takes a takeaway order. Everything it does goes straight into the restaurant portal, which is connected both to the assistant and to the website.',
+    'prj.oliva.p0':'At peak times restaurant staff can\u2019t keep up with calls: guests can\u2019t get through to book a table or order food, and the restaurant loses orders. Bookings and orders also come from different channels (phone, website and on site) and have to be combined by hand.',
+    'prj.oliva.p1':'The voice assistant takes calls on the restaurant\u2019s number: it answers guests\u2019 questions, books tables and takes takeaway orders. If it can\u2019t perform an action or answer a question, the call is transferred to a staff member. The second part of the project is the restaurant portal: a guest website with the menu, table booking and takeaway ordering, and a staff dashboard with a floor plan and real-time bookings and orders from all channels. Stack: LiveKit and ElevenLabs for voice, Next.js and PostgreSQL on a self-hosted server for the portal.',
+    'prj.oliva.p2':'The restaurant answers every call, even when the staff are busy. Bookings and orders from the voice assistant, the website and the dining room come together in one place, and each entry shows which channel it came from.',
+    'prj.oliva.s0':'How it works: a guest calls, the voice assistant answers questions, books a table or takes an order, and hands the call to a staff member when needed',
+    'prj.oliva.s1':'Restaurant dashboard: floor plan and real-time orders tagged by channel: phone bot, website or restaurant',
+    'prj.oliva.s2':'Table bookings: floor plan, a booking card from the Telegram bot and the list of upcoming bookings',
+    'prj.oliva.s3':'Restaurant website for guests: menu, table booking and takeaway ordering',
+    'prj.lingvy.d':'A German learning app built on books and films: reading with translation, audio retellings, a personal vocabulary list and word exercises.',
+    'prj.lingvy.lead':'Lingvy is a Telegram Mini App for learning a foreign language through texts based on well-known books and films. The user reads and listens to stories, translates unfamiliar words, collects them in a personal vocabulary list and practises them in exercises.',
+    'prj.lingvy.p0':'Textbooks and flashcard apps get boring fast: words are memorised out of context and forgotten just as quickly. The idea was to learn a language through engaging stories while training reading, listening and vocabulary at the same time.',
+    'prj.lingvy.p1':'The app has a library of texts based on books and films, split into chapters. While reading, you can highlight a word or phrase, see its translation and add the word to your vocabulary list with one tap. Texts can be listened to as audio retellings, not just read, and the video section offers clips with German subtitles. Words from the list are practised in exercises: fill in the blank, listen and spell the word. Stack: a Telegram Mini App built with React, data in Supabase, hosted on Vercel.',
+    'prj.lingvy.p2':'The user learns the language through stories they enjoy rather than isolated words. One app trains reading, listening and word retention, and the vocabulary grows right while reading.',
+    'prj.lingvy.s0':'Lingvy on three screens: the book library, a chapter with a translated phrase and a word exercise',
+    'prj.lingvy.s1':'Reading a chapter: a highlighted phrase with its Russian translation and the audio retelling player below',
+    'prj.lingvy.s2':'Video section: short clips and videos with German subtitles',
+    'prj.lingvy.s3':'Exercise: listen to a word and write it in German with its article',
+    'prj.benefita.d':'A cooperative loyalty programme for local businesses: points earned at one venue are spent on discounts at others.',
+    'prj.benefita.lead':'Benefita is a platform that brings local businesses together in a shared loyalty programme. Users earn points by completing tasks at some venues and spend them on discounts and gifts at others, while businesses gain new customers from their network partners without an advertising budget.',
+    'prj.benefita.p0':'Small businesses struggle to attract new customers: advertising is expensive, and their own loyalty programme only keeps those who already came. A café, salon or workshop needs a way to get customers from nearby businesses and motivate them to come back.',
+    'prj.benefita.p1':'Users find venues in the app\u2019s showcase and complete tasks for points. The simplest is to visit a venue and scan the NFC chip at the counter to check in. Other tasks include posting about the venue on social media, following an account, inviting a friend and turning on notifications. Points are exchanged for discounts and gifts offered by participating venues. Stack: Next.js, Supabase; the app runs as a PWA, with no app store install.',
+    'prj.benefita.p2':'Customers of one venue discover others and come for their discounts, and every visit and social media post brings the business a new audience. For users it is a single bonus programme across the city instead of a dozen separate cards.',
+    'prj.benefita.s0':'Benefita on a laptop and a phone: the business website and the venue showcase with offers',
+    'prj.benefita.s1':'Points section: tasks for earning points (email, Instagram, notifications, inviting a friend, a post about a venue)',
+    'prj.benefita.s2':'Showcase: participating venues and their discounts and gifts for points',
+    'prj.benefita.s3':'Venue page: description, address, opening hours and available vouchers',
     'c.title':'Tell me about your project','c.sub':'Describe what needs to be done — I\u2019ll reply with questions and a rough time estimate.','c.tz':'timezone',
     'f.name':'Name','f.nameErr':'Enter your name','f.mail':'Email or Telegram','f.mailErr':'I need a way to reply','f.type':'What do you need?',
     'f.o0':'An application','f.o1':'Website or web app','f.o2':'AI automation','f.o3':'Something else','f.budget':'Budget','f.msg':'Briefly about the task','f.msgErr':'Describe the task',
@@ -1358,7 +1414,7 @@ const I18N = {
     'pm.p0':'Zur Aufgabe des Kunden: die Ausgangslage und das zu lösende Problem.',
     'pm.p1':'Zur Lösung: Architektur, wichtige technische Entscheidungen, Integrationen.',
     'pm.p2':'Zum Ergebnis: was sich für den Kunden nach dem Start verändert hat.',
-    'pm.metric':'Kennzahl','pm.stack':'Stack','pm.demo':'Demo öffnen','pm.code':'Quellcode',
+    'pm.metric':'Kennzahl','pm.stack':'Stack','pm.demo':'Demo öffnen','pm.site':'Website öffnen','pm.code':'Quellcode',
     'cat.saas':'SaaS',
     'prj.drafta.d':'SaaS für kleine und mittlere Unternehmen: KI entwirft Antworten an Kunden in allen Messengern und sozialen Netzwerken, Sie klicken nur auf Senden.',
     'prj.drafta.lead':'drafta ist eine SaaS-App, die kleinen und mittleren Unternehmen die Kommunikation mit ihren Kunden erleichtert. Sie übernimmt die Aufgaben eines Agenten, der die sozialen Netzwerke und Messenger des Unternehmens betreut: Sie entwirft Antworten und veröffentlicht Inhalte.',
@@ -1388,12 +1444,39 @@ const I18N = {
     'prj.cards.d':'KI-Assistent für Händler: macht aus einem Amateurfoto eines Produkts ein fertiges Angebot für Amazon, Etsy, eBay oder Shopify.',
     'prj.cards.lead':'Ein Chatbot, der aus einem rohen Produktfoto ein fertiges Marktplatz-Angebot macht. Ein Schnappschuss genügt, etwa ein leicht zerknittertes Kleid auf dem Bett, und der Assistent erzeugt professionelle Fotos, einen Produkttitel und eine Beschreibung.',
     'prj.cards.p0':'Um ein Produkt auf einem Marktplatz einzustellen, braucht ein Händler gute Fotos, einen überzeugenden Titel und eine Beschreibung mit den wichtigsten Merkmalen. Ein Fotoshooting mit Model und Texte für jede Plattform kosten Zeit und Geld, besonders bei vielen Produkten.',
-    'prj.cards.p1':'Der Nutzer lädt ein Foto in den Chat, und der Assistent erkennt das Produkt, erzeugt eine Bildserie (vor neutralem Hintergrund, im Interieur und an einem Model, das es \u201eanprobiert\u201c) und schreibt Titel, Beschreibung und eine Liste der wichtigsten Merkmale. Per Button wählt man die Zielplattform (Amazon, Etsy, eBay, Shopify und weitere) und die Sprache: Englisch, Deutsch oder Russisch.',
+    'prj.cards.p1':'Der Nutzer lädt ein Foto in den Chat, und der Assistent erkennt das Produkt, erzeugt eine Bildserie (vor neutralem Hintergrund, im Interieur und an einem Model, das es \u201eanprobiert\u201c) und schreibt Titel, Beschreibung und eine Liste der wichtigsten Merkmale. Per Button wählt man die Zielplattform (Amazon, Etsy, eBay, Shopify und weitere) und die Sprache: Englisch, Deutsch oder Russisch. Stack: React, Gemini-Modelle per API, Hosting auf Vercel.',
     'prj.cards.p2':'Aus einem einzigen Amateurfoto entsteht in wenigen Minuten ein fertiges Produktangebot: Fotos, Titel und Beschreibung, die sich herunterladen oder vor der Veröffentlichung bearbeiten lassen.',
     'prj.cards.s0':'Etsy-Angebot: Modelfotos, Titel und Beschreibung, erzeugt aus einem Foto eines Kleides auf dem Bett',
     'prj.cards.s1':'Amazon-Angebot: eine Mikrowelle mit neuen Fotos und einer Liste der wichtigsten Merkmale',
     'prj.cards.s2':'Shopify-Angebot: Sneaker an einem Model im lässigen Stadtlook',
     'prj.cards.s3':'eBay-Angebot auf Russisch: ein Motorroller mit Fotos im Freien und technischen Daten',
+    'prj.oliva.d':'Sprachassistent für ein Restaurant: nimmt Anrufe an, reserviert Tische und nimmt Bestellungen zur Abholung auf, komplexe Fragen gehen an einen Mitarbeiter.',
+    'prj.oliva.lead':'Ein KI-Sprachassistent und Portal für ein Restaurant. Ein Gast ruft die normale Nummer des Restaurants an, und der Assistent beantwortet Fragen, reserviert einen Tisch oder nimmt eine Bestellung zur Abholung auf. Alles, was er tut, landet direkt im Restaurantportal, das sowohl mit dem Assistenten als auch mit der Website verbunden ist.',
+    'prj.oliva.p0':'Zu Stoßzeiten kommt das Personal mit den Anrufen nicht hinterher: Gäste erreichen niemanden, um einen Tisch zu reservieren oder Essen zu bestellen, und das Restaurant verliert Bestellungen. Reservierungen und Bestellungen kommen zudem über verschiedene Kanäle (Telefon, Website und vor Ort) und müssen von Hand zusammengeführt werden.',
+    'prj.oliva.p1':'Der Sprachassistent nimmt Anrufe unter der Nummer des Restaurants an: Er beantwortet Fragen der Gäste, reserviert Tische und nimmt Bestellungen zur Abholung auf. Kann er eine Aktion nicht ausführen oder eine Frage nicht beantworten, wird der Anruf an einen Mitarbeiter weitergeleitet. Der zweite Teil des Projekts ist das Restaurantportal: eine Website für Gäste mit Speisekarte, Tischreservierung und Bestellung zur Abholung sowie ein Dashboard für das Personal mit Saalplan und Reservierungen und Bestellungen aus allen Kanälen in Echtzeit. Stack: LiveKit und ElevenLabs für die Sprache, Next.js und PostgreSQL auf einem eigenen Server für das Portal.',
+    'prj.oliva.p2':'Das Restaurant nimmt jeden Anruf an, auch wenn das Personal beschäftigt ist. Reservierungen und Bestellungen vom Sprachassistenten, von der Website und aus dem Restaurant laufen an einem Ort zusammen, und bei jedem Eintrag ist zu sehen, über welchen Kanal er kam.',
+    'prj.oliva.s0':'Ablauf: Ein Gast ruft an, der Sprachassistent beantwortet Fragen, reserviert einen Tisch oder nimmt eine Bestellung auf und übergibt bei Bedarf an einen Mitarbeiter',
+    'prj.oliva.s1':'Restaurant-Dashboard: Saalplan und Bestellungen in Echtzeit, markiert nach Kanal: Telefon-Bot, Website oder Restaurant',
+    'prj.oliva.s2':'Tischreservierungen: Saalplan, eine Reservierung über den Telegram-Bot und die Liste anstehender Reservierungen',
+    'prj.oliva.s3':'Restaurant-Website für Gäste: Speisekarte, Tischreservierung und Bestellung zur Abholung',
+    'prj.lingvy.d':'App zum Deutschlernen mit Büchern und Filmen: Lesen mit Übersetzung, Audio-Nacherzählungen, ein persönliches Vokabelheft und Wortübungen.',
+    'prj.lingvy.lead':'Lingvy ist eine Telegram Mini App zum Lernen einer Fremdsprache mit Texten nach bekannten Büchern und Filmen. Der Nutzer liest und hört Geschichten, übersetzt unbekannte Wörter, sammelt sie in einem persönlichen Vokabelheft und festigt sie in Übungen.',
+    'prj.lingvy.p0':'Lehrbücher und Karteikarten-Apps werden schnell langweilig: Wörter werden ohne Kontext gelernt und ebenso schnell vergessen. Die Idee war, eine Sprache mit spannenden Geschichten zu lernen und dabei Lesen, Hörverstehen und Wortschatz zugleich zu trainieren.',
+    'prj.lingvy.p1':'Die App bietet eine Bibliothek mit Texten nach Büchern und Filmen, aufgeteilt in Kapitel. Beim Lesen lässt sich ein Wort oder eine Phrase markieren, die Übersetzung anzeigen und das Wort mit einem Tippen ins Vokabelheft übernehmen. Texte kann man nicht nur lesen, sondern auch als Audio-Nacherzählung hören, und im Videobereich gibt es Clips mit deutschen Untertiteln. Wörter aus dem Vokabelheft werden in Übungen gefestigt: Lücken füllen, anhören und schreiben. Stack: Telegram Mini App mit React, Daten in Supabase, Hosting auf Vercel.',
+    'prj.lingvy.p2':'Der Nutzer lernt die Sprache mit Geschichten, die ihn interessieren, statt mit einzelnen Wörtern. Eine App trainiert Lesen, Hörverstehen und das Behalten von Wörtern, und der Wortschatz wächst direkt beim Lesen.',
+    'prj.lingvy.s0':'Lingvy auf drei Bildschirmen: Buchbibliothek, ein Kapitel mit übersetzter Phrase und eine Wortübung',
+    'prj.lingvy.s1':'Lesen eines Kapitels: eine markierte Phrase mit russischer Übersetzung, darunter der Player für die Audio-Nacherzählung',
+    'prj.lingvy.s2':'Videobereich: kurze Clips und Videos mit deutschen Untertiteln',
+    'prj.lingvy.s3':'Übung: ein Wort anhören und es auf Deutsch mit Artikel schreiben',
+    'prj.benefita.d':'Kooperatives Treueprogramm für lokale Betriebe: In einem Betrieb gesammelte Punkte werden bei anderen gegen Rabatte eingelöst.',
+    'prj.benefita.lead':'Benefita ist eine Plattform, die lokale Betriebe in einem gemeinsamen Treueprogramm verbindet. Nutzer sammeln Punkte mit Aufgaben in einigen Betrieben und lösen sie bei anderen gegen Rabatte und Geschenke ein, und die Betriebe gewinnen ohne Werbebudget neue Kunden von ihren Netzwerkpartnern.',
+    'prj.benefita.p0':'Kleine Betriebe tun sich schwer, neue Kunden zu gewinnen: Werbung ist teuer, und ein eigenes Treueprogramm hält nur die, die schon da waren. Ein Café, ein Salon oder eine Werkstatt braucht einen Weg, Kunden von benachbarten Betrieben zu gewinnen und zum Wiederkommen zu motivieren.',
+    'prj.benefita.p1':'Nutzer finden Betriebe in der Vitrine der App und erledigen Aufgaben für Punkte. Die einfachste: den Betrieb besuchen und den NFC-Chip an der Theke scannen, um den Besuch zu bestätigen. Weitere Aufgaben sind etwa ein Beitrag über den Betrieb in sozialen Netzwerken, einem Account folgen, Freunde einladen oder Benachrichtigungen aktivieren. Die Punkte werden gegen Rabatte und Geschenke der teilnehmenden Betriebe eingetauscht. Stack: Next.js, Supabase; die App läuft als PWA, ohne Installation aus dem App Store.',
+    'prj.benefita.p2':'Kunden eines Betriebs entdecken andere und kommen für deren Rabatte vorbei, und jeder Besuch und jeder Social-Media-Beitrag bringt dem Betrieb neues Publikum. Für Nutzer ist es ein Bonusprogramm für die ganze Stadt statt einem Dutzend einzelner Karten.',
+    'prj.benefita.s0':'Benefita auf Laptop und Smartphone: die Website für Betriebe und die Vitrine mit Angeboten',
+    'prj.benefita.s1':'Punktebereich: Aufgaben zum Punktesammeln (E-Mail, Instagram, Benachrichtigungen, Freunde einladen, Beitrag über einen Betrieb)',
+    'prj.benefita.s2':'Vitrine: teilnehmende Betriebe und ihre Rabatte und Geschenke gegen Punkte',
+    'prj.benefita.s3':'Seite eines Betriebs: Beschreibung, Adresse, Öffnungszeiten und verfügbare Gutscheine',
     'c.title':'Erzählen Sie von Ihrem Projekt','c.sub':'Beschreiben Sie, was zu tun ist — ich antworte mit Rückfragen und einer groben Zeitschätzung.','c.tz':'Zeitzone',
     'f.name':'Name','f.nameErr':'Bitte Namen angeben','f.mail':'E-Mail oder Telegram','f.mailErr':'Ich brauche einen Kontakt für die Antwort','f.type':'Was brauchen Sie?',
     'f.o0':'Eine Anwendung','f.o1':'Website oder Web-App','f.o2':'KI-Automatisierung','f.o3':'Etwas anderes','f.budget':'Budget','f.msg':'Kurz zur Aufgabe','f.msgErr':'Bitte Aufgabe beschreiben',
@@ -1424,7 +1507,8 @@ let LANG = (() => {
 const t = k => I18N[LANG][k] ?? I18N.ru[k] ?? k;
 
 /* ================= TEST DATA ================= */
-// Настоящий проект: key (тексты prj.<key>.d / .lead / .p0–p2, подписи кадров prj.<key>.s<N>), name — без перевода, shots — кадры из img/projects/.
+// Настоящий проект: key (тексты prj.<key>.d / .lead / .p0–p2, подписи кадров prj.<key>.s<N>), name — название без перевода
+// (без name название берётся из prj.<key>.t), shots — кадры из img/projects/, url — ссылка на живой проект (кнопка «Открыть сайт»).
 // anim — тяжёлая анимация (GIF): сначала показывается статичный src, анимация подгружается, когда открыт слайд проектов (playAnims)
 // Остальные — тестовые данные: cat 'web' | 'ai' | 'soft' | 'saas'; media 'image' | 'video'
 const PROJECTS = [
@@ -1436,13 +1520,18 @@ const PROJECTS = [
            { src:'img/projects/mira-n8n.png', w:1011, h:571 }, { src:'img/projects/mira-chat.png', w:1103, h:742 }] },
   { id:'PRJ-03', key:'fairplate', name:'Spirit FairPlate Shop', cat:'web', tags:['Next.js','TypeScript','PostgreSQL','Self-hosted'],
     shots:[{ src:'img/projects/fairplate-demo.webp', anim:'img/projects/fairplate-demo.gif', w:820, h:421 }, { src:'img/projects/fairplate-offer.png', w:1533, h:798 }] },
-  { id:'PRJ-04', key:'cards', name:'Product Card AI', cat:'ai', tags:[],
+  { id:'PRJ-04', key:'benefita', name:'Benefita', cat:'web', tags:['Next.js','Supabase','PWA'], url:'https://benefita.de/',
+    shots:[{ src:'img/projects/benefita-hero.webp', w:1448, h:1086 }, { src:'img/projects/benefita-points.png', w:657, h:658 },
+           { src:'img/projects/benefita-showcase.png', w:618, h:742 }, { src:'img/projects/benefita-venue.png', w:648, h:748 }] },
+  { id:'PRJ-05', key:'cards', name:'Product Card AI', cat:'ai', tags:['Gemini','React','API','Vercel'],
     shots:['dress', 'microwave', 'sneakers', 'scooter'].map(n => ({ src:`img/projects/cards-${n}.webp`, w:1586, h:992 })) },
-  { id:'PRJ-05', cat:'ai',   media:'image', tags:['Python','RAG','FastAPI'] },
-  { id:'PRJ-06', cat:'soft', media:'image', tags:['Go','Docker'] },
-  { id:'PRJ-07', cat:'web',  media:'video', tags:['Vue','Laravel'] },
+  { id:'PRJ-06', key:'oliva', name:'Gastronomie AI', cat:'ai', tags:['LiveKit','ElevenLabs','Next.js','PostgreSQL','Self-hosted'],
+    shots:['flow', 'orders', 'tables', 'site'].map(n => ({ src:`img/projects/oliva-${n}.webp`, w:1448, h:1086 })) },
+  { id:'PRJ-07', key:'lingvy', name:'Lingvy', cat:'soft', tags:['Telegram Mini App','React','Supabase','Vercel'],
+    shots:[{ src:'img/projects/lingvy-phones.webp', w:1448, h:1086 }, { src:'img/projects/lingvy-reader.png', w:567, h:631 },
+           { src:'img/projects/lingvy-video.png', w:695, h:647 }, { src:'img/projects/lingvy-quiz.png', w:435, h:642 }] },
 ].map((p, i) => Object.defineProperties(p, {
-  title: { get: () => p.name || t('proj.title') + ' ' + pad(i + 1) },
+  title: { get: () => p.name || (p.key ? t(`prj.${p.key}.t`) : t('proj.title') + ' ' + pad(i + 1)) },
   desc:  { get: () => t(p.key ? `prj.${p.key}.d` : 'proj.desc') },
   catName: { get: () => t('cat.' + p.cat) },
 }));
@@ -2622,8 +2711,7 @@ car.innerHTML = PROJECTS.map((p, i) => `
     <div class="pc-in">
       <div class="pc-media">${mediaHTML(p)}</div>
       <div class="pc-body">
-        <div class="pc-meta"><span class="id">${p.id}</span><span data-i18n="cat.${p.cat}"></span></div>
-        <h3>${p.name ? esc(p.name) : `<span data-i18n="proj.title"></span> ${pad(i + 1)}`}</h3>
+        <div class="pc-meta"><h3>${p.name ? esc(p.name) : p.key ? `<span data-i18n="prj.${p.key}.t"></span>` : `<span data-i18n="proj.title"></span> ${pad(i + 1)}`}</h3><span class="cat" data-i18n="cat.${p.cat}"></span></div>
         <p data-i18n="${p.key ? `prj.${p.key}.d` : 'proj.desc'}"></p>
         <div class="pc-foot"><div class="tags">${p.tags.slice(0, 3).map(t => `<span>${t}</span>`).join('')}</div>
         <span class="pc-open"><span data-i18n="more"></span> <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></div>
@@ -2748,7 +2836,13 @@ function fillProject(i) {
   $('#pmLead').dataset.i18n = p.key ? `prj.${p.key}.lead` : 'pm.lead';
   $$('#tabTrack > div').forEach((d, k) => d.dataset.i18n = p.key ? `prj.${p.key}.p${k}` : `pm.p${k}`);
   i18nIn($('.m-info', pm));
-  $('#pmMetrics').hidden = $('#pmLinks').hidden = !!p.key;
+  // у настоящего проекта нет метрик и демо/кода: показываем только ссылку, если она есть
+  $('#pmMetrics').hidden = !!p.key;
+  $('#pmLinks').hidden = !!p.key && !p.url;
+  $$('#pmLinks [data-ph]').forEach(b => b.hidden = !!p.key);
+  const site = $('#pmSite');
+  site.hidden = !p.url;
+  if (p.url) site.href = p.url; else site.removeAttribute('href');
   $('#pmTags').innerHTML = p.tags.map(t => `<span>${esc(t)}</span>`).join('');
   $('#pmStack').hidden = !p.tags.length;
   setTab(0);
@@ -2996,7 +3090,7 @@ function buildPrompt() {
     `Certificates (real facts): ${CERTS.map(c => `${c.title} — ${c.org}, ${c.dateStr}`).join('; ')}. ` +
     `Skills by area (real facts, from the knowledge graph): ${KN_CATS.map(k => `${t('kn.cat.' + k)}: ${[...KN.byCat[k]].map(n => n.title).join(', ')}`).join('; ')}. ` +
     `Work experience in this order, with the start year (real facts): ${JOBS.map(j => j.free ? `since ${j.from} freelance work` : `${j.from} ${j.name}${j.parent ? ` (${j.parent})` : ''} — ${t('job.' + j.key)}`).join('; ')}. ` +
-    `Projects (real facts): ${PROJECTS.filter(p => p.key).map(p => `${p.name} — ${t(`prj.${p.key}.lead`)} ${t(`prj.${p.key}.p1`)}`).join('; ')}. The other project cards are placeholders. ` +
+    `Projects (real facts): ${PROJECTS.filter(p => p.key).map(p => `${p.title} — ${t(`prj.${p.key}.lead`)} ${t(`prj.${p.key}.p1`)}${p.url ? ` Website: ${p.url}` : ''}`).join('; ')}. ${PROJECTS.some(p => !p.key) ? 'The other project cards are placeholders. ' : ''}` +
     `Website sections: 0 = About, 1 = Experience, 2 = Skills (3D knowledge graph), 3 = Certificates, 4 = Projects, 5 = Contact form. ` +
     `Apart from the certificates, the skills, the list of employers and the projects above, the website content is still placeholder text, so NEVER invent specific facts (prices, job titles, clients, other dates, project details). ` +
     `For anything specific, suggest the contact form or the email hello@example.com. ` +
