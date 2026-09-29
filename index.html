@@ -457,6 +457,7 @@ button{font:inherit;color:inherit}
 .field.req label::after{content:" *";color:var(--brass)}
 .field input,.field textarea{box-sizing:border-box;width:100%;background:var(--bg);border:1px solid var(--line-strong);border-radius:8px;padding:11px 14px;font:inherit;font-size:15px;line-height:1.4;color:var(--ink);outline:none;resize:vertical;transition:border-color .25s,box-shadow .25s}
 .field textarea{height:130px;min-height:90px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .field input:hover,.field textarea:hover{border-color:var(--muted)}
 .field input:focus,.field textarea:focus{border-color:var(--verd);box-shadow:0 0 0 3px var(--verd-soft)}
 .field.err input,.field.err textarea{border-color:var(--danger);box-shadow:0 0 0 3px color-mix(in srgb,var(--danger) 15%,transparent)}
@@ -1004,6 +1005,7 @@ button{font:inherit;color:inherit}
             <div class="field req"><label for="fName" data-i18n="f.name"></label><input id="fName" name="name" autocomplete="name" required aria-describedby="fNameErr"><span class="ferr" id="fNameErr" data-i18n="f.nameErr"></span></div>
             <div class="field"><label for="fCompany" data-i18n="f.company"></label><input id="fCompany" name="company" autocomplete="organization"></div>
             <div class="field req"><label for="fMsg" data-i18n="f.msg"></label><textarea id="fMsg" name="message" required aria-describedby="fMsgErr"></textarea><span class="ferr" id="fMsgErr" data-i18n="f.msgErr"></span></div>
+            <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
             <button class="send" type="submit" id="send"><span class="fill"></span><span class="lbl"><svg class="plane" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 2.5 10.5 13.5M21.5 2.5l-7 19-4-8-8-4z"/></svg><span id="sendTxt"></span></span></button>
           </form>
           <div class="tx-done" aria-live="polite">
@@ -1240,7 +1242,7 @@ const I18N = {
     'f.name':'Имя','f.nameErr':'Укажите имя','f.mail':'Email','f.mailErr':'Укажите корректный email','f.company':'Фирма (необязательно)',
     'f.msg':'Сообщение','f.msgErr':'Напишите сообщение',
     'f.send':'Отправить сообщение','f.sending':'отправка','f.sent':'Отправлено','f.ready':'Готов к отправке','f.fix':'Заполните отмеченные поля','f.tx':'Передача данных…','f.delivered':'Доставлено',
-    'f.doneT':'Сообщение отправлено','f.doneP':'Отвечу в течение дня. Это демо-версия: форма пока никуда не отправляет данные.','f.again':'Отправить ещё одну',
+    'f.doneT':'Сообщение отправлено','f.doneP':'Отвечу в течение дня.','f.err':'Ошибка отправки, попробуйте ещё раз','f.again':'Отправить ещё одну',
     'sh.module':'МОДУЛЬ','sh.loading':'загрузка раздела «{x}»','sh.boot':'ЗАПУСК','sh.init':'ИНИЦИАЛИЗАЦИЯ СИСТЕМЫ','sh.bootSub':'портфолио загружается',
     'chat.tip':'Задать вопрос ассистенту','chat.title':'Ассистент','chat.online':'Онлайн, отвечает AI','chat.demo':'Демо-режим: готовые ответы','chat.ph':'Напишите вопрос…','chat.send':'Отправить',
     'chat.hello':'Привет! Помогу разобраться с услугами, проектами и тем, как связаться. Что вас интересует?',
@@ -1365,7 +1367,7 @@ const I18N = {
     'f.name':'Name','f.nameErr':'Enter your name','f.mail':'Email','f.mailErr':'Enter a valid email','f.company':'Company (optional)',
     'f.msg':'Message','f.msgErr':'Write a message',
     'f.send':'Send message','f.sending':'sending','f.sent':'Sent','f.ready':'Ready to send','f.fix':'Fill in the highlighted fields','f.tx':'Transmitting…','f.delivered':'Delivered',
-    'f.doneT':'Message sent','f.doneP':'I\u2019ll reply within a day. This is a demo: the form doesn\u2019t send data anywhere yet.','f.again':'Send another',
+    'f.doneT':'Message sent','f.doneP':'I\u2019ll reply within a day.','f.err':'Sending failed, please try again','f.again':'Send another',
     'sh.module':'MODULE','sh.loading':'loading section \u201c{x}\u201d','sh.boot':'BOOT','sh.init':'SYSTEM INITIALIZATION','sh.bootSub':'loading portfolio',
     'chat.tip':'Ask the assistant','chat.title':'Assistant','chat.online':'Online, answered by AI','chat.demo':'Demo mode: preset answers','chat.ph':'Type a question…','chat.send':'Send',
     'chat.hello':'Hi! I can help with services, projects and how to get in touch. What would you like to know?',
@@ -1490,7 +1492,7 @@ const I18N = {
     'f.name':'Name','f.nameErr':'Bitte Namen angeben','f.mail':'E-Mail','f.mailErr':'Bitte gültige E-Mail angeben','f.company':'Firma (optional)',
     'f.msg':'Nachricht','f.msgErr':'Bitte Nachricht schreiben',
     'f.send':'Nachricht senden','f.sending':'wird gesendet','f.sent':'Gesendet','f.ready':'Bereit zum Senden','f.fix':'Bitte markierte Felder ausfüllen','f.tx':'Daten werden übertragen…','f.delivered':'Zugestellt',
-    'f.doneT':'Nachricht gesendet','f.doneP':'Ich antworte innerhalb eines Tages. Das ist eine Demo: Das Formular sendet noch keine Daten.','f.again':'Weitere senden',
+    'f.doneT':'Nachricht gesendet','f.doneP':'Ich antworte innerhalb eines Tages.','f.err':'Senden fehlgeschlagen, bitte erneut versuchen','f.again':'Weitere senden',
     'sh.module':'MODUL','sh.loading':'Abschnitt \u201e{x}\u201c wird geladen','sh.boot':'START','sh.init':'SYSTEMINITIALISIERUNG','sh.bootSub':'Portfolio wird geladen',
     'chat.tip':'Assistenten fragen','chat.title':'Assistent','chat.online':'Online, antwortet per KI','chat.demo':'Demo-Modus: vorbereitete Antworten','chat.ph':'Frage eingeben…','chat.send':'Senden',
     'chat.hello':'Hallo! Ich helfe bei Fragen zu Leistungen, Projekten und Kontakt. Was möchten Sie wissen?',
@@ -2977,13 +2979,25 @@ form.addEventListener('submit', e => {
     if (bad) { void f.offsetWidth; f.classList.add('err'); ok = false; }
   });
   if (!ok) { txState = 'fix'; $('#txStatus').textContent = t('f.fix'); return; }
-  txState = 'ready';
   const btn = $('#send'); if (btn.classList.contains('sending')) return;
+  txState = 'ready';
   btn.classList.add('sending');
   gTarget = 6;
+  // Анимация идёт не меньше 2 с и замирает на 95%, пока не придёт ответ /api/contact.
+  let result = null;
+  fetch('/api/contact', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(Object.fromEntries(new FormData(form))),
+  }).then(r => r.ok).catch(() => false).then(v => { result = v; });
   const t0 = performance.now();
   (function f(now) {
-    const p = Math.min(1, (now - t0) / 2000);
+    const p = Math.min(result === null ? .95 : 1, (now - t0) / 2000);
+    if (p >= 1 && !result) {
+      txState = 'err'; btn.classList.remove('sending');
+      $('#sendTxt').textContent = t('f.send'); $('#txStatus').textContent = t('f.err');
+      return;
+    }
     const bits = Array.from({ length: 8 }, () => Math.random() < .5 ? 0 : 1).join('');
     if (p >= 1) txState = 'done';
     $('#sendTxt').textContent = p < 1 ? `${bits} · ${t('f.sending')} ${Math.round(p * 100)}%` : t('f.sent');
@@ -3047,7 +3061,7 @@ function applyLang(l, animate) {
   CERTS.forEach(c => c._el && c._el.setAttribute('aria-label', t('cert.open') + ': ' + c.title));
   selectCert(activeCert, !animate);
   kgLang();
-  $('#txStatus').textContent = t(txState === 'done' ? 'f.delivered' : txState === 'fix' ? 'f.fix' : 'f.ready');
+  $('#txStatus').textContent = t(txState === 'done' ? 'f.delivered' : txState === 'fix' ? 'f.fix' : txState === 'err' ? 'f.err' : 'f.ready');
   if (!$('#send').classList.contains('sending')) $('#sendTxt').textContent = t('f.send');
   else if (txState === 'done') $('#sendTxt').textContent = t('f.sent');
   if (pm.classList.contains('show')) { $('#pmMeta').textContent = `${PROJECTS[pmIdx].id} · ${PROJECTS[pmIdx].catName}`; $('#pmTitle').textContent = PROJECTS[pmIdx].title; }
