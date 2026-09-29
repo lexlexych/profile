@@ -389,6 +389,9 @@ button{font:inherit;color:inherit}
   linear-gradient(var(--line) 1px,transparent 1px) 0 0/24px 24px,linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/24px 24px;
   transition:transform 1.2s var(--ease-out)}
 .pcard.center:hover .ph-media{transform:scale(1.06)}
+.pc-media .shot,.m-screen .shot,.thumbs .shot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.2s var(--ease-out)}
+.pcard.center:hover .pc-media .shot{transform:scale(1.04)}
+.m-screen.real .shot{object-fit:contain}
 .ph-media svg{width:52px;height:52px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;opacity:.7}
 .badge{position:absolute;top:12px;left:12px;font-size:11.5px;padding:4px 10px;background:var(--surface);border:1px solid var(--line-strong);border-radius:20px;z-index:1}
 .play{position:absolute;left:50%;top:50%;width:62px;height:62px;margin:-31px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;z-index:1}
@@ -551,6 +554,7 @@ button{font:inherit;color:inherit}
 .metric b{font-family:var(--f-display);font-size:22px;display:block;color:var(--verd)}
 .metric span{font-size:12px;color:var(--muted)}
 .m-links{display:flex;gap:10px;flex-wrap:wrap}
+.metrics[hidden],.m-links[hidden]{display:none}
 .modal.open .stag{animation:a-up .8s var(--ease-out) both;animation-delay:calc(var(--d,0) * 70ms + 380ms)}
 .stag{opacity:0}
 .cm .m-panel{width:auto;max-width:92vw;display:flex;flex-direction:column}
@@ -1069,16 +1073,16 @@ button{font:inherit;color:inherit}
         <div class="thumbs stag" style="--d:1" id="pmThumbs"></div>
       </div>
       <div class="m-info">
-        <p class="m-lead stag" style="--d:1" data-i18n="pm.lead"></p>
+        <p class="m-lead stag" style="--d:1" id="pmLead" data-i18n="pm.lead"></p>
         <div class="stag" style="--d:2">
           <div class="tabs" id="tabs"><button class="active" data-i18n="pm.t0"></button><button data-i18n="pm.t1"></button><button data-i18n="pm.t2"></button><span class="ind"></span></div>
           <div class="tab-view" style="margin-top:14px"><div class="tab-track" id="tabTrack">
             <div data-i18n="pm.p0"></div><div data-i18n="pm.p1"></div><div data-i18n="pm.p2"></div>
           </div></div>
         </div>
-        <div class="metrics stag" style="--d:3"><div class="metric"><b>+00%</b><span data-i18n="pm.metric"></span></div><div class="metric"><b>00 h</b><span data-i18n="pm.metric"></span></div><div class="metric"><b>0.0×</b><span data-i18n="pm.metric"></span></div></div>
-        <div class="stag" style="--d:4"><div class="flabel" data-i18n="pm.stack"></div><div class="tags" id="pmTags"></div></div>
-        <div class="m-links stag" style="--d:5"><button class="btn btn-primary magnetic" data-spinhost><svg data-gear="10" data-spin="1" viewBox="-50 -50 100 100"></svg><span data-i18n="pm.demo"></span></button><button class="btn btn-ghost magnetic"><span data-i18n="pm.code"></span></button></div>
+        <div class="metrics stag" style="--d:3" id="pmMetrics"><div class="metric"><b>+00%</b><span data-i18n="pm.metric"></span></div><div class="metric"><b>00 h</b><span data-i18n="pm.metric"></span></div><div class="metric"><b>0.0×</b><span data-i18n="pm.metric"></span></div></div>
+        <div class="stag" style="--d:4" id="pmStack"><div class="flabel" data-i18n="pm.stack"></div><div class="tags" id="pmTags"></div></div>
+        <div class="m-links stag" style="--d:5" id="pmLinks"><button class="btn btn-primary magnetic" data-spinhost><svg data-gear="10" data-spin="1" viewBox="-50 -50 100 100"></svg><span data-i18n="pm.demo"></span></button><button class="btn btn-ghost magnetic"><span data-i18n="pm.code"></span></button></div>
       </div>
     </div>
   </div>
@@ -1157,6 +1161,41 @@ const I18N = {
     'pm.p1':'Текст о решении: архитектура, ключевые технические решения, интеграции.',
     'pm.p2':'Текст о результате: что изменилось для клиента после запуска.',
     'pm.metric':'Метрика','pm.stack':'Стек','pm.demo':'Открыть демо','pm.code':'Исходный код',
+    'cat.saas':'SaaS',
+    'prj.drafta.d':'SaaS для малого и среднего бизнеса: AI готовит черновики ответов клиентам во всех мессенджерах и соцсетях, остаётся нажать «Отправить».',
+    'prj.drafta.lead':'drafta — SaaS-приложение для малого и среднего бизнеса, которое упрощает общение с клиентами. Оно берёт на себя работу агента, который ведёт соцсети и мессенджеры компании: готовит ответы и публикует контент.',
+    'prj.drafta.p0':'Клиенты пишут малому бизнесу в Telegram, WhatsApp, Instagram, Facebook, на почту и в чат на сайте. Владельцу приходится переключаться между приложениями и отвечать на каждое сообщение вручную, а на соцсети времени не остаётся.',
+    'prj.drafta.p1':'Все каналы подключаются к одному окну. На каждый запрос AI (Mistral, OpenAI) готовит черновик ответа с учётом контекста бизнеса: календаря, таблиц и базы знаний. В том же приложении можно создавать посты и публиковать их прямо в соцсетях. Стек: Next.js и Supabase.',
+    'prj.drafta.p2':'Пользователю остаётся проверить черновик и нажать одну кнопку, чтобы отправить сообщение. Окончательное решение всегда за человеком, а переписка и публикации во всех каналах ведутся из одного места.',
+    'prj.drafta.s0':'Приложение drafta на ноутбуке и телефоне: список диалогов, переписка и AI-черновик ответа',
+    'prj.drafta.s1':'Диалог с клиентом в WhatsApp и готовый AI-черновик ответа над полем ввода',
+    'prj.drafta.s2':'Настройки базы знаний: разделы, из которых AI берёт факты, и бюджет токенов',
+    'prj.drafta.s3':'Схема drafta: каналы клиентов, контекст бизнеса и окончательное решение за владельцем',
+    'prj.mira.d':'AI-ассистент для поиска путешествий: пишете в чат, куда и с каким бюджетом хотите поехать, а агенты подбирают перелёты и отели.',
+    'prj.mira.lead':'Mira — чат-бот на основе искусственного интеллекта для планирования поездок. Пользователь своими словами описывает, куда хочет поехать, на сколько человек, с каким бюджетом и пожеланиями, а AI-агенты ищут подходящие перелёты и отели.',
+    'prj.mira.p0':'Чтобы спланировать поездку, приходится часами сравнивать перелёты и отели на разных сайтах, заново вводить одни и те же параметры в фильтры и сводить варианты в голове.',
+    'prj.mira.p1':'Логика построена на n8n: агент-оркестратор собирает параметры поездки, уточняет недостающие данные и запускает отдельных агентов поиска перелётов и отелей. Модели — OpenAI и Mistral. Качество ответов проверяется автоматическими оценками на тестовом наборе. Интерфейс чата — Next.js, данные — Supabase, интеграции с HubSpot и Telegram.',
+    'prj.mira.p2':'Вместо поиска по фильтрам — разговор: пользователь получает до пяти подходящих вариантов перелётов и отелей с ценой, рейтингом, условиями и коротким объяснением, почему выбран именно этот вариант.',
+    'prj.mira.s0':'Лендинг Mira: пример диалога с AI-ассистентом о поездке',
+    'prj.mira.s1':'Чат Mira с найденными перелётами: цена, рейсы туда и обратно, багаж и условия',
+    'prj.mira.s2':'Сценарий в n8n: оркестратор, агенты поиска перелётов и отелей и блок оценки качества',
+    'prj.mira.s3':'Чат Mira с найденными отелями: цена за поездку, рейтинг, питание и условия',
+    'prj.fairplate.d':'Портал для Spirit GmbH: клиент загружает макет упаковки и за несколько кликов получает площади по цветам и стоимость флексоклише.',
+    'prj.fairplate.lead':'Spirit FairPlate Shop — онлайн-портал, который я разработал по заказу компании Spirit GmbH, производителя флексоклише для печати на гофрокартоне. Клиент загружает макет упаковки, а система сама раскладывает его по цветам, считает площадь каждого цвета и рассчитывает стоимость заказа.',
+    'prj.fairplate.p0':'Цена флексоклише зависит от площади печатной формы под каждый цвет макета. Клиентам Spirit — производителям упаковки — нужно быстро узнать эту цену, чтобы ответить своему заказчику, а разбирать макет и считать площади вручную долго.',
+    'prj.fairplate.p1':'Портал на Next.js и TypeScript с базой PostgreSQL на собственном сервере. Загруженный макет автоматически разделяется на цвета, для каждого цвета вычисляется площадь, и по ней формируется стоимость. Расчёт можно сохранить и оформить заказ, когда заказчик подтвердит его, а без регистрации — загрузить файл или взять тестовые данные и получить демо-расчёт на почту.',
+    'prj.fairplate.p2':'Вместо ручного запроса — несколько кликов: клиент загружает шаблон продукта и сразу получает подробный разбор технических площадей по цветам и стоимость заказа.',
+    'prj.fairplate.s0':'Главная страница Spirit FairPlate Shop: заказ смонтированных и несмонтированных флексоклише онлайн',
+    'prj.fairplate.s1':'Видеоинструкция к калькулятору: готовое ценовое предложение с выбранными цветами и расчётной стоимостью',
+    'prj.cards.d':'AI-ассистент для продавцов: из любительского фото товара делает готовую карточку для Amazon, Etsy, eBay или Shopify.',
+    'prj.cards.lead':'Чат-бот, который превращает сырую фотографию товара в готовую карточку для маркетплейса. Достаточно отправить снимок — например, слегка помятое платье на кровати, — и ассистент сгенерирует профессиональные фото, заголовок и описание товара.',
+    'prj.cards.p0':'Чтобы выставить товар на маркетплейс, продавцу нужны качественные фотографии, продающий заголовок и описание с ключевыми характеристиками. Фотосессия с моделью и тексты под требования каждой площадки отнимают время и деньги, особенно когда товаров много.',
+    'prj.cards.p1':'Пользователь загружает фото в чат, а ассистент распознаёт товар, генерирует серию изображений — на нейтральном фоне, в интерьере и на модели, которая его «примерила», — и пишет заголовок, описание и список ключевых особенностей. Кнопками выбирается площадка, под которую готовится карточка: Amazon, Etsy, eBay, Shopify и другие, а также язык: английский, немецкий или русский.',
+    'prj.cards.p2':'Из одного любительского снимка за несколько минут получается готовая карточка товара: набор фотографий, заголовок и описание, которые можно скачать или отредактировать перед публикацией.',
+    'prj.cards.s0':'Карточка товара для Etsy: из фото платья на кровати сгенерированы снимки на модели, заголовок и описание',
+    'prj.cards.s1':'Карточка товара для Amazon: микроволновая печь с новыми фото и списком ключевых особенностей',
+    'prj.cards.s2':'Карточка товара для Shopify: кроссовки на модели в городском образе',
+    'prj.cards.s3':'Карточка товара для eBay на русском: скутер с фото на улице и характеристиками',
     'c.title':'Расскажите о задаче','c.sub':'Опишите, что нужно сделать — отвечу с вопросами и примерной оценкой сроков.','c.tz':'часовой пояс',
     'f.name':'Имя','f.nameErr':'Укажите имя','f.mail':'Email или Telegram','f.mailErr':'Нужен контакт для ответа','f.type':'Что нужно сделать',
     'f.o0':'Программа','f.o1':'Сайт или веб-приложение','f.o2':'AI-автоматизация','f.o3':'Другое','f.budget':'Бюджет','f.msg':'Коротко о задаче','f.msgErr':'Опишите задачу',
@@ -1171,7 +1210,7 @@ const I18N = {
     'fb.services':'Основные направления: разработка ПО, веб-разработка и AI-автоматизация. Подробности — в первом разделе.',
     'fb.price':'Стоимость зависит от задачи. Опишите проект в форме — отвечу с оценкой сроков и бюджета.',
     'fb.contact':'Проще всего — через форму обратной связи или по email hello@example.com.',
-    'fb.projects':'Примеры работ собраны в разделе «Проекты». Нажмите на карточку, чтобы открыть подробности.',
+    'fb.projects':'Примеры работ собраны в разделе «Проекты». Например, drafta — SaaS, в котором AI готовит черновики ответов клиентам во всех мессенджерах и соцсетях. Нажмите на карточку, чтобы открыть подробности.',
     'fb.skills':'Технологии и компетенции собраны в разделе «Знания»: Java и Spring, бэкенд, веб, AI-консалтинг, автоматизация и AI-агенты (n8n, RAG, мультиагентные системы).',
     'fb.exp':'Опыт работы: T-Systems (Deutsche Telekom) — с 2014 года, DATEV — 2020, Volkswagen — 2021, LeanCodes — 2022, AixPano — 2023, с 2026 года — фриланс. Подробнее — в разделе «Опыт».','fb.certs':'Сертификаты: «Специалист по AI-автоматизации бизнеса» (Beam Institute, 600 ч), n8n Professional Certificate и Oracle Certified Professional: Java SE 11. Их можно открыть в разделе «Сертификаты».',
     'fb.default':'Чтобы ответить точно, лучше написать через форму — отвечу в течение дня.',
@@ -1221,6 +1260,41 @@ const I18N = {
     'pm.p1':'About the solution: architecture, key technical decisions, integrations.',
     'pm.p2':'About the result: what changed for the client after launch.',
     'pm.metric':'Metric','pm.stack':'Stack','pm.demo':'Open demo','pm.code':'Source code',
+    'cat.saas':'SaaS',
+    'prj.drafta.d':'SaaS for small and mid-sized businesses: AI drafts replies to customers across messengers and social networks, you just press Send.',
+    'prj.drafta.lead':'drafta is a SaaS app that makes customer communication easier for small and mid-sized businesses. It takes over the job of an agent who runs the company’s social networks and messengers: it drafts replies and publishes content.',
+    'prj.drafta.p0':'Customers message small businesses on Telegram, WhatsApp, Instagram, Facebook, by email and in the website chat. The owner keeps switching between apps and answers every message by hand, leaving no time for social media.',
+    'prj.drafta.p1':'All channels connect to a single inbox. For every request, AI (Mistral, OpenAI) drafts a reply using the business context: calendar, spreadsheets and knowledge base. The same app lets you create posts and publish them straight to social networks. Stack: Next.js and Supabase.',
+    'prj.drafta.p2':'The user only reviews the draft and presses one button to send it. The final decision always stays with a human, and conversations and posts across all channels are handled in one place.',
+    'prj.drafta.s0':'The drafta app on a laptop and a phone: conversation list, chat and an AI reply draft',
+    'prj.drafta.s1':'A WhatsApp conversation with a customer and a ready AI reply draft above the input field',
+    'prj.drafta.s2':'Knowledge base settings: the categories AI pulls facts from and the token budget',
+    'prj.drafta.s3':'drafta diagram: customer channels, business context and the owner making the final decision',
+    'prj.mira.d':'An AI travel search assistant: tell the chat where you want to go and on what budget, and agents find matching flights and hotels.',
+    'prj.mira.lead':'Mira is an AI chatbot for trip planning. The user describes in their own words where they want to go, how many people are travelling, the budget and any wishes, and AI agents search for matching flights and hotels.',
+    'prj.mira.p0':'Planning a trip means hours of comparing flights and hotels across different websites, typing the same parameters into filters again and again and keeping all the options in your head.',
+    'prj.mira.p1':'The logic runs on n8n: an orchestrator agent collects the trip parameters, asks for missing details and launches separate flight and hotel search agents. Models: OpenAI and Mistral. Answer quality is checked with automated evaluations on a test dataset. The chat UI is built with Next.js, data lives in Supabase, with HubSpot and Telegram integrations.',
+    'prj.mira.p2':'A conversation instead of filters: the user gets up to five matching flight and hotel options with price, rating, conditions and a short explanation of why each one was chosen.',
+    'prj.mira.s0':'Mira landing page: a sample trip conversation with the AI assistant',
+    'prj.mira.s1':'Mira chat with flight results: price, outbound and return flights, baggage and conditions',
+    'prj.mira.s2':'n8n workflow: orchestrator, flight and hotel search agents and a quality evaluation block',
+    'prj.mira.s3':'Mira chat with hotel results: total price, rating, meals and conditions',
+    'prj.fairplate.d':'A portal for Spirit GmbH: customers upload a packaging design and get the area per colour and the flexo plate price in a few clicks.',
+    'prj.fairplate.lead':'Spirit FairPlate Shop is an online portal I built for Spirit GmbH, a maker of flexographic printing plates for corrugated board. The customer uploads a packaging design, and the system splits it into colours, measures the area of each colour and calculates the order price.',
+    'prj.fairplate.p0':'The price of a flexo plate depends on the plate area needed for each colour of the design. Spirit\u2019s customers, packaging manufacturers, need that price fast to quote their own clients, while breaking down a design and measuring areas by hand takes time.',
+    'prj.fairplate.p1':'A portal built with Next.js and TypeScript, with a PostgreSQL database on a self-hosted server. An uploaded design is automatically separated into colours, the area of each colour is calculated, and the price is derived from it. Calculations can be saved and ordered once the client confirms, and without registering you can upload a file or use sample data to get a demo calculation by email.',
+    'prj.fairplate.p2':'A few clicks instead of a manual request: the customer uploads a product template and immediately gets a detailed breakdown of technical areas per colour and the order price.',
+    'prj.fairplate.s0':'Spirit FairPlate Shop home page: ordering mounted and unmounted flexo plates online',
+    'prj.fairplate.s1':'Calculator video guide: a finished price offer with the selected colours and the estimated cost',
+    'prj.cards.d':'An AI assistant for sellers: turns an amateur product photo into a ready listing for Amazon, Etsy, eBay or Shopify.',
+    'prj.cards.lead':'A chatbot that turns a raw product photo into a ready marketplace listing. Just send a snapshot, say a slightly creased dress lying on a bed, and the assistant generates professional photos, a product title and a description.',
+    'prj.cards.p0':'To list a product on a marketplace, a seller needs good photos, a compelling title and a description with key features. A photo shoot with a model and copy tailored to every platform cost time and money, especially with many products.',
+    'prj.cards.p1':'The user uploads a photo to the chat, and the assistant recognises the product, generates a set of images (on a clean background, in an interior and on a model \u201cwearing\u201d it) and writes a title, a description and a list of key features. Buttons choose the target platform (Amazon, Etsy, eBay, Shopify and others) and the language: English, German or Russian.',
+    'prj.cards.p2':'One amateur snapshot becomes a ready product listing in minutes: a set of photos, a title and a description that can be downloaded or edited before publishing.',
+    'prj.cards.s0':'Etsy listing: model shots, a title and a description generated from a photo of a dress on a bed',
+    'prj.cards.s1':'Amazon listing: a microwave oven with new photos and a list of key features',
+    'prj.cards.s2':'Shopify listing: sneakers on a model in a casual city look',
+    'prj.cards.s3':'eBay listing in Russian: a scooter with outdoor photos and specifications',
     'c.title':'Tell me about your project','c.sub':'Describe what needs to be done — I\u2019ll reply with questions and a rough time estimate.','c.tz':'timezone',
     'f.name':'Name','f.nameErr':'Enter your name','f.mail':'Email or Telegram','f.mailErr':'I need a way to reply','f.type':'What do you need?',
     'f.o0':'An application','f.o1':'Website or web app','f.o2':'AI automation','f.o3':'Something else','f.budget':'Budget','f.msg':'Briefly about the task','f.msgErr':'Describe the task',
@@ -1235,7 +1309,7 @@ const I18N = {
     'fb.services':'The main areas are software development, web development and AI automation. See the first section for details.',
     'fb.price':'The price depends on the task. Describe your project in the form and I\u2019ll reply with a time and budget estimate.',
     'fb.contact':'The easiest way is the contact form or email hello@example.com.',
-    'fb.projects':'Work examples are in the Projects section. Click a card to open the details.',
+    'fb.projects':'Work examples are in the Projects section. For example, drafta is a SaaS where AI drafts replies to customers across all messengers and social networks. Click a card to open the details.',
     'fb.skills':'All technologies and skills are in the Skills section: Java and Spring, backend, web, AI consulting, automation and AI agents (n8n, RAG, multi-agent systems).',
     'fb.exp':'Work history: T-Systems (Deutsche Telekom) from 2014, DATEV 2020, Volkswagen 2021, LeanCodes 2022, AixPano 2023, freelance since 2026. More in the Experience section.','fb.certs':'Certificates: AI Business Automation Specialist (Beam Institute, 600 hours), n8n Professional Certificate and Oracle Certified Professional: Java SE 11. You can open them in the Certificates section.',
     'fb.default':'To give you a precise answer, please write via the form — I\u2019ll reply within a day.',
@@ -1285,6 +1359,41 @@ const I18N = {
     'pm.p1':'Zur Lösung: Architektur, wichtige technische Entscheidungen, Integrationen.',
     'pm.p2':'Zum Ergebnis: was sich für den Kunden nach dem Start verändert hat.',
     'pm.metric':'Kennzahl','pm.stack':'Stack','pm.demo':'Demo öffnen','pm.code':'Quellcode',
+    'cat.saas':'SaaS',
+    'prj.drafta.d':'SaaS für kleine und mittlere Unternehmen: KI entwirft Antworten an Kunden in allen Messengern und sozialen Netzwerken, Sie klicken nur auf Senden.',
+    'prj.drafta.lead':'drafta ist eine SaaS-App, die kleinen und mittleren Unternehmen die Kommunikation mit ihren Kunden erleichtert. Sie übernimmt die Aufgaben eines Agenten, der die sozialen Netzwerke und Messenger des Unternehmens betreut: Sie entwirft Antworten und veröffentlicht Inhalte.',
+    'prj.drafta.p0':'Kunden schreiben kleinen Unternehmen über Telegram, WhatsApp, Instagram, Facebook, per E-Mail und im Website-Chat. Der Inhaber wechselt ständig zwischen Apps und beantwortet jede Nachricht von Hand, für Social Media bleibt keine Zeit.',
+    'prj.drafta.p1':'Alle Kanäle laufen in einem Posteingang zusammen. Zu jeder Anfrage entwirft die KI (Mistral, OpenAI) eine Antwort mit dem Kontext des Unternehmens: Kalender, Tabellen und Wissensdatenbank. In derselben App lassen sich Beiträge erstellen und direkt in sozialen Netzwerken veröffentlichen. Stack: Next.js und Supabase.',
+    'prj.drafta.p2':'Der Nutzer prüft den Entwurf und sendet ihn mit einem Klick. Die endgültige Entscheidung trifft immer ein Mensch, und Gespräche und Beiträge in allen Kanälen werden an einem Ort geführt.',
+    'prj.drafta.s0':'Die App drafta auf Laptop und Smartphone: Dialogliste, Chat und ein KI-Antwortentwurf',
+    'prj.drafta.s1':'Ein WhatsApp-Dialog mit einer Kundin und ein fertiger KI-Antwortentwurf über dem Eingabefeld',
+    'prj.drafta.s2':'Einstellungen der Wissensdatenbank: Kategorien, aus denen die KI Fakten bezieht, und das Token-Budget',
+    'prj.drafta.s3':'drafta-Schema: Kundenkanäle, Unternehmenskontext und die endgültige Entscheidung beim Inhaber',
+    'prj.mira.d':'KI-Assistent für die Reisesuche: Sie schreiben im Chat, wohin und mit welchem Budget Sie reisen möchten, und Agenten finden passende Flüge und Hotels.',
+    'prj.mira.lead':'Mira ist ein KI-Chatbot für die Reiseplanung. Der Nutzer beschreibt in eigenen Worten, wohin er reisen möchte, mit wie vielen Personen, mit welchem Budget und welchen Wünschen, und KI-Agenten suchen passende Flüge und Hotels.',
+    'prj.mira.p0':'Eine Reise zu planen heißt, stundenlang Flüge und Hotels auf verschiedenen Websites zu vergleichen, immer wieder dieselben Filter auszufüllen und alle Optionen im Kopf zu behalten.',
+    'prj.mira.p1':'Die Logik läuft in n8n: Ein Orchestrator-Agent sammelt die Reiseparameter, fragt fehlende Angaben nach und startet eigene Agenten für die Flug- und Hotelsuche. Modelle: OpenAI und Mistral. Die Qualität der Antworten wird mit automatischen Evaluierungen auf einem Testdatensatz geprüft. Die Chat-Oberfläche ist mit Next.js gebaut, die Daten liegen in Supabase, dazu Integrationen mit HubSpot und Telegram.',
+    'prj.mira.p2':'Ein Gespräch statt Filter: Der Nutzer erhält bis zu fünf passende Flug- und Hoteloptionen mit Preis, Bewertung, Konditionen und einer kurzen Begründung, warum gerade diese Option gewählt wurde.',
+    'prj.mira.s0':'Mira-Landingpage: ein Beispieldialog mit dem KI-Assistenten über eine Reise',
+    'prj.mira.s1':'Mira-Chat mit gefundenen Flügen: Preis, Hin- und Rückflug, Gepäck und Konditionen',
+    'prj.mira.s2':'n8n-Workflow: Orchestrator, Agenten für Flug- und Hotelsuche und ein Block zur Qualitätsbewertung',
+    'prj.mira.s3':'Mira-Chat mit gefundenen Hotels: Gesamtpreis, Bewertung, Verpflegung und Konditionen',
+    'prj.fairplate.d':'Portal für die Spirit GmbH: Kunden laden ein Verpackungsmotiv hoch und erhalten mit wenigen Klicks die Flächen je Farbe und den Klischeepreis.',
+    'prj.fairplate.lead':'Der Spirit FairPlate Shop ist ein Onlineportal, das ich im Auftrag der Spirit GmbH entwickelt habe, einem Hersteller von Flexoklischees für den Wellpappendruck. Der Kunde lädt ein Verpackungsmotiv hoch, und das System zerlegt es in Farben, berechnet die Fläche jeder Farbe und ermittelt den Auftragspreis.',
+    'prj.fairplate.p0':'Der Preis eines Flexoklischees hängt von der Druckfläche für jede Farbe des Motivs ab. Die Kunden von Spirit, Verpackungshersteller, brauchen diesen Preis schnell, um ihren eigenen Auftraggebern ein Angebot zu machen, doch ein Motiv manuell zu zerlegen und Flächen zu messen dauert.',
+    'prj.fairplate.p1':'Ein Portal mit Next.js und TypeScript und einer PostgreSQL-Datenbank auf einem eigenen Server. Ein hochgeladenes Motiv wird automatisch in Farben getrennt, für jede Farbe wird die Fläche berechnet und daraus der Preis ermittelt. Kalkulationen lassen sich speichern und bestellen, sobald der Auftraggeber zusagt; ohne Registrierung kann man eine Datei hochladen oder Testdaten nutzen und erhält eine Demo-Kalkulation per E-Mail.',
+    'prj.fairplate.p2':'Wenige Klicks statt einer manuellen Anfrage: Der Kunde lädt eine Produktvorlage hoch und erhält sofort eine detaillierte Aufschlüsselung der technischen Flächen je Farbe und den Auftragspreis.',
+    'prj.fairplate.s0':'Startseite des Spirit FairPlate Shops: montierte und unmontierte Flexoklischees online bestellen',
+    'prj.fairplate.s1':'Videoanleitung zum Kalkulator: ein fertiges Preisangebot mit den ausgewählten Farben und den geschätzten Kosten',
+    'prj.cards.d':'KI-Assistent für Händler: macht aus einem Amateurfoto eines Produkts ein fertiges Angebot für Amazon, Etsy, eBay oder Shopify.',
+    'prj.cards.lead':'Ein Chatbot, der aus einem rohen Produktfoto ein fertiges Marktplatz-Angebot macht. Ein Schnappschuss genügt, etwa ein leicht zerknittertes Kleid auf dem Bett, und der Assistent erzeugt professionelle Fotos, einen Produkttitel und eine Beschreibung.',
+    'prj.cards.p0':'Um ein Produkt auf einem Marktplatz einzustellen, braucht ein Händler gute Fotos, einen überzeugenden Titel und eine Beschreibung mit den wichtigsten Merkmalen. Ein Fotoshooting mit Model und Texte für jede Plattform kosten Zeit und Geld, besonders bei vielen Produkten.',
+    'prj.cards.p1':'Der Nutzer lädt ein Foto in den Chat, und der Assistent erkennt das Produkt, erzeugt eine Bildserie (vor neutralem Hintergrund, im Interieur und an einem Model, das es \u201eanprobiert\u201c) und schreibt Titel, Beschreibung und eine Liste der wichtigsten Merkmale. Per Button wählt man die Zielplattform (Amazon, Etsy, eBay, Shopify und weitere) und die Sprache: Englisch, Deutsch oder Russisch.',
+    'prj.cards.p2':'Aus einem einzigen Amateurfoto entsteht in wenigen Minuten ein fertiges Produktangebot: Fotos, Titel und Beschreibung, die sich herunterladen oder vor der Veröffentlichung bearbeiten lassen.',
+    'prj.cards.s0':'Etsy-Angebot: Modelfotos, Titel und Beschreibung, erzeugt aus einem Foto eines Kleides auf dem Bett',
+    'prj.cards.s1':'Amazon-Angebot: eine Mikrowelle mit neuen Fotos und einer Liste der wichtigsten Merkmale',
+    'prj.cards.s2':'Shopify-Angebot: Sneaker an einem Model im lässigen Stadtlook',
+    'prj.cards.s3':'eBay-Angebot auf Russisch: ein Motorroller mit Fotos im Freien und technischen Daten',
     'c.title':'Erzählen Sie von Ihrem Projekt','c.sub':'Beschreiben Sie, was zu tun ist — ich antworte mit Rückfragen und einer groben Zeitschätzung.','c.tz':'Zeitzone',
     'f.name':'Name','f.nameErr':'Bitte Namen angeben','f.mail':'E-Mail oder Telegram','f.mailErr':'Ich brauche einen Kontakt für die Antwort','f.type':'Was brauchen Sie?',
     'f.o0':'Eine Anwendung','f.o1':'Website oder Web-App','f.o2':'KI-Automatisierung','f.o3':'Etwas anderes','f.budget':'Budget','f.msg':'Kurz zur Aufgabe','f.msgErr':'Bitte Aufgabe beschreiben',
@@ -1299,7 +1408,7 @@ const I18N = {
     'fb.services':'Die Schwerpunkte sind Softwareentwicklung, Webentwicklung und KI-Automatisierung. Details im ersten Abschnitt.',
     'fb.price':'Der Preis hängt von der Aufgabe ab. Beschreiben Sie Ihr Projekt im Formular — ich antworte mit einer Schätzung zu Zeit und Budget.',
     'fb.contact':'Am einfachsten über das Kontaktformular oder per E-Mail an hello@example.com.',
-    'fb.projects':'Arbeitsbeispiele finden Sie unter „Projekte“. Klicken Sie auf eine Karte für Details.',
+    'fb.projects':'Arbeitsbeispiele finden Sie unter „Projekte“. Zum Beispiel drafta: ein SaaS, in dem KI Antworten an Kunden in allen Messengern und sozialen Netzwerken entwirft. Klicken Sie auf eine Karte für Details.',
     'fb.skills':'Alle Technologien und Kompetenzen finden Sie unter „Kenntnisse“: Java und Spring, Backend, Web, KI-Beratung, Automatisierung und KI-Agenten (n8n, RAG, Multi-Agenten-Systeme).',
     'fb.exp':'Berufserfahrung: T-Systems (Deutsche Telekom) ab 2014, DATEV 2020, Volkswagen 2021, LeanCodes 2022, AixPano 2023, seit 2026 Freelance. Mehr im Abschnitt „Erfahrung“.','fb.certs':'Zertifikate: KI-Business-Automatisierungs-Spezialist (Beam Institute, 600 UE), n8n Professional Certificate und Oracle Certified Professional: Java SE 11. Sie lassen sich im Abschnitt „Zertifikate“ öffnen.',
     'fb.default':'Für eine genaue Antwort schreiben Sie am besten über das Formular — ich antworte innerhalb eines Tages.',
@@ -1315,18 +1424,26 @@ let LANG = (() => {
 const t = k => I18N[LANG][k] ?? I18N.ru[k] ?? k;
 
 /* ================= TEST DATA ================= */
-// cat: 'web' | 'ai' | 'soft'; media: 'image' | 'video'
+// Настоящий проект: key (тексты prj.<key>.d / .lead / .p0–p2, подписи кадров prj.<key>.s<N>), name — без перевода, shots — кадры из img/projects/.
+// anim — тяжёлая анимация (GIF): сначала показывается статичный src, анимация подгружается, когда открыт слайд проектов (playAnims)
+// Остальные — тестовые данные: cat 'web' | 'ai' | 'soft' | 'saas'; media 'image' | 'video'
 const PROJECTS = [
-  { id:'PRJ-01', cat:'web',  media:'image', tags:['React','Node.js','PostgreSQL'] },
-  { id:'PRJ-02', cat:'ai',   media:'video', tags:['Python','LLM API','n8n'] },
-  { id:'PRJ-03', cat:'soft', media:'image', tags:['C#','.NET','SQLite'] },
-  { id:'PRJ-04', cat:'web',  media:'video', tags:['Next.js','Supabase'] },
+  { id:'PRJ-01', key:'drafta', name:'drafta', cat:'saas', tags:['Next.js','Supabase','Mistral','OpenAI'],
+    shots:[{ src:'img/projects/drafta-app.webp', w:1672, h:941 }, { src:'img/projects/drafta-draft.webp', w:1672, h:941 },
+           { src:'img/projects/drafta-kb.webp', w:1672, h:941 }, { src:'img/projects/drafta-flow.webp', w:1672, h:941 }] },
+  { id:'PRJ-02', key:'mira', name:'Mira', cat:'ai', tags:['n8n','Next.js','Supabase','HubSpot','Telegram','OpenAI','Mistral'],
+    shots:[{ src:'img/projects/mira-demo.webp', anim:'img/projects/mira-demo.gif', w:900, h:506 }, { src:'img/projects/mira-flights.png', w:1117, h:747 },
+           { src:'img/projects/mira-n8n.png', w:1011, h:571 }, { src:'img/projects/mira-chat.png', w:1103, h:742 }] },
+  { id:'PRJ-03', key:'fairplate', name:'Spirit FairPlate Shop', cat:'web', tags:['Next.js','TypeScript','PostgreSQL','Self-hosted'],
+    shots:[{ src:'img/projects/fairplate-demo.webp', anim:'img/projects/fairplate-demo.gif', w:820, h:421 }, { src:'img/projects/fairplate-offer.png', w:1533, h:798 }] },
+  { id:'PRJ-04', key:'cards', name:'Product Card AI', cat:'ai', tags:[],
+    shots:['dress', 'microwave', 'sneakers', 'scooter'].map(n => ({ src:`img/projects/cards-${n}.webp`, w:1586, h:992 })) },
   { id:'PRJ-05', cat:'ai',   media:'image', tags:['Python','RAG','FastAPI'] },
   { id:'PRJ-06', cat:'soft', media:'image', tags:['Go','Docker'] },
   { id:'PRJ-07', cat:'web',  media:'video', tags:['Vue','Laravel'] },
 ].map((p, i) => Object.defineProperties(p, {
-  title: { get: () => t('proj.title') + ' ' + pad(i + 1) },
-  desc:  { get: () => t('proj.desc') },
+  title: { get: () => p.name || t('proj.title') + ' ' + pad(i + 1) },
+  desc:  { get: () => t(p.key ? `prj.${p.key}.d` : 'proj.desc') },
   catName: { get: () => t('cat.' + p.cat) },
 }));
 // date: 'YYYY-MM-DD' или 'YYYY-MM'; w/h — размер картинки, по нему считается ориентация и раскладка
@@ -1794,6 +1911,7 @@ function setActiveUI(i) {
   $('#navVal').textContent = t('nav.' + i);
   setPager(i);
   history.replaceState(null, '', '#' + slides[i].id);
+  if (slides[i].id === 'projects') playAnims();
 }
 
 function randomBits(lines = 60, len = 90) {
@@ -2487,7 +2605,15 @@ function selectCert(i, silent) {
 const car = $('#carousel');
 let active = 0, beltPos = 0;
 const ICON_IMG = '<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg>';
+const shotAlt = (p, k) => `prj.${p.key}.s${k}`;
+// подменяет статичный кадр на анимацию; GIF большой, поэтому только когда слайд проектов на экране
+function playAnims(root = $('#projects')) { $$('img[data-anim]', root).forEach(im => { im.src = im.dataset.anim; im.removeAttribute('data-anim'); }); }
+function shotHTML(p, k, lazy) {
+  const sh = p.shots[k];
+  return `<img class="shot" src="${sh.src}"${sh.anim && !RM ? ` data-anim="${sh.anim}"` : ''} width="${sh.w}" height="${sh.h}" alt="${esc(t(shotAlt(p, k)))}" data-i18n-alt="${shotAlt(p, k)}" decoding="async"${lazy ? ' loading="lazy"' : ''}>`;
+}
 function mediaHTML(p, big) {
+  if (p.shots) return shotHTML(p, 0, !big);
   if (p.media === 'video') return `<div class="ph-media"></div><span class="badge" data-i18n="media.video">${t('media.video')}</span><div class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><div class="vbar"><i></i></div>`;
   return `<div class="ph-media">${ICON_IMG}</div><span class="badge"><span data-i18n="media.image">${t('media.image')}</span>${big ? ' 16:10' : ''}</span>`;
 }
@@ -2497,8 +2623,8 @@ car.innerHTML = PROJECTS.map((p, i) => `
       <div class="pc-media">${mediaHTML(p)}</div>
       <div class="pc-body">
         <div class="pc-meta"><span class="id">${p.id}</span><span data-i18n="cat.${p.cat}"></span></div>
-        <h3><span data-i18n="proj.title"></span> ${pad(i + 1)}</h3>
-        <p data-i18n="proj.desc"></p>
+        <h3>${p.name ? esc(p.name) : `<span data-i18n="proj.title"></span> ${pad(i + 1)}`}</h3>
+        <p data-i18n="${p.key ? `prj.${p.key}.d` : 'proj.desc'}"></p>
         <div class="pc-foot"><div class="tags">${p.tags.slice(0, 3).map(t => `<span>${t}</span>`).join('')}</div>
         <span class="pc-open"><span data-i18n="more"></span> <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></div>
       </div>
@@ -2570,6 +2696,7 @@ pcards.forEach((c, i) => {
   c.addEventListener('pointerleave', () => inner.style.transform = '');
 });
 layoutCar();
+if (slides[current].id === 'projects') playAnims();
 
 /* ================= MODALS (clip-path unfold from source) ================= */
 const pm = $('#pm'), cm = $('#cm');
@@ -2607,10 +2734,23 @@ function fillProject(i) {
   const p = PROJECTS[i]; pmIdx = i;
   $('#pmMeta').textContent = `${p.id} · ${p.catName}`;
   $('#pmTitle').textContent = p.title;
-  $('#pmScreen').innerHTML = mediaHTML(p, true);
-  $('#pmThumbs').innerHTML = [0, 1, 2, 3].map(k => `<button class="${k === 0 ? 'active' : ''}" aria-label="${t('proj.frame')} ${k + 1}"><div class="ph-media">${ICON_IMG}</div></button>`).join('');
-  $$('#pmThumbs button').forEach(b => b.addEventListener('click', () => { $$('#pmThumbs button').forEach(x => x.classList.remove('active')); b.classList.add('active'); }));
-  $('#pmTags').innerHTML = p.tags.map(t => `<span>${t}</span>`).join('');
+  const scr = $('#pmScreen');
+  scr.innerHTML = mediaHTML(p, true); playAnims(scr);
+  scr.style.aspectRatio = p.shots ? `${p.shots[0].w} / ${p.shots[0].h}` : '';
+  scr.classList.toggle('real', !!p.shots);
+  $('#pmThumbs').innerHTML = (p.shots ? p.shots.map((sh, k) => shotHTML(p, k, true)) : [0, 1, 2, 3].map(() => `<div class="ph-media">${ICON_IMG}</div>`))
+    .map((m, k) => `<button class="${k === 0 ? 'active' : ''}" aria-label="${t('proj.frame')} ${k + 1}">${m}</button>`).join('');
+  $$('#pmThumbs button').forEach((b, k) => b.addEventListener('click', () => {
+    $$('#pmThumbs button').forEach(x => x.classList.remove('active')); b.classList.add('active');
+    if (p.shots) { scr.innerHTML = shotHTML(p, k); playAnims(scr); scr.style.aspectRatio = `${p.shots[k].w} / ${p.shots[k].h}`; }
+  }));
+  // тексты: у настоящего проекта свои ключи, у тестового — общие заглушки
+  $('#pmLead').dataset.i18n = p.key ? `prj.${p.key}.lead` : 'pm.lead';
+  $$('#tabTrack > div').forEach((d, k) => d.dataset.i18n = p.key ? `prj.${p.key}.p${k}` : `pm.p${k}`);
+  i18nIn($('.m-info', pm));
+  $('#pmMetrics').hidden = $('#pmLinks').hidden = !!p.key;
+  $('#pmTags').innerHTML = p.tags.map(t => `<span>${esc(t)}</span>`).join('');
+  $('#pmStack').hidden = !p.tags.length;
   setTab(0);
 }
 function openProject(i) { fillProject(i); openModal(pm, pcards[i]); }
@@ -2699,6 +2839,7 @@ function i18nIn(root = document) {
   $$('[data-i18n]', root).forEach(el => { el.textContent = t(el.dataset.i18n); });
   $$('[data-i18n-aria]', root).forEach(el => el.setAttribute('aria-label', t(el.dataset.i18nAria)));
   $$('[data-i18n-ph]', root).forEach(el => el.setAttribute('placeholder', t(el.dataset.i18nPh)));
+  $$('[data-i18n-alt]', root).forEach(el => el.setAttribute('alt', t(el.dataset.i18nAlt)));
 }
 let txState = 'ready';
 function applyLang(l, animate) {
@@ -2718,6 +2859,7 @@ function applyLang(l, animate) {
   });
   $$('[data-i18n-aria]').forEach(el => el.setAttribute('aria-label', t(el.dataset.i18nAria)));
   $$('[data-i18n-ph]').forEach(el => el.setAttribute('placeholder', t(el.dataset.i18nPh)));
+  $$('[data-i18n-alt]').forEach(el => el.setAttribute('alt', t(el.dataset.i18nAlt)));
   // dynamic bits
   $$('#hudR button').forEach((b, i) => b.setAttribute('aria-label', t('nav.' + i)));
   $('#navVal').textContent = t('nav.' + current);
@@ -2854,8 +2996,9 @@ function buildPrompt() {
     `Certificates (real facts): ${CERTS.map(c => `${c.title} — ${c.org}, ${c.dateStr}`).join('; ')}. ` +
     `Skills by area (real facts, from the knowledge graph): ${KN_CATS.map(k => `${t('kn.cat.' + k)}: ${[...KN.byCat[k]].map(n => n.title).join(', ')}`).join('; ')}. ` +
     `Work experience in this order, with the start year (real facts): ${JOBS.map(j => j.free ? `since ${j.from} freelance work` : `${j.from} ${j.name}${j.parent ? ` (${j.parent})` : ''} — ${t('job.' + j.key)}`).join('; ')}. ` +
+    `Projects (real facts): ${PROJECTS.filter(p => p.key).map(p => `${p.name} — ${t(`prj.${p.key}.lead`)} ${t(`prj.${p.key}.p1`)}`).join('; ')}. The other project cards are placeholders. ` +
     `Website sections: 0 = About, 1 = Experience, 2 = Skills (3D knowledge graph), 3 = Certificates, 4 = Projects, 5 = Contact form. ` +
-    `Apart from the certificates, the skills and the list of employers above, the website content is still placeholder text, so NEVER invent specific facts (prices, job titles, clients, other dates, project details). ` +
+    `Apart from the certificates, the skills, the list of employers and the projects above, the website content is still placeholder text, so NEVER invent specific facts (prices, job titles, clients, other dates, project details). ` +
     `For anything specific, suggest the contact form or the email hello@example.com. ` +
     `Reply ONLY in ${t('langName')}, at most 3 short sentences, plain text without markdown. ` +
     `If one website section is relevant, end your reply with exactly one tag like [[go:3]].\n\n` +
