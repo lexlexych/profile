@@ -201,6 +201,7 @@ button{font:inherit;color:inherit}
 .photo .scan{position:absolute;left:0;right:0;top:-40%;height:40%;background:linear-gradient(to bottom,transparent,rgba(var(--bit),.18) 85%,rgba(var(--bit),.6));animation:scan 4s var(--ease) infinite}
 @keyframes scan{0%{top:-40%}60%,100%{top:110%}}
 .orbit{position:absolute;inset:3%;border-radius:50%;animation:orbit 14s linear infinite;pointer-events:none}
+.portrait.still .orbit{animation-play-state:paused}
 .orbit.o2{inset:-4%;animation-duration:22s;animation-direction:reverse}
 .orbit.o3{inset:10%;animation-duration:9s}
 .orbit span{position:absolute;top:-9px;left:50%;margin-left:-8px;width:16px;height:18px;display:grid;place-items:center;font-family:var(--f-mono);font-size:12px;font-weight:600;color:var(--verd);background:var(--bg);border:1px solid var(--verd-soft);border-radius:3px}
@@ -361,6 +362,12 @@ button{font:inherit;color:inherit}
 .certs-side .ci-btns{margin-top:auto}
 .panel{border:1px solid var(--line-strong);background:var(--surface);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:8px;overflow:hidden}
 .panel-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}
+.ci-nav{display:flex;align-items:center;gap:6px}
+.ci-nav>span{margin-right:4px}
+.ci-arr{width:28px;height:28px;display:grid;place-items:center;border:1px solid var(--line-strong);border-radius:50%;background:transparent;color:var(--muted);cursor:pointer;transition:color .25s,border-color .25s,transform .3s var(--ease-out)}
+.ci-arr svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.ci-arr:hover,.ci-arr:focus-visible{color:var(--brass);border-color:var(--brass)}
+#ciPrev:hover{transform:translateX(-2px)}#ciNext:hover{transform:translateX(2px)}
 .leds{display:flex;gap:6px}
 .leds i{width:8px;height:8px;border-radius:50%;background:var(--line-strong)}
 .leds i:nth-child(1){background:var(--verd);box-shadow:0 0 8px var(--verd);animation:blink 1.6s infinite}
@@ -376,9 +383,6 @@ button{font:inherit;color:inherit}
 .ci-check #ciHash{overflow:hidden;text-overflow:ellipsis}
 .ci-btns{display:flex;gap:10px;flex-wrap:wrap}
 .btn[hidden]{display:none}
-.ci-list{display:flex;gap:8px;margin-top:14px}
-.ci-list button{all:unset;cursor:pointer;flex:1;padding:10px;border:1px solid var(--line);border-radius:6px;font-size:12px;color:var(--muted);text-align:center;transition:.3s}
-.ci-list button.active{border-color:var(--brass);color:var(--ink);background:var(--brass-soft)}
 .cert-stage{height:clamp(300px,calc(100vh - 250px),720px);display:flex;align-items:center;justify-content:center}
 .cert-gal{display:flex;gap:18px;align-items:center}
 .cert-col{display:flex;flex-direction:column;gap:18px;align-items:center}
@@ -970,7 +974,7 @@ button{font:inherit;color:inherit}
         </div>
         <div class="certs-side" data-a="right" style="--d:2">
             <div class="panel">
-              <div class="panel-bar"><span class="leds"><i></i><i></i><i></i></span><span data-i18n="cert.verify"></span></div>
+              <div class="panel-bar"><span class="leds"><i></i><i></i><i></i></span><span class="ci-nav"><span data-i18n="cert.details"></span><button class="ci-arr" id="ciPrev" type="button" data-i18n-aria="cert.prev"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button><button class="ci-arr" id="ciNext" type="button" data-i18n-aria="cert.next"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></span></div>
               <div class="ci-body">
                 <div class="ci-id" id="ciId">C-01</div>
                 <h3 id="ciTitle"></h3>
@@ -982,7 +986,6 @@ button{font:inherit;color:inherit}
                 </div>
               </div>
             </div>
-            <div class="ci-list" id="ciList"></div>
         </div>
       </div>
     </div>
@@ -1204,7 +1207,7 @@ const I18N = {
     'kn.n.risk':'Риск-менеджмент LLM','kn.n.agentaudit':'Аудит AI-агентов','kn.n.change':'Управление изменениями','kn.n.roadmap':'Roadmap трансформации',
     'kn.n.agents':'AI-агенты','kn.n.workflow':'Автоматизация процессов','kn.n.assistants':'Кастомные AI-ассистенты','kn.n.chatbots':'Чат-боты',
     'kn.n.routing':'Роутинг агентов','kn.n.mas':'Мультиагентные системы','kn.n.vectordb':'Векторные БД','kn.n.pipelines':'Пайплайны данных',
-    'cert.verify':'Проверка подлинности','cert.org':'Организация','cert.date':'Дата','cert.info':'Подробности','cert.ok':'ID','cert.open':'Открыть сертификат','cert.check':'Проверить онлайн',
+    'cert.details':'Детали сертификата','cert.prev':'Предыдущий сертификат','cert.next':'Следующий сертификат','cert.org':'Организация','cert.date':'Дата','cert.info':'Подробности','cert.ok':'ID','cert.open':'Открыть сертификат','cert.check':'Проверить онлайн',
     'cert.beam':'Специалист по AI-автоматизации бизнеса','cert.beam.i':'Переподготовка 600 ак. часов (27.04–21.08.2026): 15 модулей — AI-агенты и мультиагентные системы, RAG, промпт-инжиниринг, анализ бизнес-процессов, GDPR и EU AI Act. Все модули — «отлично».',
     'cert.n8n':'n8n Professional Certificate','cert.n8n.i':'Пройдены все курсы программы n8n Academy по автоматизации рабочих процессов в n8n.',
     'cert.oracle':'Oracle Certified Professional: Java SE 11 Developer','cert.oracle.i':'Профессиональная сертификация Oracle по разработке на Java SE 11.',
@@ -1329,7 +1332,7 @@ const I18N = {
     'kn.n.risk':'LLM risk management','kn.n.agentaudit':'AI agent audit','kn.n.change':'Change management','kn.n.roadmap':'Transformation roadmap',
     'kn.n.agents':'AI agents','kn.n.workflow':'Workflow automation','kn.n.assistants':'Custom AI assistants','kn.n.chatbots':'Chatbots',
     'kn.n.routing':'Agent routing','kn.n.mas':'Multi-agent systems','kn.n.vectordb':'Vector databases','kn.n.pipelines':'Data pipelines',
-    'cert.verify':'Verification','cert.org':'Issuer','cert.date':'Date','cert.info':'Details','cert.ok':'ID','cert.open':'Open certificate','cert.check':'Verify online',
+    'cert.details':'Certificate details','cert.prev':'Previous certificate','cert.next':'Next certificate','cert.org':'Issuer','cert.date':'Date','cert.info':'Details','cert.ok':'ID','cert.open':'Open certificate','cert.check':'Verify online',
     'cert.beam':'AI Business Automation Specialist','cert.beam.i':'600-hour further education program (27.04–21.08.2026): 15 modules — AI agents and multi-agent systems, RAG, prompt engineering, business process analysis, GDPR and the EU AI Act. All modules graded “very good”.',
     'cert.n8n':'n8n Professional Certificate','cert.n8n.i':'Completed all courses of the n8n Academy program on workflow automation with n8n.',
     'cert.oracle':'Oracle Certified Professional: Java SE 11 Developer','cert.oracle.i':'Oracle professional certification in Java SE 11 development.',
@@ -1454,7 +1457,7 @@ const I18N = {
     'kn.n.risk':'LLM-Risikomanagement','kn.n.agentaudit':'Audit von KI-Agenten','kn.n.change':'Change Management','kn.n.roadmap':'Transformations-Roadmap',
     'kn.n.agents':'KI-Agenten','kn.n.workflow':'Workflow-Automatisierung','kn.n.assistants':'Individuelle KI-Assistenten','kn.n.chatbots':'Chatbots',
     'kn.n.routing':'Agenten-Routing','kn.n.mas':'Multi-Agenten-Systeme','kn.n.vectordb':'Vektordatenbanken','kn.n.pipelines':'Datenpipelines',
-    'cert.verify':'Echtheitsprüfung','cert.org':'Aussteller','cert.date':'Datum','cert.info':'Details','cert.ok':'ID','cert.open':'Zertifikat öffnen','cert.check':'Online prüfen',
+    'cert.details':'Zertifikatsdetails','cert.prev':'Vorheriges Zertifikat','cert.next':'Nächstes Zertifikat','cert.org':'Aussteller','cert.date':'Datum','cert.info':'Details','cert.ok':'ID','cert.open':'Zertifikat öffnen','cert.check':'Online prüfen',
     'cert.beam':'KI-Business-Automatisierungs-Spezialist','cert.beam.i':'Weiterbildung mit 600 UE (27.04.–21.08.2026): 15 Module — KI-Agenten und Multi-Agenten-Systeme, RAG, Prompt Engineering, Geschäftsprozessanalyse, DSGVO und EU AI Act. Alle Module „sehr gut“.',
     'cert.n8n':'n8n Professional Certificate','cert.n8n.i':'Alle Kurse des n8n-Academy-Programms zur Workflow-Automatisierung mit n8n abgeschlossen.',
     'cert.oracle':'Oracle Certified Professional: Java SE 11 Developer','cert.oracle.i':'Oracle-Profizertifizierung für die Entwicklung mit Java SE 11.',
@@ -1592,12 +1595,12 @@ const fmtDate = s => {
   return new Intl.DateTimeFormat(LANG, d ? { day: 'numeric', month: 'long', year: 'numeric' } : { month: 'long', year: 'numeric' }).format(new Date(y, m - 1, d || 1));
 };
 const CERTS = [
-  { id:'C-01', key:'beam', short:'Beam', org:'Beam Institute of Technology, Berlin', date:'2026-08-21', no:'№ 27042612',
+  { id:'C-01', key:'beam', org:'Beam Institute of Technology, Berlin', date:'2026-08-21', no:'№ 27042612',
     img:'img/certs/beam-ki-automation.jpg', w:1247, h:1754 },
-  { id:'C-02', key:'n8n', short:'n8n', org:'n8n Academy', date:'2026-09', no:'c4dac917cdda4d3ba02a5eb0e42f55c6',
+  { id:'C-02', key:'n8n', org:'n8n Academy', date:'2026-09', no:'c4dac917cdda4d3ba02a5eb0e42f55c6',
     img:'img/certs/n8n-professional.jpg', w:1546, h:907,
     verify:'https://credentials.learn.n8n.io/credentials/c4dac917cdda4d3ba02a5eb0e42f55c6/' },
-  { id:'C-03', key:'oracle', short:'Oracle', org:'Oracle University', date:'2020-06-09', no:'242653379OCPJSE11',
+  { id:'C-03', key:'oracle', org:'Oracle University', date:'2020-06-09', no:'242653379OCPJSE11',
     img:'img/certs/oracle-java-se11.jpg', w:1650, h:1275 },
 ].map(c => Object.defineProperties(Object.assign(c, { ratio: c.w / c.h, orient: c.h > c.w ? 'portrait' : 'landscape' }), {
   title:   { get: () => t('cert.' + c.key) },
@@ -1866,7 +1869,7 @@ function registerSpinners(root = document) {
     const s = { el, speed: parseFloat(el.dataset.spin) || 0, angle: rand(0, 360), local: 1, localT: 1, extra: 0, extraT: 0 };
     el._sp = s;
     if (el instanceof SVGElement && el.tagName !== 'svg') { el.style.transformBox = 'view-box'; el.style.transformOrigin = '0 0'; }
-    const host = el.closest('[data-spinhost]');
+    const host = s.host = el.closest('[data-spinhost]');
     if (host && !host._spBound) {
       host._spBound = true;
       host.addEventListener('mouseenter', () => $$('[data-spin]', host).forEach(e => e._sp && (e._sp.localT = 6)));
@@ -1997,7 +2000,8 @@ function loop(now) {
   const mult = RM ? 0.15 : 1;
 
   for (const s of spinners) {
-    s.local += (s.localT - s.local) * .06 * f;
+    // a host with .still (the portrait while its video plays) brings its gears to a stop
+    s.local += ((s.host && s.host.classList.contains('still') ? 0 : s.localT) - s.local) * .06 * f;
     s.extra += (s.extraT - s.extra) * .09 * f;
     s.angle += s.speed * gSpeed * s.local * f * mult;
     s.el.style.transform = `rotate(${(s.angle + s.extra).toFixed(2)}deg)`;
@@ -2171,7 +2175,7 @@ function countUp(el) {
 // tilt helper
 function tilt(host, target, max = 8, glare) {
   host.addEventListener('pointermove', e => {
-    if (e.pointerType !== 'mouse') return;
+    if (e.pointerType !== 'mouse' || host.classList.contains('still')) return;
     const r = host.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
     target.style.transform = `rotateY(${(x * max).toFixed(2)}deg) rotateX(${(-y * max).toFixed(2)}deg)`;
     if (glare) { glare.style.setProperty('--gx', (x + .5) * 100 + '%'); glare.style.setProperty('--gy', (y + .5) * 100 + '%'); }
@@ -2183,6 +2187,9 @@ tilt($('#portrait'), $('#portraitTilt'), 10);
 const heroVid = $('#heroVideo'), heroPlay = $('#heroPlay'), heroPhoto = heroVid.parentElement;
 function heroPlayUI(on) {
   heroPlay.classList.toggle('on', on);
+  // while the video plays the portrait holds still: gears stop, the orbits pause, the tilt levels out
+  $('#portrait').classList.toggle('still', on);
+  if (on) $('#portraitTilt').style.transform = '';
   heroPlay.setAttribute('aria-pressed', on);
   heroPlay.dataset.i18nAria = on ? 'hero.pause' : 'hero.play';
   heroPlay.setAttribute('aria-label', t(heroPlay.dataset.i18nAria));
@@ -2726,13 +2733,14 @@ function buildCerts() {
     });
     certGal.appendChild(ce);
   });
-  $('#ciList').innerHTML = CERTS.map((c, i) => `<button data-i="${i}">${c.short}</button>`).join('');
-  $$('#ciList button').forEach(b => b.addEventListener('click', () => selectCert(+b.dataset.i)));
   $('#ciOpen').addEventListener('click', () => openCert(activeCert, CERTS[activeCert]._el));
+  $('#ciPrev').addEventListener('click', () => selectCert((activeCert - 1 + CERTS.length) % CERTS.length));
+  $('#ciNext').addEventListener('click', () => selectCert((activeCert + 1) % CERTS.length));
   selectCert(0, true);
 }
 function layoutCerts() {
   const gap = 18;
+  certStage.style.height = '';
   const W = certStage.clientWidth, Hmax = certStage.clientHeight;
   if (!W || !Hmax) return;
   // total width is linear in H: portrait column = ratio·H, landscape column (2 stacked) = maxRatio·(H − gap)/2
@@ -2746,12 +2754,13 @@ function layoutCerts() {
     const h = col.type === 'p' ? H : (H - gap) / 2;
     c._el.style.width = (h * c.ratio).toFixed(1) + 'px'; c._el.style.height = h.toFixed(1) + 'px';
   }));
+  // single column (≤860px): the gallery is width-bound, shrink the stage to it so the details panel follows right below
+  if (matchMedia('(max-width:860px)').matches) certStage.style.height = Math.ceil(H + 20) + 'px';
 }
 function selectCert(i, silent) {
   activeCert = i;
   const c = CERTS[i];
   CERTS.forEach((x, k) => x._el && x._el.classList.toggle('active', k === i));
-  $$('#ciList button').forEach((b, k) => b.classList.toggle('active', k === i));
   $('#ciId').textContent = c.id;
   $('#ciOrg').textContent = c.org; $('#ciDate').textContent = c.dateStr;
   $('#ciInfo').textContent = c.info;
