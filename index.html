@@ -124,8 +124,7 @@ button{font:inherit;color:inherit}
 .stage{position:fixed;inset:0;z-index:10}
 .slide{position:absolute;inset:0;visibility:hidden;opacity:0;pointer-events:none}
 .slide.active{visibility:visible;opacity:1;pointer-events:auto}
-/* touch-action: mobile Chrome would otherwise pan the clipped x-axis on a diagonal swipe */
-.slide-scroll{position:absolute;inset:0;overflow-x:hidden;overflow-y:auto;scrollbar-width:none;touch-action:pan-y pinch-zoom;overscroll-behavior-x:none;
+.slide-scroll{position:absolute;inset:0;overflow-x:hidden;overflow-y:auto;scrollbar-width:none;
   padding:calc(env(safe-area-inset-top,0px) + var(--nav-h) + 14px) clamp(20px,6vw,110px) calc(env(safe-area-inset-bottom,0px) + 70px);
   display:flex;flex-direction:column;justify-content:center}
 .slide-scroll::-webkit-scrollbar{display:none}
@@ -619,13 +618,6 @@ button{font:inherit;color:inherit}
 @media (max-width:1360px){
   .nav-inner{gap:16px}
   .menu button{padding:0 11px;font-size:13px}
-}
-/* here .wrap spans the screen minus the side padding: clip it at the screen edge, so the carousel side cards
-   and the slide-in animations never widen the slide and mobile Chrome has nothing to pan sideways */
-@media (max-width:1360px){
-  @supports (overflow-clip-margin:1px){
-    .slide-scroll > .wrap{overflow-x:clip;overflow-clip-margin:clamp(20px,6vw,110px)}
-  }
 }
 @media (max-width:1100px){
   .menu{display:none}
@@ -1932,8 +1924,6 @@ function loop(now) {
 const slides = $$('.slide');
 const N = slides.length;
 let current = 0, busy = false;
-// slides scroll only vertically: overflow-x:hidden still lets focus or scrollIntoView shift them sideways
-$$('.slide-scroll').forEach(sc => sc.addEventListener('scroll', () => { if (sc.scrollLeft) sc.scrollLeft = 0; }, { passive: true }));
 const menu = $('#menu'), menuBtns = $$('#menu button'), menuThumb = $('#menuThumb');
 const shutter = $('#shutter');
 
