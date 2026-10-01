@@ -170,6 +170,34 @@ button{font:inherit;color:inherit}
   background:radial-gradient(circle at 50% 30%,var(--bg2),var(--surface-solid) 70%);box-shadow:inset 0 0 40px rgba(0,0,0,.15)}
 .photo:has(img){background:#fff}
 .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
+.photo video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block;opacity:0;transition:opacity .45s var(--ease-out)}
+.photo.playing video{opacity:1}
+.photo.playing .scan{display:none}
+/* play button: a wide pill with lens-convex top and bottom, overlapping the photo edge and the ticks ring.
+   It sits outside .portrait-tilt: the whole box is the hit area and 3D hit-testing never steals the click */
+.hero-play{all:unset;box-sizing:border-box;cursor:pointer;position:absolute;left:50%;top:84.5%;width:clamp(76px,22%,104px);aspect-ratio:120/72;transform:translate(-50%,-50%);z-index:5;
+  display:grid;place-items:center;color:var(--bg);-webkit-tap-highlight-color:transparent;transition:transform .3s var(--ease-out)}
+.hero-play:hover{transform:translate(-50%,-50%) scale(1.06)}
+.hero-play:active{transform:translate(-50%,-50%) scale(.97)}
+.hero-play:focus-visible{outline:2px solid var(--verd);outline-offset:6px;border-radius:30%}
+.hero-play *{pointer-events:none}
+.hero-play .hp-bg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 10px 14px rgba(0,0,0,.22));transition:filter .3s}
+.hero-play .hp-halo{fill:none;stroke:var(--bg);stroke-width:10}
+.hero-play .hp-glow{fill:none;stroke:var(--brass-soft);stroke-width:0;transition:stroke-width .3s}
+.hero-play .hp-body{fill:var(--ink);stroke:var(--brass);stroke-width:2}
+.hero-play .hp-halo,.hero-play .hp-glow,.hero-play .hp-body,.hero-play .hp-pulse{vector-effect:non-scaling-stroke}
+/* idle call to action: the pill breathes and a brass wave rolls off it; stops on hover and while the video plays */
+.hero-play .hp-pulse{fill:none;stroke:var(--brass);stroke-width:0;opacity:0;animation:hpWave 2.4s var(--ease-out) infinite}
+.hero-play .hp-bg,.hero-play .i-play{animation:hpBreathe 2.4s ease-in-out infinite}
+.hero-play:hover .hp-pulse,.hero-play.on .hp-pulse,.hero-play:hover .hp-bg,.hero-play.on .hp-bg,.hero-play:hover .i-play{animation:none}
+@keyframes hpWave{0%{stroke-width:4;opacity:.75}100%{stroke-width:34;opacity:0}}
+@keyframes hpBreathe{0%,100%{transform:none}50%{transform:scale(1.045)}}
+.hero-play:hover .hp-glow{stroke-width:18}
+.hero-play:hover .hp-body{fill:color-mix(in srgb,var(--ink) 88%,var(--brass))}
+.hero-play .i-play,.hero-play .i-pause{position:relative;width:34%;height:auto;aspect-ratio:1;fill:currentColor}
+.hero-play .i-pause,.hero-play.on .i-play{display:none}
+.hero-play.on .i-pause{display:block}
+.hero-play .i-play{margin-left:5%}
 .photo .scan{position:absolute;left:0;right:0;top:-40%;height:40%;background:linear-gradient(to bottom,transparent,rgba(var(--bit),.18) 85%,rgba(var(--bit),.6));animation:scan 4s var(--ease) infinite}
 @keyframes scan{0%{top:-40%}60%,100%{top:110%}}
 .orbit{position:absolute;inset:3%;border-radius:50%;animation:orbit 14s linear infinite;pointer-events:none}
@@ -574,6 +602,7 @@ button{font:inherit;color:inherit}
 @media (pointer:fine){
   .cursor{display:block;position:fixed;inset:0;z-index:999;pointer-events:none;opacity:0;transition:opacity .4s}
   .cursor.live{opacity:1}
+  .cursor.live.off{opacity:0;transition-duration:.15s}
   .c-dot,.c-ring-w{position:fixed;left:0;top:0;will-change:transform}
   .c-dot{width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:var(--brass)}
   .c-ring{width:34px;height:34px;margin:-17px 0 0 -17px;border:1px solid var(--line-strong);border-radius:50%;transition:width .35s var(--ease-out),height .35s var(--ease-out),margin .35s var(--ease-out),border-color .3s}
@@ -823,10 +852,19 @@ button{font:inherit;color:inherit}
               <div class="orbit o3"><span>1</span></div>
               <div class="photo">
                 <img src="img/photo.jpg" width="827" height="1063" data-i18n-aria="hero.photo" aria-label="Фото">
+                <video id="heroVideo" src="img/hero.mp4" preload="none" playsinline hidden></video>
 
                 <div class="scan"></div>
               </div>
             </div>
+            <button class="hero-play" id="heroPlay" type="button" data-i18n-aria="hero.play" aria-label="Смотреть видео" aria-pressed="false">
+              <svg class="hp-bg" viewBox="0 0 120 72" preserveAspectRatio="none" aria-hidden="true">
+                <defs><path id="hpShape" d="M15 4.5Q60-1.5 105 4.5Q117.5 6 118.6 19Q120 36 118.6 53Q117.5 66 105 67.5Q60 73.5 15 67.5Q2.5 66 1.4 53Q0 36 1.4 19Q2.5 6 15 4.5Z"/></defs>
+                <use href="#hpShape" class="hp-pulse"/><use href="#hpShape" class="hp-halo"/><use href="#hpShape" class="hp-glow"/><use href="#hpShape" class="hp-body"/>
+              </svg>
+              <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>
+              <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="4" width="4.2" height="16" rx="1"/><rect x="13.8" y="4" width="4.2" height="16" rx="1"/></svg>
+            </button>
             <div class="callout c1"><span class="led"></span><span data-i18n="hero.c1">Открыт к проектам</span></div>
             <div class="callout c2"><span data-i18n="hero.c2">Работаю удалённо</span></div>
           </div>
@@ -1138,7 +1176,7 @@ const I18N = {
     'nav.0':'О себе','nav.1':'Опыт','nav.2':'Навыки','nav.3':'Сертификаты','nav.4':'Проекты','nav.5':'Контакты',
     'word.0':'ПРИВЕТ','word.1':'ОПЫТ','word.2':'НАВЫКИ','word.3':'СЕРТИФИКАТЫ','word.4':'ПРОЕКТЫ','word.5':'НА СВЯЗИ',
     'theme.light':'Светлая тема','theme.dark':'Тёмная тема','theme.system':'Системная тема','pg.prev':'Назад','pg.next':'Далее','aria.pager':'Соседние разделы',
-    'hero.photo':'Фото','hero.c1':'Открыт к проектам','hero.c2':'Работаю удалённо',
+    'hero.photo':'Фото','hero.play':'Смотреть видео','hero.pause':'Пауза','hero.c1':'Открыт к проектам','hero.c2':'Работаю удалённо',
     'hero.lead':'Надёжная разработка. Умная автоматизация. Внимание к каждой детали. Всё, чтобы ваш бизнес работал чётко и без сбоев.',
     'svc.0.t':'Веб, мобильные и десктоп-приложения','svc.0.d':'Сайты и порталы, мобильные и десктопные приложения, PWA — одно приложение для браузера, телефона и компьютера. Бэкенд, API и интеграции — под ключ.',
     'svc.1.t':'AI-автоматизация и AI-агенты','svc.1.d':'Агенты берут рутину на себя: разбирают письма клиентов, готовят ответы, передают задачи и данные между отделами, CRM и ERP.',
@@ -1263,7 +1301,7 @@ const I18N = {
     'nav.0':'About','nav.1':'Experience','nav.2':'Skills','nav.3':'Certificates','nav.4':'Projects','nav.5':'Contact',
     'word.0':'HELLO','word.1':'EXPERIENCE','word.2':'SKILLS','word.3':'CERTIFICATES','word.4':'PROJECTS','word.5':'CONTACT',
     'theme.light':'Light theme','theme.dark':'Dark theme','theme.system':'System theme','pg.prev':'Previous','pg.next':'Next','aria.pager':'Adjacent sections',
-    'hero.photo':'Photo','hero.c1':'Open to projects','hero.c2':'Working remotely',
+    'hero.photo':'Photo','hero.play':'Play video','hero.pause':'Pause','hero.c1':'Open to projects','hero.c2':'Working remotely',
     'hero.lead':'Reliable development. Smart automation. Attention to every detail. Everything it takes to keep your business running smoothly and without a hitch.',
     'svc.0.t':'Web, mobile & desktop apps','svc.0.d':'Websites and portals, mobile and desktop apps, PWAs — one app for browser, phone and computer. Backend, APIs and integrations, end to end.',
     'svc.1.t':'AI automation & AI agents','svc.1.d':'Agents take over the routine: they sort customer emails, draft replies and pass tasks and data between departments, CRM and ERP.',
@@ -1388,7 +1426,7 @@ const I18N = {
     'nav.0':'Über mich','nav.1':'Erfahrung','nav.2':'Kenntnisse','nav.3':'Zertifikate','nav.4':'Projekte','nav.5':'Kontakt',
     'word.0':'HALLO','word.1':'ERFAHRUNG','word.2':'KENNTNISSE','word.3':'ZERTIFIKATE','word.4':'PROJEKTE','word.5':'KONTAKT',
     'theme.light':'Helles Design','theme.dark':'Dunkles Design','theme.system':'Systemdesign','pg.prev':'Zurück','pg.next':'Weiter','aria.pager':'Benachbarte Abschnitte',
-    'hero.photo':'Foto','hero.c1':'Offen für Projekte','hero.c2':'Arbeite remote',
+    'hero.photo':'Foto','hero.play':'Video abspielen','hero.pause':'Pause','hero.c1':'Offen für Projekte','hero.c2':'Arbeite remote',
     'hero.lead':'Zuverlässige Entwicklung. Intelligente Automatisierung. Liebe zum Detail. Alles, damit Ihr Unternehmen präzise und reibungslos läuft.',
     'svc.0.t':'Web-, Mobile- & Desktop-Apps','svc.0.d':'Websites und Portale, Mobile- und Desktop-Apps, PWAs — eine App für Browser, Smartphone und Computer. Backend, APIs und Integrationen aus einer Hand.',
     'svc.1.t':'KI-Automatisierung & KI-Agenten','svc.1.d':'Agenten übernehmen die Routine: Sie sortieren Kunden-E-Mails, entwerfen Antworten und übergeben Aufgaben und Daten zwischen Abteilungen, CRM und ERP.',
@@ -2011,6 +2049,7 @@ function setActiveUI(i) {
   setPager(i);
   history.replaceState(null, '', '#' + slides[i].id);
   if (slides[i].id === 'projects') playAnims();
+  if (slides[i].id !== 'about') heroVideoStop();
 }
 
 function randomBits(lines = 60, len = 90) {
@@ -2138,6 +2177,27 @@ function tilt(host, target, max = 8, glare) {
   host.addEventListener('pointerleave', () => { target.style.transform = ''; });
 }
 tilt($('#portrait'), $('#portraitTilt'), 10);
+// hero video: the play button swaps the avatar for the video; when it ends (or the slide is left) the avatar returns
+const heroVid = $('#heroVideo'), heroPlay = $('#heroPlay'), heroPhoto = heroVid.parentElement;
+function heroPlayUI(on) {
+  heroPlay.classList.toggle('on', on);
+  heroPlay.setAttribute('aria-pressed', on);
+  heroPlay.dataset.i18nAria = on ? 'hero.pause' : 'hero.play';
+  heroPlay.setAttribute('aria-label', t(heroPlay.dataset.i18nAria));
+}
+function heroVideoStop() {
+  if (heroVid.hidden) return;
+  heroVid.pause(); heroPhoto.classList.remove('playing'); heroPlayUI(false);
+  setTimeout(() => { if (!heroPhoto.classList.contains('playing')) { heroVid.hidden = true; heroVid.currentTime = 0; } }, 450);
+}
+// the button state switches right away: a click while the video is still loading cancels it instead of being lost
+heroPlay.addEventListener('click', () => {
+  if (heroPlay.classList.contains('on')) { heroVid.pause(); heroPlayUI(false); return; }
+  heroPlayUI(true);
+  heroVid.hidden = false;
+  heroVid.play().then(() => heroPhoto.classList.add('playing')).catch(e => { if (e.name !== 'AbortError') heroVideoStop(); });
+});
+heroVid.addEventListener('ended', heroVideoStop);
 // magnetic buttons
 function magnetic(el) {
   el.addEventListener('pointermove', e => {
@@ -3019,7 +3079,11 @@ if (matchMedia('(pointer:fine)').matches) {
   let rx = 0, ry = 0;
   addEventListener('pointermove', e => { cur.classList.add('live'); mouse.x = e.clientX; mouse.y = e.clientY; dot.style.transform = `translate(${e.clientX}px,${e.clientY}px)`; });
   (function follow() { rx += (mouse.x - rx) * .18; ry += (mouse.y - ry) * .18; ring.style.transform = `translate(${rx.toFixed(1)}px,${ry.toFixed(1)}px)`; requestAnimationFrame(follow); })();
-  document.addEventListener('pointerover', e => cur.classList.toggle('hover', !!e.target.closest('a,button,label,.pcard,.cert,.chip,input[type=range]')));
+  document.addEventListener('pointerover', e => {
+    const own = !!e.target.closest('.hero-play'); // the hero play button shows the plain system pointer instead
+    cur.classList.toggle('off', own);
+    cur.classList.toggle('hover', !own && !!e.target.closest('a,button,label,.pcard,.cert,.chip,input[type=range]'));
+  });
   addEventListener('pointerdown', () => cur.classList.add('down'));
   addEventListener('pointerup', () => cur.classList.remove('down'));
 } else {
