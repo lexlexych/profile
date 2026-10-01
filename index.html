@@ -516,7 +516,7 @@ button{font:inherit;color:inherit}
 .foot{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 28px);text-align:center;font-size:12px;color:var(--muted);pointer-events:none}
 
 /* ============ SHUTTER TRANSITION ============ */
-.shutter{position:fixed;inset:0;z-index:80;pointer-events:none}
+.shutter{position:fixed;inset:0;z-index:80;pointer-events:none;overflow:hidden}
 .shutter.closing,.shutter.boot{pointer-events:auto}
 .sh{position:absolute;top:0;bottom:0;width:calc(50% + 12px);overflow:hidden;will-change:transform}
 .sh-l{left:0;transform:translateX(-103%)}
@@ -628,7 +628,6 @@ button{font:inherit;color:inherit}
   :root{--nav-h:60px}
   .logo span{display:none}
   .nav-inner{gap:10px}
-  .chat{right:10px;left:10px;width:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 84px);height:min(560px,calc(100vh - 170px))}
   .hud-r{display:none}
   .slide-scroll{justify-content:flex-start;--top-gap:14px}
   .hero,.contact,.certs{grid-template-columns:1fr}
@@ -679,8 +678,8 @@ button{font:inherit;color:inherit}
   .kn-hud{left:12px;top:10px;flex-direction:column}
   .kn-hud .kn-rot{display:none}
   .kn-card{left:8px;bottom:8px;width:calc(100% - 16px);padding:12px 14px 14px}
-  /* the pager takes the space left of the chat button, names shrink with an ellipsis */
-  .pager{left:12px;right:calc(clamp(14px,2vw,28px) + 68px);gap:8px}
+  /* the pager spans the bottom edge, names shrink with an ellipsis */
+  .pager{left:12px;right:12px;gap:8px}
   .pg{min-width:0;flex:0 1 auto;height:40px;gap:7px;font-size:12.5px;padding:0 12px 0 4px}
   .pg-next{padding:0 4px 0 12px}
   .pg-n b{display:none}
@@ -729,45 +728,6 @@ button{font:inherit;color:inherit}
 .dd-menu button:hover,.dd-menu button:focus-visible{background:var(--brass-soft);color:var(--ink)}
 .dd-menu button[aria-checked="true"]{color:var(--ink)}
 .dd-menu button[aria-checked="true"]::after{content:"";width:7px;height:7px;margin:0 3px 0 auto;flex:none;transform:rotate(45deg);background:var(--verd);box-shadow:0 0 10px var(--verd)}
-/* ============ CHATBOT ============ */
-.chat-fab{all:unset;cursor:pointer;position:fixed;z-index:70;right:clamp(14px,2vw,28px);bottom:calc(env(safe-area-inset-bottom,0px) + 18px);width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--bg);box-shadow:var(--shadow);transition:transform .4s var(--ease-out)}
-.chat-fab:hover{transform:scale(1.06)}
-.chat-fab .fg{position:absolute;left:-8px;top:-8px;width:74px;height:74px;color:var(--brass);pointer-events:none}
-.chat-fab .ic{position:absolute;width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linejoin:round;transition:transform .5s var(--ease-out),opacity .3s}
-.chat-fab .ic-x{opacity:0;transform:rotate(-90deg) scale(.6)}
-.chat-fab.open .ic-chat{opacity:0;transform:rotate(90deg) scale(.6)}
-.chat-fab.open .ic-x{opacity:1;transform:none}
-.chat-fab .tip{position:absolute;right:calc(100% + 18px);white-space:nowrap;background:var(--surface-solid);color:var(--ink);border:1px solid var(--line-strong);padding:7px 12px;border-radius:20px;font-size:13px;opacity:0;transform:translateX(8px);transition:.4s var(--ease-out);pointer-events:none}
-.chat-fab:hover .tip{opacity:1;transform:none}
-.chat-fab.open .tip{display:none}
-.chat-fab .dot{position:absolute;top:3px;right:3px;width:11px;height:11px;border-radius:50%;background:var(--verd);border:2px solid var(--ink);animation:blink 2s infinite}
-.chat-fab.open .dot{display:none}
-.chat{position:fixed;z-index:75;right:clamp(14px,2vw,28px);bottom:calc(env(safe-area-inset-bottom,0px) + 90px);width:min(390px,calc(100vw - 28px));height:min(580px,calc(100vh - 190px));background:var(--surface-solid);border:1px solid var(--line-strong);border-radius:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden;clip-path:circle(0px at calc(100% - 29px) calc(100% + 43px));visibility:hidden;transition:clip-path .7s var(--ease),visibility 0s .7s}
-.chat.open{clip-path:circle(150% at calc(100% - 29px) calc(100% + 43px));visibility:visible;transition:clip-path .75s var(--ease),visibility 0s}
-.chat-head{display:flex;align-items:center;gap:12px;padding:12px 14px 12px 16px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,var(--brass-soft),transparent 60%)}
-.chat-head > svg{width:34px;height:34px;color:var(--brass);flex:0 0 auto}
-.chat-head b{display:block;font-size:14.5px}
-.chat-head small{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
-.chat-head small i{width:7px;height:7px;border-radius:50%;background:var(--verd);box-shadow:0 0 8px var(--verd)}
-.chat-head small.demo i{background:var(--brass);box-shadow:none}
-.chat-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;overscroll-behavior:contain}
-.msg{max-width:86%;padding:10px 13px;border-radius:14px;font-size:14px;line-height:1.5;white-space:pre-wrap;animation:msgIn .45s var(--ease-out) both}
-.msg.bot{align-self:flex-start;background:var(--bg2);border-bottom-left-radius:4px}
-.msg.me{align-self:flex-end;background:var(--ink);color:var(--bg);border-bottom-right-radius:4px}
-.msg.typing span{font-family:var(--f-mono);color:var(--verd);letter-spacing:.1em}
-.msg .go{all:unset;cursor:pointer;display:flex;width:max-content;margin-top:8px;font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:20px;border:1px solid var(--verd);color:var(--verd);transition:background .3s,color .3s;white-space:normal}
-.msg .go:hover{background:var(--verd);color:var(--bg)}
-@keyframes msgIn{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
-.chat-sugg{display:flex;gap:6px;flex-wrap:wrap;padding:0 16px 10px}
-.chat-sugg:empty{display:none}
-.chat-sugg button{all:unset;cursor:pointer;font-size:12.5px;padding:6px 11px;border:1px solid var(--line-strong);border-radius:20px;transition:.3s}
-.chat-sugg button:hover{border-color:var(--verd);color:var(--verd)}
-.chat-form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}
-.chat-form input{flex:1;min-width:0;background:var(--bg2);border:1px solid transparent;border-radius:24px;padding:11px 16px;font:inherit;font-size:14px;color:var(--ink);outline:none;transition:border-color .3s}
-.chat-form input:focus{border-color:var(--verd)}
-.chat-form button{all:unset;cursor:pointer;width:42px;height:42px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;flex:0 0 auto;transition:opacity .3s}
-.chat-form button:disabled{opacity:.4;cursor:default}
-.chat-form button svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2}
 </style>
 <script>try{var m=localStorage.getItem('pf-theme');if(m=='light'||m=='dark')document.documentElement.dataset.theme=m}catch(e){}</script>
 </head>
@@ -1064,28 +1024,6 @@ button{font:inherit;color:inherit}
   </section>
 </main>
 
-<!-- ========== CHATBOT ========== -->
-<button class="chat-fab" id="chatFab" aria-expanded="false" aria-controls="chat" data-spinhost>
-  <svg class="fg" data-gear="22" data-spin="0.4" viewBox="-50 -50 100 100"></svg>
-  <svg class="ic ic-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 10h.01M12 10h.01M16 10h.01" stroke-width="2.6" stroke-linecap="round"/></svg>
-  <svg class="ic ic-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
-  <span class="tip" data-i18n="chat.tip"></span>
-  <span class="dot"></span>
-</button>
-<div class="chat" id="chat" role="dialog" aria-modal="false" aria-labelledby="chatTitle">
-  <div class="chat-head">
-    <svg data-gear="14" data-spin="0.8" viewBox="-50 -50 100 100"></svg>
-    <div><b id="chatTitle" data-i18n="chat.title"></b><small id="chatStatus"><i></i><span></span></small></div>
-    <button class="ibtn x" id="chatClose" data-i18n-aria="aria.close" style="margin-left:auto"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-  </div>
-  <div class="chat-msgs" id="chatMsgs" aria-live="polite"></div>
-  <div class="chat-sugg" id="chatSugg"></div>
-  <form class="chat-form" id="chatForm">
-    <input id="chatIn" autocomplete="off" maxlength="500" data-i18n-ph="chat.ph">
-    <button type="submit" id="chatSend" data-i18n-aria="chat.send"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-  </form>
-</div>
-
 <!-- ========== SHUTTER ========== -->
 <div class="shutter boot" id="shutter" aria-hidden="true">
   <div class="sh sh-l">
@@ -1287,18 +1225,6 @@ const I18N = {
     'f.send':'Отправить сообщение','f.sending':'отправка','f.sent':'Отправлено','f.ready':'Готов к отправке','f.fix':'Заполните отмеченные поля','f.tx':'Передача данных…','f.delivered':'Доставлено',
     'f.doneT':'Сообщение отправлено','f.doneP':'Отвечу в течение дня.','f.err':'Ошибка отправки, попробуйте ещё раз','f.again':'Отправить ещё одну',
     'sh.module':'МОДУЛЬ','sh.loading':'загрузка раздела «{x}»','sh.boot':'ЗАПУСК','sh.init':'ИНИЦИАЛИЗАЦИЯ СИСТЕМЫ','sh.bootSub':'портфолио загружается',
-    'chat.tip':'Задать вопрос ассистенту','chat.title':'Ассистент','chat.online':'Онлайн, отвечает AI','chat.demo':'Демо-режим: готовые ответы','chat.ph':'Напишите вопрос…','chat.send':'Отправить',
-    'chat.hello':'Привет! Помогу разобраться с услугами, проектами и тем, как связаться. Что вас интересует?',
-    'chat.s':['Какие услуги?','Сколько стоит проект?','Как связаться?'],
-    'chat.err':'Не получилось ответить. Попробуйте ещё раз или напишите через форму.','chat.rate':'Слишком много вопросов подряд — подождите немного.','chat.go':'Открыть',
-    'fb.services':'Три направления: веб, мобильные и десктоп-приложения (включая PWA), AI-автоматизация и AI-агенты, голосовые AI-ассистенты. Подробности — в первом разделе.',
-    'fb.price':'Стоимость зависит от задачи. Опишите проект в форме — отвечу с оценкой сроков и бюджета.',
-    'fb.contact':'Проще всего — через форму обратной связи, по email info@profidev.de или в Telegram @a1exeych.',
-    'fb.projects':'Примеры работ собраны в разделе «Проекты». Например, drafta — SaaS, в котором AI готовит черновики ответов клиентам во всех мессенджерах и соцсетях. Нажмите на карточку, чтобы открыть подробности.',
-    'fb.skills':'Технологии и компетенции собраны в разделе «Навыки»: Java и Spring, бэкенд, веб, AI-консалтинг, автоматизация и AI-агенты (n8n, RAG, мультиагентные системы).',
-    'fb.exp':'Опыт работы: T-Systems (Deutsche Telekom) — с 2014 года, DATEV — 2020, Volkswagen — 2021, LeanCodes — 2022, AixPano — 2023, с 2026 года — фриланс. Подробнее — в разделе «Опыт».','fb.certs':'Сертификаты: «Специалист по AI-автоматизации бизнеса» (Beam Institute, 600 ч), n8n Professional Certificate и Oracle Certified Professional: Java SE 11. Их можно открыть в разделе «Сертификаты».',
-    'fb.default':'Чтобы ответить точно, лучше написать через форму — отвечу в течение дня.',
-    'langName':'Russian'
   },
   en: {
     'aria.home':'Go to first slide','aria.sections':'Sections','aria.lang':'Language','aria.theme':'Theme','aria.prev':'Previous project','aria.next':'Next project','aria.close':'Close',
@@ -1412,18 +1338,6 @@ const I18N = {
     'f.send':'Send message','f.sending':'sending','f.sent':'Sent','f.ready':'Ready to send','f.fix':'Fill in the highlighted fields','f.tx':'Transmitting…','f.delivered':'Delivered',
     'f.doneT':'Message sent','f.doneP':'I\u2019ll reply within a day.','f.err':'Sending failed, please try again','f.again':'Send another',
     'sh.module':'MODULE','sh.loading':'loading section \u201c{x}\u201d','sh.boot':'BOOT','sh.init':'SYSTEM INITIALIZATION','sh.bootSub':'loading portfolio',
-    'chat.tip':'Ask the assistant','chat.title':'Assistant','chat.online':'Online, answered by AI','chat.demo':'Demo mode: preset answers','chat.ph':'Type a question…','chat.send':'Send',
-    'chat.hello':'Hi! I can help with services, projects and how to get in touch. What would you like to know?',
-    'chat.s':['What services?','How much does it cost?','How to get in touch?'],
-    'chat.err':'Couldn\u2019t answer. Try again or use the contact form.','chat.rate':'Too many questions in a row — please wait a moment.','chat.go':'Open',
-    'fb.services':'Three areas: web, mobile and desktop apps (including PWAs), AI automation and AI agents, and voice AI assistants. See the first section for details.',
-    'fb.price':'The price depends on the task. Describe your project in the form and I\u2019ll reply with a time and budget estimate.',
-    'fb.contact':'The easiest way is the contact form, email info@profidev.de or Telegram @a1exeych.',
-    'fb.projects':'Work examples are in the Projects section. For example, drafta is a SaaS where AI drafts replies to customers across all messengers and social networks. Click a card to open the details.',
-    'fb.skills':'All technologies and skills are in the Skills section: Java and Spring, backend, web, AI consulting, automation and AI agents (n8n, RAG, multi-agent systems).',
-    'fb.exp':'Work history: T-Systems (Deutsche Telekom) from 2014, DATEV 2020, Volkswagen 2021, LeanCodes 2022, AixPano 2023, freelance since 2026. More in the Experience section.','fb.certs':'Certificates: AI Business Automation Specialist (Beam Institute, 600 hours), n8n Professional Certificate and Oracle Certified Professional: Java SE 11. You can open them in the Certificates section.',
-    'fb.default':'To give you a precise answer, please write via the form — I\u2019ll reply within a day.',
-    'langName':'English'
   },
   de: {
     'aria.home':'Zur ersten Folie','aria.sections':'Abschnitte','aria.lang':'Sprache','aria.theme':'Design','aria.prev':'Vorheriges Projekt','aria.next':'Nächstes Projekt','aria.close':'Schließen',
@@ -1537,18 +1451,6 @@ const I18N = {
     'f.send':'Nachricht senden','f.sending':'wird gesendet','f.sent':'Gesendet','f.ready':'Bereit zum Senden','f.fix':'Bitte markierte Felder ausfüllen','f.tx':'Daten werden übertragen…','f.delivered':'Zugestellt',
     'f.doneT':'Nachricht gesendet','f.doneP':'Ich antworte innerhalb eines Tages.','f.err':'Senden fehlgeschlagen, bitte erneut versuchen','f.again':'Weitere senden',
     'sh.module':'MODUL','sh.loading':'Abschnitt \u201e{x}\u201c wird geladen','sh.boot':'START','sh.init':'SYSTEMINITIALISIERUNG','sh.bootSub':'Portfolio wird geladen',
-    'chat.tip':'Assistenten fragen','chat.title':'Assistent','chat.online':'Online, antwortet per KI','chat.demo':'Demo-Modus: vorbereitete Antworten','chat.ph':'Frage eingeben…','chat.send':'Senden',
-    'chat.hello':'Hallo! Ich helfe bei Fragen zu Leistungen, Projekten und Kontakt. Was möchten Sie wissen?',
-    'chat.s':['Welche Leistungen?','Was kostet ein Projekt?','Wie erreiche ich Sie?'],
-    'chat.err':'Keine Antwort möglich. Bitte erneut versuchen oder das Formular nutzen.','chat.rate':'Zu viele Fragen hintereinander — bitte kurz warten.','chat.go':'Öffnen',
-    'fb.services':'Drei Schwerpunkte: Web-, Mobile- und Desktop-Apps (inklusive PWAs), KI-Automatisierung und KI-Agenten sowie KI-Sprachassistenten. Details im ersten Abschnitt.',
-    'fb.price':'Der Preis hängt von der Aufgabe ab. Beschreiben Sie Ihr Projekt im Formular — ich antworte mit einer Schätzung zu Zeit und Budget.',
-    'fb.contact':'Am einfachsten über das Kontaktformular per E-Mail an info@profidev.de oder über Telegram @a1exeych.',
-    'fb.projects':'Arbeitsbeispiele finden Sie unter „Projekte“. Zum Beispiel drafta: ein SaaS, in dem KI Antworten an Kunden in allen Messengern und sozialen Netzwerken entwirft. Klicken Sie auf eine Karte für Details.',
-    'fb.skills':'Alle Technologien und Kompetenzen finden Sie unter „Kenntnisse“: Java und Spring, Backend, Web, KI-Beratung, Automatisierung und KI-Agenten (n8n, RAG, Multi-Agenten-Systeme).',
-    'fb.exp':'Berufserfahrung: T-Systems (Deutsche Telekom) ab 2014, DATEV 2020, Volkswagen 2021, LeanCodes 2022, AixPano 2023, seit 2026 Freelance. Mehr im Abschnitt „Erfahrung“.','fb.certs':'Zertifikate: KI-Business-Automatisierungs-Spezialist (Beam Institute, 600 UE), n8n Professional Certificate und Oracle Certified Professional: Java SE 11. Sie lassen sich im Abschnitt „Zertifikate“ öffnen.',
-    'fb.default':'Für eine genaue Antwort schreiben Sie am besten über das Formular — ich antworte innerhalb eines Tages.',
-    'langName':'German'
   }
 };
 const LANGS = ['de', 'en', 'ru'];
@@ -2127,7 +2029,7 @@ addEventListener('keydown', e => {
     else if (e.key === 'Tab') { e.preventDefault(); const b = $$('.zm-ctl button'), i = b.indexOf(document.activeElement); b[(i + (e.shiftKey ? -1 : 1) + b.length) % b.length].focus(); }
     return;
   }
-  if (e.key === 'Escape') { if (chatOpen()) toggleChat(false); else if (modalOpen()) closeAllModals(); else kgClear(); return; }
+  if (e.key === 'Escape') { if (modalOpen()) closeAllModals(); else kgClear(); return; }
   if (modalOpen()) {
     if ($('#pm').classList.contains('open')) { if (e.key === 'ArrowRight') pmStep(1); if (e.key === 'ArrowLeft') pmStep(-1); }
     return;
@@ -3141,7 +3043,6 @@ function applyLang(l, animate) {
   else if (txState === 'done') $('#sendTxt').textContent = t('f.sent');
   if (pm.classList.contains('show')) { $('#pmMeta').textContent = `${PROJECTS[pmIdx].id} · ${PROJECTS[pmIdx].catName}`; $('#pmTitle').textContent = PROJECTS[pmIdx].title; }
   if (cm.classList.contains('show')) { const c = CERTS[activeCert]; $('#cmMeta').textContent = `${c.id} · ${c.org} · ${c.dateStr}`; $('#cmTitle').textContent = c.title; $('.cert-img', cm)?.setAttribute('alt', c.title); }
-  chatLang();
   setTimeout(() => placeMenuThumb(current), animate ? 560 : 0);
 }
 $$('#lang [data-lang]').forEach(b => b.addEventListener('click', () => {
@@ -3200,124 +3101,6 @@ function applyTheme(m) {
 }
 $$('#theme [data-theme-opt]').forEach(b => b.addEventListener('click', () => { ddClose(true); applyTheme(b.dataset.themeOpt); }));
 applyTheme(document.documentElement.dataset.theme || 'system');
-
-/* ================= CHATBOT ================= */
-const chat = $('#chat'), fab = $('#chatFab'), msgsEl = $('#chatMsgs'), chatIn = $('#chatIn');
-let sampleFn = null, chatMode = 'demo', chatBusy = false, chatCtl = null;
-const chatLog = []; // {who:'me'|'bot', text, go?}
-const chatOpen = () => chat.classList.contains('open');
-function setChatStatus() {
-  const s = $('#chatStatus');
-  s.classList.toggle('demo', chatMode !== 'ai');
-  $('span', s).textContent = t(chatMode === 'ai' ? 'chat.online' : 'chat.demo');
-}
-function goBtn(i) { return `<button class="go" data-go="${i}" type="button">${t('chat.go')}: ${t('nav.' + i)}</button>`; }
-function renderMsg(m) {
-  const el = document.createElement('div');
-  el.className = 'msg ' + m.who;
-  const txt = document.createElement('span'); txt.textContent = m.text; el.appendChild(txt);
-  if (m.go != null) el.insertAdjacentHTML('beforeend', goBtn(m.go));
-  msgsEl.appendChild(el);
-  msgsEl.scrollTop = msgsEl.scrollHeight;
-  return el;
-}
-function renderSugg() {
-  $('#chatSugg').innerHTML = chatLog.length > 2 ? '' : t('chat.s').map(s => `<button type="button">${s}</button>`).join('');
-  $$('#chatSugg button').forEach(b => b.addEventListener('click', () => sendChat(b.textContent)));
-}
-function chatLang() {
-  setChatStatus();
-  if (chatLog.length <= 1) { chatLog.length = 0; chatLog.push({ who: 'bot', text: t('chat.hello') }); msgsEl.innerHTML = ''; renderMsg(chatLog[0]); }
-  renderSugg();
-}
-function toggleChat(open = !chatOpen()) {
-  chat.classList.toggle('open', open);
-  fab.classList.toggle('open', open);
-  fab.setAttribute('aria-expanded', open);
-  kick($('.fg g', fab), open ? 180 : -180);
-  if (open) setTimeout(() => chatIn.focus({ preventScroll: true }), 350);
-}
-fab.addEventListener('click', () => toggleChat());
-$('#chatClose').addEventListener('click', () => toggleChat(false));
-msgsEl.addEventListener('click', e => { if (e.target.closest('[data-go]') && innerWidth < 700) toggleChat(false); });
-
-function fallbackAnswer(q) {
-  const s = q.toLowerCase();
-  const rules = [
-    [/цен|стоим|сколько|бюджет|price|cost|budget|rate|preis|kost/, 'fb.price', 5],
-    [/связ|контакт|почт|mail|telegram|contact|reach|kontakt|erreich|schreib/, 'fb.contact', 5],
-    [/сертиф|certif|zertif/, 'fb.certs', 3],
-    [/знани|навык|технолог|стек|java|spring|n8n|skill|stack|technolog|kenntnis|fähigkeit|wissen/, 'fb.skills', 2],
-    [/опыт|путь|работал|experience|career|erfahrung|werdegang/, 'fb.exp', 1],
-    [/проект|портфол|пример|project|portfolio|example|projekt|beispiel/, 'fb.projects', 4],
-    [/услуг|умее|делае|service|offer|what do you|leistung|angebot|dienst/, 'fb.services', 0],
-  ];
-  for (const [re, key, go] of rules) if (re.test(s)) return { text: t(key), go };
-  return { text: t('fb.default'), go: 5 };
-}
-function buildPrompt() {
-  const convo = chatLog.slice(-10).map(m => (m.who === 'me' ? 'Visitor: ' : 'Assistant: ') + m.text).join('\n');
-  return `You are a friendly assistant on the portfolio website of a freelance developer named "${t('name.full')}". ` +
-    `Services (real facts): 1) web, mobile and desktop apps, including PWAs, with backend, APIs and integrations; 2) AI automation and AI agents, e.g. processing incoming customer emails or automating communication between company departments; 3) voice AI assistants that answer users by voice, call tools and write results to a database or CRM. ` +
-    `Positioning (real facts): a software engineer with 12+ years of experience who combines classic software development with AI agents; 25+ projects. ` +
-    `Certificates (real facts): ${CERTS.map(c => `${c.title} — ${c.org}, ${c.dateStr}`).join('; ')}. ` +
-    `Skills by area (real facts, from the knowledge graph): ${KN_CATS.map(k => `${t('kn.cat.' + k)}: ${[...KN.byCat[k]].map(n => n.title).join(', ')}`).join('; ')}. ` +
-    `Work experience in this order, with the start year (real facts): ${JOBS.map(j => j.free ? `since ${j.from} freelance work` : `${j.from} ${j.name}${j.parent ? ` (${j.parent})` : ''} — ${t('job.' + j.key)}`).join('; ')}. ` +
-    `Projects (real facts): ${PROJECTS.filter(p => p.key).map(p => `${p.title} — ${t(`prj.${p.key}.lead`)} ${t(`prj.${p.key}.p1`)}${p.url ? ` Website: ${p.url}` : ''}`).join('; ')}. ${PROJECTS.some(p => !p.key) ? 'The other project cards are placeholders. ' : ''}` +
-    `Website sections: 0 = About, 1 = Experience, 2 = Skills (3D knowledge graph), 3 = Certificates, 4 = Projects, 5 = Contact form. ` +
-    `Apart from the certificates, the skills, the list of employers and the projects above, the website content is still placeholder text, so NEVER invent specific facts (prices, job titles, clients, other dates, project details). ` +
-    `For anything specific, suggest the contact form or the email info@profidev.de or Telegram @a1exeych (LinkedIn: https://www.linkedin.com/in/aleksei-chasovskoi/, based in Nuremberg). ` +
-    `Reply ONLY in ${t('langName')}, at most 3 short sentences, plain text without markdown. ` +
-    `If one website section is relevant, end your reply with exactly one tag like [[go:3]].\n\n` +
-    `${convo}\nAssistant:`;
-}
-const cleanTag = s => s.replace(/\[\[go:\d\]\]/g, '').replace(/\[\[[^\]]*$/, '').trim();
-async function sendChat(text) {
-  text = text.trim();
-  if (!text || chatBusy) return;
-  chatBusy = true; $('#chatSend').disabled = true;
-  chatLog.push({ who: 'me', text }); renderMsg(chatLog.at(-1)); renderSugg();
-  chatIn.value = '';
-  const bubble = renderMsg({ who: 'bot', text: '' });
-  const span = $('span', bubble);
-  bubble.classList.add('typing');
-  const iv = setInterval(() => { span.textContent = Array.from({ length: 3 }, () => ri(0, 1)).join(' '); }, 120);
-  const finish = (answer, go) => {
-    clearInterval(iv); bubble.classList.remove('typing');
-    span.textContent = answer;
-    if (go != null && go >= 0 && go < N) bubble.insertAdjacentHTML('beforeend', goBtn(go));
-    chatLog.push({ who: 'bot', text: answer, go });
-    msgsEl.scrollTop = msgsEl.scrollHeight;
-    chatBusy = false; $('#chatSend').disabled = false;
-    kick($('.chat-head > svg g'), 120);
-  };
-  if (chatMode !== 'ai' || !sampleFn) {
-    setTimeout(() => { const a = fallbackAnswer(text); finish(a.text, a.go); }, 650);
-    return;
-  }
-  chatCtl = new AbortController();
-  try {
-    const { text: out } = await sampleFn(buildPrompt(), {
-      modelTier: 'quick', cache: false, signal: chatCtl.signal,
-      onText: ({ text: so }) => { clearInterval(iv); bubble.classList.remove('typing'); span.textContent = cleanTag(so); msgsEl.scrollTop = msgsEl.scrollHeight; }
-    });
-    const m = out.match(/\[\[go:(\d)\]\]/);
-    finish(cleanTag(out) || t('fb.default'), m ? +m[1] : null);
-  } catch (e) {
-    if (e && e.code === 'not_granted') { chatMode = 'demo'; setChatStatus(); const a = fallbackAnswer(text); finish(a.text, a.go); }
-    else if (e && e.code === 'rate_limited') finish(t('chat.rate'), null);
-    else if (e && e.code === 'cancelled') finish(cleanTag(e.text || '') || '…', null);
-    else finish(cleanTag(e?.text || '') || t('chat.err'), null);
-  }
-}
-$('#chatForm').addEventListener('submit', e => { e.preventDefault(); sendChat(chatIn.value); });
-(async () => {
-  try {
-    if (!window.claude || typeof window.claude.use !== 'function') return;
-    const s = await window.claude.use('sample');
-    if (s) { sampleFn = s; chatMode = 'ai'; setChatStatus(); }
-  } catch (e) { /* stay in demo mode */ }
-})();
 
 /* ================= INIT ================= */
 function buildAll() { buildGears(); buildCircuits(); buildBinary(); layoutCerts(); placeMenuThumb(current, true); layoutCar(); kgResize(); }
