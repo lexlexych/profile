@@ -288,7 +288,7 @@ button{font:inherit;color:inherit}
 .kn-stage{position:relative;min-width:0}
 .kn-stage::before{content:"";position:absolute;inset:2% 8%;border-radius:50%;pointer-events:none;
   background:radial-gradient(closest-side,color-mix(in srgb,var(--surface-solid) 78%,transparent),color-mix(in srgb,var(--surface-solid) 30%,transparent) 62%,transparent)}
-#kgraph{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab;-webkit-tap-highlight-color:transparent}
+#kgraph{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-x pan-y;cursor:grab;-webkit-tap-highlight-color:transparent}
 #kgraph.over{cursor:pointer}
 #kgraph.drag{cursor:grabbing}
 .kn-br{position:absolute;width:18px;height:18px;border:1.5px solid var(--line-strong);pointer-events:none}
@@ -1128,14 +1128,17 @@ const I18N = {
     'stat.0':'лет опыта','stat.1':'проектов','stat.2':'технологий',
     'roles':['веб, мобильные и десктоп-приложения','AI-автоматизация и AI-агенты','голосовые ассистенты','фриланс, открыт к проектам'],
     'path.title':'Профессиональный опыт','path.sub':'Сложные процессы, данные и корпоративные системы.',
-    'job.role':'Должность','job.tech':'Технология','job.yyyy':'ГГГГ',
-    'job.tsys':'Система и E2E-диагностика: интернет, ТВ и телефония.','job.datev':'Базы данных и миграция систем.','job.vw':'Privacy-портал: GDPR-запросы клиентов.',
-    'job.lean':'Управление строительными площадками.','job.aix':'ERP и автоматизация для производителей упаковки.',
-    'job.free':'Фриланс','job.freeC':'Софт, веб и AI-автоматизация','job.freeD':'Короткое описание: с какими клиентами работаете сейчас.',
-    'kn.title':'Сеть навыков','kn.sub':'Точки — технологии и компетенции, линии — связи между ними. Вращайте облако и выберите узел, чтобы увидеть его окружение.',
+    'job.yyyy':'ГГГГ',
+    'job.tsys':'E2E-диагностика проблем у клиентов Deutsche Telekom: интернет, телефония, ТВ.','job.datev':'Базы данных и миграция систем.','job.vw':'Privacy-портал: GDPR-запросы клиентов.',
+    'job.lean':'ERP для управления строительными площадками.','job.aix':'ERP и автоматизация для производителей упаковки.',
+    'job.free':'Фриланс','job.freeC':'Софт, веб и AI-автоматизация','job.freeD':'AI-агенты, автоматизация процессов, SaaS и веб-приложения для малого и среднего бизнеса.',
+    'job.tsys.r':'Разработчик: от Junior до Senior','job.datev.r':'Senior Java-разработчик','job.vw.r':'Teamleiter','job.lean.r':'Senior Fullstack-разработчик','job.aix.r':'Senior-разработчик',
+    'job.t.expert':'Экспертные системы','job.t.micro':'Микросервисы',
+    'kn.title':'Сеть навыков','kn.sub':'Сеть технологий и компетенций, которыми я обладаю.',
     'kn.hint':'тяните, чтобы вращать','kn.nodes':'узлов','kn.links':'связей','kn.deg':'связей: {n}','kn.rel':'Связано с',
     'kn.search':'Найти технологию…','kn.empty':'Ничего не найдено','kn.list':'Технологии по разделам','kn.spin':'Автовращение','kn.reset':'Сбросить вид',
     'kn.graph':'Трёхмерный граф навыков: технологии и связи между ними. Полный список — в таблице рядом.',
+    'kn.n.contentgen':'Генерация контента',
     'kn.cat.java':'Java-экосистема','kn.cat.back':'Бэкенд и DevOps','kn.cat.web':'Веб и фронтенд','kn.cat.ai':'AI-консалтинг','kn.cat.auto':'Автоматизация и AI-агенты',
     'kn.n.oop':'ООП и SOLID','kn.n.concurrency':'Многопоточность','kn.n.patterns':'Паттерны проектирования',
     'kn.n.micro':'Микросервисы','kn.n.vps':'VPS и self-hosting',
@@ -1241,14 +1244,17 @@ const I18N = {
     'stat.0':'years of experience','stat.1':'projects','stat.2':'technologies',
     'roles':['web, mobile & desktop apps','AI automation & AI agents','voice assistants','freelance, open to projects'],
     'path.title':'Professional experience','path.sub':'Complex processes, data and enterprise systems.',
-    'job.role':'Position','job.tech':'Technology','job.yyyy':'YYYY',
-    'job.tsys':'E2E diagnostics system for internet, TV and telephony.','job.datev':'Databases and system migration.','job.vw':'Privacy portal: customer GDPR requests.',
-    'job.lean':'Construction site management.','job.aix':'ERP and automation for packaging manufacturers.',
-    'job.free':'Freelance','job.freeC':'Software, web & AI automation','job.freeD':'Short description: the kind of clients you work with now.',
-    'kn.title':'Knowledge graph','kn.sub':'Points are technologies and skills, lines are the links between them. Rotate the cloud and pick a node to see what it connects to.',
+    'job.yyyy':'YYYY',
+    'job.tsys':'E2E diagnostics of Deutsche Telekom customer issues: internet, telephony, TV.','job.datev':'Databases and system migration.','job.vw':'Privacy portal: customer GDPR requests.',
+    'job.lean':'ERP for construction site management.','job.aix':'ERP and automation for packaging manufacturers.',
+    'job.free':'Freelance','job.freeC':'Software, web & AI automation','job.freeD':'AI agents, process automation, SaaS and web apps for small and mid-sized businesses.',
+    'job.tsys.r':'Developer: Junior to Senior','job.datev.r':'Senior Java Developer','job.vw.r':'Team Lead','job.lean.r':'Senior Fullstack Developer','job.aix.r':'Senior Developer',
+    'job.t.expert':'Expert systems','job.t.micro':'Microservices',
+    'kn.title':'Knowledge graph','kn.sub':'A network of the technologies and skills I bring.',
     'kn.hint':'drag to rotate','kn.nodes':'nodes','kn.links':'links','kn.deg':'links: {n}','kn.rel':'Connected to',
     'kn.search':'Find a technology…','kn.empty':'Nothing found','kn.list':'Technologies by area','kn.spin':'Auto-rotation','kn.reset':'Reset view',
     'kn.graph':'3D knowledge graph: technologies and the links between them. The full list is in the table next to it.',
+    'kn.n.contentgen':'Content generation',
     'kn.cat.java':'Java ecosystem','kn.cat.back':'Backend & DevOps','kn.cat.web':'Web & frontend','kn.cat.ai':'AI consulting','kn.cat.auto':'Automation & AI agents',
     'kn.n.oop':'OOP & SOLID','kn.n.concurrency':'Concurrency','kn.n.patterns':'Design patterns',
     'kn.n.micro':'Microservices','kn.n.vps':'VPS & self-hosting',
@@ -1354,14 +1360,17 @@ const I18N = {
     'stat.0':'Jahre Erfahrung','stat.1':'Projekte','stat.2':'Technologien',
     'roles':['Web-, Mobile- & Desktop-Apps','KI-Automatisierung & KI-Agenten','Sprachassistenten','Freelancer, offen für Projekte'],
     'path.title':'Berufserfahrung','path.sub':'Komplexe Prozesse, Daten und Unternehmenssysteme.',
-    'job.role':'Position','job.tech':'Technologie','job.yyyy':'JJJJ',
-    'job.tsys':'System und E2E-Diagnose für Internet, TV und Telefonie.','job.datev':'Datenbanken und Systemmigration.','job.vw':'Privacy-Portal: DSGVO-Anfragen von Kunden.',
-    'job.lean':'Baustellenmanagement.','job.aix':'ERP und Automatisierung für Verpackungshersteller.',
-    'job.free':'Freelance','job.freeC':'Software, Web & KI-Automatisierung','job.freeD':'Kurzbeschreibung: mit welchen Kunden Sie aktuell arbeiten.',
-    'kn.title':'Wissensnetz','kn.sub':'Punkte sind Technologien und Kompetenzen, Linien ihre Verbindungen. Drehen Sie die Wolke und wählen Sie einen Knoten, um sein Umfeld zu sehen.',
+    'job.yyyy':'JJJJ',
+    'job.tsys':'E2E-Diagnose von Kundenproblemen bei der Deutschen Telekom: Internet, Telefonie, TV.','job.datev':'Datenbanken und Systemmigration.','job.vw':'Privacy-Portal: DSGVO-Anfragen von Kunden.',
+    'job.lean':'ERP für das Baustellenmanagement.','job.aix':'ERP und Automatisierung für Verpackungshersteller.',
+    'job.free':'Freelance','job.freeC':'Software, Web & KI-Automatisierung','job.freeD':'KI-Agenten, Prozessautomatisierung, SaaS und Web-Apps für kleine und mittlere Unternehmen.',
+    'job.tsys.r':'Entwickler: von Junior bis Senior','job.datev.r':'Senior Java-Entwickler','job.vw.r':'Teamleiter','job.lean.r':'Senior Fullstack-Entwickler','job.aix.r':'Senior-Entwickler',
+    'job.t.expert':'Expertensysteme','job.t.micro':'Microservices',
+    'kn.title':'Wissensnetz','kn.sub':'Ein Netz aus Technologien und Kompetenzen, die ich mitbringe.',
     'kn.hint':'ziehen zum Drehen','kn.nodes':'Knoten','kn.links':'Verbindungen','kn.deg':'Verbindungen: {n}','kn.rel':'Verbunden mit',
     'kn.search':'Technologie suchen…','kn.empty':'Nichts gefunden','kn.list':'Technologien nach Bereichen','kn.spin':'Automatische Drehung','kn.reset':'Ansicht zurücksetzen',
     'kn.graph':'3D-Wissensgraph: Technologien und ihre Verbindungen. Die vollständige Liste steht in der Tabelle daneben.',
+    'kn.n.contentgen':'Content-Generierung',
     'kn.cat.java':'Java-Ökosystem','kn.cat.back':'Backend & DevOps','kn.cat.web':'Web & Frontend','kn.cat.ai':'KI-Beratung','kn.cat.auto':'Automatisierung & KI-Agenten',
     'kn.n.oop':'OOP & SOLID','kn.n.concurrency':'Nebenläufigkeit','kn.n.patterns':'Entwurfsmuster',
     'kn.n.micro':'Microservices','kn.n.vps':'VPS & Self-Hosting',
@@ -1512,14 +1521,14 @@ const CERTS = [
 // Места работы по порядку (слева направо по линии). name/parent — без перевода, описание — i18n-ключ job.<key>,
 // logo — файл в img/logos/, icon — вместо логотипа своя иконка (inline SVG в цветах темы), без обоих — пустая плашка.
 // from — год начала (без него — заглушка job.yyyy), now — текущая работа (пульсирующий узел).
-// Должность (job.role) и технологии (tags — число заглушек job.tech) — заглушки.
+// Должность — i18n-ключ job.<key>.r. tags — технологии без перевода; '#x' — переводимая плашка job.t.x.
 const JOBS = [
-  { key:'tsys',  name:'T-Systems', parent:'Deutsche Telekom', logo:'img/logos/t-systems.svg', from:'2014', tags:2 },
-  { key:'datev', name:'DATEV', logo:'img/logos/datev.svg', from:'2020', tags:2 },
-  { key:'vw',    name:'Volkswagen', logo:'img/logos/volkswagen.svg', from:'2021', tags:2 },
-  { key:'lean',  name:'LeanCodes', logo:'img/logos/leancodes.png', from:'2022', tags:2 },
-  { key:'aix',   name:'AixPano', logo:'img/logos/aixpano.svg', from:'2023', tags:2 },
-  { key:'free',  free:true, now:true, icon:'free', from:'2026', tags:2 },
+  { key:'tsys',  name:'T-Systems', parent:'Deutsche Telekom', logo:'img/logos/t-systems.svg', from:'2014', tags:['Java','BPMN','#expert'] },
+  { key:'datev', name:'DATEV', logo:'img/logos/datev.svg', from:'2020', tags:['Java','EJB','PostgreSQL'] },
+  { key:'vw',    name:'Volkswagen', logo:'img/logos/volkswagen.svg', from:'2021', tags:['Java','Angular','GDPR'] },
+  { key:'lean',  name:'LeanCodes', logo:'img/logos/leancodes.png', from:'2022', tags:['Go','Angular','#micro'] },
+  { key:'aix',   name:'AixPano', logo:'img/logos/aixpano.svg', from:'2023', tags:['Java','Vaadin','BPMN'] },
+  { key:'free',  free:true, now:true, icon:'free', from:'2026', tags:['n8n','Next.js','LLM'] },
 ];
 // freelance: a laptop with code on the screen and an AI spark
 const JOB_ICONS = {
@@ -1536,15 +1545,17 @@ $('#tl').innerHTML = '<div class="tl-line" data-a="clip" style="--d:1"></div>' +
         ${j.free ? '<h3 data-i18n="job.free"></h3>' : `<h3>${esc(j.name)}${j.parent ? `<small>${esc(j.parent)}</small>` : ''}</h3>`}
         <span class="job-when">${yr(j.from)}</span>
       </div>
-      <div class="company" data-i18n="${j.free ? 'job.freeC' : 'job.role'}"></div>
+      <div class="company" data-i18n="${j.free ? 'job.freeC' : 'job.' + j.key + '.r'}"></div>
       <p data-i18n="${j.free ? 'job.freeD' : 'job.' + j.key}"></p>
-      <div class="tags">${'<span data-i18n="job.tech"></span>'.repeat(j.tags)}</div>
+      <div class="tags">${j.tags.map(t => t[0] === '#' ? `<span data-i18n="job.t.${t.slice(1)}"></span>` : `<span>${esc(t)}</span>`).join('')}</div>
     </article>
   </div>`).join('');
 
 /* ================= KNOWLEDGE DATA ================= */
 // Граф знаний (слайд «Навыки»). Разделы — в порядке таблицы; цвет раздела — токен --k-<key>, название — i18n-ключ kn.cat.<key>
 const KN_CATS = ['java', 'back', 'web', 'ai', 'auto'];
+// Порядок разделов в таблице (KN_CATS задаёт ещё и области облака — его не трогаем, чтобы форма не менялась).
+const KN_ORDER = ['auto', 'ai', 'web', 'back', 'java'];
 // Узел: id, cat — раздел, name — подпись без перевода. Без name подпись берётся из I18N по ключу kn.n.<id> (во всех трёх языках).
 // hub: true — центральный узел раздела: подпись видна всегда и крупнее, в таблице идёт первым. Размер узла зависит от числа связей.
 const KN_NODES = [
@@ -1641,9 +1652,13 @@ const KN_NODES = [
   { id:'claudecode', cat:'auto', name:'Claude Code' },
   { id:'codex', cat:'auto', name:'Codex' },
   { id:'livekit', cat:'auto', name:'LiveKit' },
+  { id:'contentgen', cat:'auto' },
+  { id:'veo', cat:'auto', name:'Veo 3' },
 ];
 // Связи: 'a: b c d' — узел a связан с b, c и d. Связь двусторонняя, повторы не страшны. Неизвестный id — предупреждение в консоли.
 const KN_LINKS = [
+  'contentgen: veo llmapi prompt agents n8n',
+  'veo: prompt',
   'java: oop collections streams concurrency jvm patterns spring jdbc maven gradle junit lombok',
   'oop: patterns collections',
   'streams: collections concurrency',
@@ -2484,7 +2499,7 @@ function kgEnter() { kgResize(); if (!RM) { kgAppear = 0; kgVx = .045; } }
 
 // table (list by section) and the info card
 function knListRender() {
-  knList.innerHTML = KN_CATS.map((k, ci) => {
+  knList.innerHTML = KN_ORDER.map((k, ci) => {
     const items = [...KN.byCat[k]].sort((a, b) => b.hub - a.hub || b.deg - a.deg || a.title.localeCompare(b.title, LANG));
     return `<section class="kn-sec" style="--c:var(--k-${k})"><button class="kn-sec-h" type="button" data-cat="${k}" aria-pressed="false">` +
       `<span class="kn-idx">${pad(ci + 1)}</span><span class="kn-sec-t">${esc(t('kn.cat.' + k))}</span><span class="kn-n">${pad(items.length)}</span></button>` +
@@ -2535,14 +2550,14 @@ function kgLang() { knListRender(); }
 const kgXY = e => { const r = kgCvs.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
 kgCvs.addEventListener('pointerdown', e => {
   if (e.button !== 0) return;
-  kgPtr = { id: e.pointerId, x0: e.clientX, y0: e.clientY, lx: e.clientX, ly: e.clientY, lt: performance.now(), drag: false, hit: kgPick(...kgXY(e)) };
+  kgPtr = { id: e.pointerId, x0: e.clientX, y0: e.clientY, lx: e.clientX, ly: e.clientY, lt: performance.now(), drag: false, hit: kgPick(...kgXY(e)), out: e.pointerType !== 'mouse' && !kgInSphere(...kgXY(e)) };
   kgVx = kgVy = 0;
   kgCvs.setPointerCapture?.(e.pointerId);
 });
 kgCvs.addEventListener('pointermove', e => {
   if (kgPtr && e.pointerId === kgPtr.id) {
     const dx = e.clientX - kgPtr.lx, dy = e.clientY - kgPtr.ly;
-    if (!kgPtr.drag && Math.hypot(e.clientX - kgPtr.x0, e.clientY - kgPtr.y0) > 6) { kgPtr.drag = true; kgFocus = null; kgCvs.classList.add('drag'); kgSetHover(null); }
+    if (!kgPtr.drag && !kgPtr.out && Math.hypot(e.clientX - kgPtr.x0, e.clientY - kgPtr.y0) > 6) { kgPtr.drag = true; kgFocus = null; kgCvs.classList.add('drag'); kgSetHover(null); }
     if (kgPtr.drag) {
       const k = 1.9 / Math.max(260, Math.min(kgW, kgH));
       kgM = m3(m3rot(1, 0, 0, -dy * k), m3(m3rot(0, 1, 0, dx * k), kgM));
@@ -2561,6 +2576,13 @@ const kgUp = e => {
   kgPtr = null;
 };
 kgCvs.addEventListener('pointerup', kgUp);
+// touch: the cloud rotates only inside the square around the sphere; elsewhere the swipe scrolls the page
+// (scrolling cancels the pointer → kgUp). preventDefault on touchstart keeps the browser from scrolling inside it.
+const kgInSphere = (x, y) => { const R = kgR * kgZ * 1.08; return Math.abs(x - kgW / 2 - kgSx) <= R && Math.abs(y - kgH / 2 - kgSy) <= R; };
+kgCvs.addEventListener('touchstart', e => {
+  const t = e.touches[0];
+  if (e.touches.length === 1 && kgInSphere(...kgXY(t))) e.preventDefault();
+}, { passive: false });
 kgCvs.addEventListener('pointercancel', kgUp);
 kgCvs.addEventListener('pointerenter', () => { kgOver = true; });
 kgCvs.addEventListener('pointerleave', () => { kgOver = false; if (!kgPtr) kgSetHover(null); });
