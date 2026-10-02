@@ -752,6 +752,9 @@ button{font:inherit;color:inherit}
 .dd-menu button[aria-checked="true"]::after{content:"";width:7px;height:7px;margin:0 3px 0 auto;flex:none;transform:rotate(45deg);background:var(--verd);box-shadow:0 0 10px var(--verd)}
 </style>
 <script>try{var m=localStorage.getItem('pf-theme');if(m=='light'||m=='dark')document.documentElement.dataset.theme=m}catch(e){}</script>
+<!-- Vercel Web Analytics: скрипт отдаётся с того же домена, без cookie; локально (http.server) будет 404 — это нормально -->
+<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 
@@ -2961,10 +2964,12 @@ const LEGAL = {
     <h4>4. Kontakt per E-Mail oder Telegram</h4>
     <p>Wenn Sie mir per E-Mail oder Telegram schreiben, verarbeite ich Ihre Angaben zur Bearbeitung der Anfrage (Art. 6 Abs. 1 lit. b bzw. f DSGVO). Für Telegram gelten zusätzlich die Datenschutzbestimmungen von Telegram.</p>
     <h4>5. Lokale Speicherung im Browser</h4>
-    <p>Die gewählte Sprache und das Farbschema werden im lokalen Speicher Ihres Browsers (localStorage) abgelegt und nicht an mich übertragen. Dies ist für die von Ihnen gewünschte Funktion unbedingt erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG). Sie können die Daten jederzeit über die Browsereinstellungen löschen. Es werden keine Cookies, Analyse- oder Tracking-Dienste eingesetzt.</p>
-    <h4>6. Externe Links</h4>
+    <p>Die gewählte Sprache und das Farbschema werden im lokalen Speicher Ihres Browsers (localStorage) abgelegt und nicht an mich übertragen. Dies ist für die von Ihnen gewünschte Funktion unbedingt erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG). Sie können die Daten jederzeit über die Browsereinstellungen löschen. Es werden keine Cookies gesetzt.</p>
+    <h4>6. Webanalyse mit Vercel Web Analytics</h4>
+    <p>Um die Nutzung der Website statistisch auszuwerten und sie zu verbessern, setze ich Vercel Web Analytics von Vercel Inc. (Anschrift siehe Abschnitt 2) ein. Dabei werden aufgerufene Seite, Referrer, ungefährer Standort (Land), Browser, Betriebssystem und Gerätetyp erfasst. Es werden keine Cookies gesetzt und keine Informationen auf Ihrem Endgerät gespeichert oder ausgelesen. Besucher werden nur über einen Hash aus der Anfrage unterschieden, der täglich verworfen wird; IP-Adressen werden dabei nicht gespeichert, eine Identifizierung einzelner Personen oder ein seitenübergreifendes Tracking findet nicht statt. Die Daten werden ausschließlich in aggregierter Form ausgewertet. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; mein berechtigtes Interesse liegt in der Reichweitenmessung und Verbesserung der Website. Zur Übermittlung in die USA und zum Auftragsverarbeitungsvertrag siehe Abschnitt 2. Sie können der Verarbeitung jederzeit widersprechen, etwa per formloser Nachricht an die oben genannte E-Mail-Adresse oder durch einen Tracking-Blocker in Ihrem Browser.</p>
+    <h4>7. Externe Links</h4>
     <p>Links zu LinkedIn, Telegram und zu Projekt-Websites sind einfache Verlinkungen. Daten werden erst übertragen, wenn Sie einen Link anklicken; dann gelten die Datenschutzbestimmungen des jeweiligen Anbieters.</p>
-    <h4>7. Ihre Rechte</h4>
+    <h4>8. Ihre Rechte</h4>
     <p>Sie haben das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) sowie Widerspruch gegen Verarbeitungen auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO (Art. 21). Eine formlose Nachricht an die oben genannte E-Mail-Adresse genügt.</p>
     <p>Außerdem können Sie sich bei einer Datenschutz-Aufsichtsbehörde beschweren, zum Beispiel beim Bayerischen Landesamt für Datenschutzaufsicht (BayLDA), Promenade 18, 91522 Ansbach.</p>
     <p>Stand: Oktober 2026</p>`,

@@ -7,6 +7,7 @@
 - Чистые HTML + CSS + vanilla JS в одном файле. Сборки, зависимостей, `package.json` и тестов нет. Единственный серверный код — `api/contact.js` (Vercel Function формы, без зависимостей).
 - Внешних ресурсов нет. Шрифты (Tektur, Onest, JetBrains Mono) лежат в `fonts/` — переменные woff2, подмножества latin, latin-ext, cyrillic, cyrillic-ext; `@font-face` в блоке `FONTS` в начале CSS. Шрифты с CDN не подключать (DSGVO).
 - Картинки лежат в `img/`.
+- Статистика — Vercel Web Analytics: два `<script>` в конце `<head>`, скрипт грузится с того же домена (`/_vercel/insights/script.js`), без cookie. Включается в панели Vercel (Project → Analytics). Под `python -m http.server` скрипт отдаёт 404 — это нормально. Описана в разделе 6 Datenschutzerklärung.
 - Запуск: `python -m http.server 8123`. Конфигурация для Claude Code — `.claude/launch.json`. Если открыть файл напрямую через `file://`, картинки по относительным путям могут не загрузиться. Проверять на ширине десктопа и 375px, в светлой и тёмной теме.
 - Держать всё в одном файле. Фреймворки и сборку не вводить без запроса.
 
