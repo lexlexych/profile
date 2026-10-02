@@ -4,10 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Алексей Часовской — приложения, AI-агенты и голосовые ассистенты</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400;600;800&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
+/* ==== FONTS ==== self-hosted (fonts/), Tektur / Onest / JetBrains Mono, variable woff2: latin, latin-ext, cyrillic, cyrillic-ext */
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 600;font-display:swap;src:url(fonts/jetbrains-mono-cyrillic-ext.woff2) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 600;font-display:swap;src:url(fonts/jetbrains-mono-cyrillic.woff2) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 600;font-display:swap;src:url(fonts/jetbrains-mono-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 600;font-display:swap;src:url(fonts/jetbrains-mono-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Onest';font-style:normal;font-weight:400 700;font-display:swap;src:url(fonts/onest-cyrillic-ext.woff2) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Onest';font-style:normal;font-weight:400 700;font-display:swap;src:url(fonts/onest-cyrillic.woff2) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Onest';font-style:normal;font-weight:400 700;font-display:swap;src:url(fonts/onest-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Onest';font-style:normal;font-weight:400 700;font-display:swap;src:url(fonts/onest-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Tektur';font-style:normal;font-weight:400 800;font-display:swap;src:url(fonts/tektur-cyrillic-ext.woff2) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Tektur';font-style:normal;font-weight:400 800;font-display:swap;src:url(fonts/tektur-cyrillic.woff2) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Tektur';font-style:normal;font-weight:400 800;font-display:swap;src:url(fonts/tektur-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Tektur';font-style:normal;font-weight:400 800;font-display:swap;src:url(fonts/tektur-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
 /* ============ TOKENS ============ */
 :root{
   --bg:#E6EAEE; --bg2:#D9DFE5; --surface:rgba(244,246,248,.94); --surface-solid:#F3F5F7;
@@ -598,6 +608,18 @@ button{font:inherit;color:inherit}
 .modal.open .stag{animation:a-up .8s var(--ease-out) both;animation-delay:calc(var(--d,0) * 70ms + 380ms)}
 .stag{opacity:0}
 .cm .m-panel{width:auto;max-width:92vw;display:flex;flex-direction:column}
+/* legal texts (Impressum / Datenschutz): one readable column */
+.lm .m-panel{width:min(820px,92vw)}
+.lm .m-body{display:block;padding:22px clamp(18px,3vw,36px) 30px;font-size:14.5px;line-height:1.65}
+.lg h4{font-family:var(--f-display);font-weight:600;font-size:16px;margin:22px 0 6px}
+.lg h4:first-child{margin-top:0}
+.lg p{margin:0 0 10px;color:var(--muted)}
+.lg a{color:var(--verd)}
+.lg-note{font-size:12.5px;color:var(--muted);border:1px dashed var(--line-strong);border-radius:8px;padding:8px 12px;margin-bottom:16px}
+.lg-note:empty{display:none}
+.foot-links{display:inline-flex;gap:14px;margin-left:14px;pointer-events:auto}
+.foot-links button{all:unset;cursor:pointer;color:var(--muted);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line-strong);transition:color .3s}
+.foot-links button:hover,.foot-links button:focus-visible{color:var(--brass)}
 .cm .m-body{display:flex;align-items:center;justify-content:center;padding:24px;background:var(--bg2)}
 .cm .cert-big{position:relative;border:1px solid var(--line-strong);background:#fff;border-radius:4px;overflow:hidden}
 
@@ -1019,7 +1041,7 @@ button{font:inherit;color:inherit}
           </div>
         </div>
       </div>
-      <div class="foot">© 2026 <span data-i18n="name.full"></span></div>
+      <div class="foot">© 2026 <span data-i18n="name.full"></span><span class="foot-links"><button type="button" data-legal="imprint" data-i18n="lg.imprint"></button><button type="button" data-legal="privacy" data-i18n="lg.privacy"></button></span></div>
     </div>
   </section>
 </main>
@@ -1094,6 +1116,19 @@ button{font:inherit;color:inherit}
       <div class="m-actions"><button class="ibtn x" data-close data-i18n-aria="aria.close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
     </div>
     <div class="m-body"><div class="cert-big stag" id="cmBig"></div></div>
+  </div>
+</div>
+
+<!-- ========== LEGAL MODAL ========== -->
+<div class="modal lm" id="lm" aria-hidden="true">
+  <div class="m-back" data-close></div>
+  <div class="m-panel" role="dialog" aria-modal="true" aria-labelledby="lmTitle">
+    <div class="m-head">
+      <svg class="gear-sm" data-gear="12" data-spin="1" viewBox="-50 -50 100 100"></svg>
+      <div class="ttl"><small>§</small><h3 id="lmTitle"></h3></div>
+      <div class="m-actions"><button class="ibtn x" data-close data-i18n-aria="aria.close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    </div>
+    <div class="m-body lg"><p class="lg-note" data-i18n="lg.note"></p><div id="lmBody"></div></div>
   </div>
 </div>
 
@@ -1222,6 +1257,7 @@ const I18N = {
     'prj.benefita.s1':'Раздел баллов: задания для заработка баллов — email, Instagram, уведомления, приглашение друга, пост о заведении',
     'prj.benefita.s2':'Витрина: заведения-участники и их скидки и подарки за баллы',
     'prj.benefita.s3':'Страница заведения: описание, адрес, часы работы и доступные купоны',
+    'lg.imprint':'Impressum','lg.privacy':'Политика конфиденциальности','lg.note':'Юридически значимый текст приведён на немецком языке.',
     'c.title':'Обратная связь','c.sub':'Есть вопрос или идея? Напишите — я отвечу.','c.loc':'место','c.city':'Нюрнберг','c.tg':'Написать в Telegram',
     'f.name':'Имя','f.nameErr':'Укажите имя','f.mail':'Email','f.mailErr':'Укажите корректный email','f.company':'Фирма (необязательно)',
     'f.msg':'Сообщение','f.msgErr':'Напишите сообщение',
@@ -1338,6 +1374,7 @@ const I18N = {
     'prj.benefita.s1':'Points section: tasks for earning points (email, Instagram, notifications, inviting a friend, a post about a venue)',
     'prj.benefita.s2':'Showcase: participating venues and their discounts and gifts for points',
     'prj.benefita.s3':'Venue page: description, address, opening hours and available vouchers',
+    'lg.imprint':'Legal notice','lg.privacy':'Privacy policy','lg.note':'The legally binding text is provided in German.',
     'c.title':'Get in touch','c.sub':'Have a question or an idea? Drop me a line — I\u2019ll get back to you.','c.loc':'location','c.city':'Nuremberg','c.tg':'Message on Telegram',
     'f.name':'Name','f.nameErr':'Enter your name','f.mail':'Email','f.mailErr':'Enter a valid email','f.company':'Company (optional)',
     'f.msg':'Message','f.msgErr':'Write a message',
@@ -1454,6 +1491,7 @@ const I18N = {
     'prj.benefita.s1':'Punktebereich: Aufgaben zum Punktesammeln (E-Mail, Instagram, Benachrichtigungen, Freunde einladen, Beitrag über einen Betrieb)',
     'prj.benefita.s2':'Vitrine: teilnehmende Betriebe und ihre Rabatte und Geschenke gegen Punkte',
     'prj.benefita.s3':'Seite eines Betriebs: Beschreibung, Adresse, Öffnungszeiten und verfügbare Gutscheine',
+    'lg.imprint':'Impressum','lg.privacy':'Datenschutzerklärung','lg.note':'',
     'c.title':'Kontakt','c.sub':'Eine Frage oder eine Idee? Schreiben Sie mir — ich melde mich.','c.loc':'Ort','c.city':'Nürnberg','c.tg':'Auf Telegram schreiben',
     'f.name':'Name','f.nameErr':'Bitte Namen angeben','f.mail':'E-Mail','f.mailErr':'Bitte gültige E-Mail angeben','f.company':'Firma (optional)',
     'f.msg':'Nachricht','f.msgErr':'Bitte Nachricht schreiben',
@@ -2792,7 +2830,8 @@ if (slides[current].id === 'projects') playAnims();
 /* ================= MODALS (clip-path unfold from source) ================= */
 const pm = $('#pm'), cm = $('#cm');
 let modalSource = null;
-const modalOpen = () => pm.classList.contains('show') || cm.classList.contains('show');
+const lm = $('#lm');
+const modalOpen = () => [pm, cm, lm].some(m => m.classList.contains('show'));
 function clipFrom(panel, srcEl) {
   const p = panel.getBoundingClientRect(), s = srcEl.getBoundingClientRect();
   const t = Math.max(0, s.top - p.top), l = Math.max(0, s.left - p.left), r = Math.max(0, p.right - s.right), b = Math.max(0, p.bottom - s.bottom);
@@ -2895,7 +2934,49 @@ function closeModal(m) {
   panel.style.clipPath = modalSource && modalSource.isConnected ? clipFrom(panel, modalSource) : 'inset(50% 50% 50% 50% round 12px)';
   setTimeout(() => { m.classList.remove('show'); m.setAttribute('aria-hidden', 'true'); }, 700);
 }
-function closeAllModals() { closeModal(pm); closeModal(cm); }
+function closeAllModals() { closeModal(pm); closeModal(cm); closeModal(lm); }
+
+/* ==== LEGAL ==== */
+// Impressum и Datenschutzerklärung — только по-немецки (юридически значимая версия), на ru/en сверху пояснение lg.note.
+const LG_ADDR = `Aleksei Chasovskoi<br>Zweigstr. 16<br>91154 Roth<br>Deutschland`;
+const LEGAL = {
+  imprint: `
+    <h4>Angaben gemäß § 5 DDG</h4>
+    <p>${LG_ADDR}</p>
+    <h4>Kontakt</h4>
+    <p>E-Mail: <a href="mailto:info@profidev.de">info@profidev.de</a><br>Telegram: <a href="https://t.me/a1exeych" target="_blank" rel="noopener">@a1exeych</a></p>
+    <h4>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h4>
+    <p>Aleksei Chasovskoi, Anschrift wie oben</p>
+    <h4>Verbraucherstreitbeilegung</h4>
+    <p>Ich bin nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+    <h4>Haftung für Links</h4>
+    <p>Diese Website enthält Links zu externen Websites Dritter, auf deren Inhalte ich keinen Einfluss habe. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber verantwortlich. Bei Bekanntwerden von Rechtsverletzungen werde ich derartige Links umgehend entfernen.</p>`,
+  privacy: `
+    <h4>1. Verantwortlicher</h4>
+    <p>${LG_ADDR}<br>E-Mail: <a href="mailto:info@profidev.de">info@profidev.de</a></p>
+    <h4>2. Hosting</h4>
+    <p>Diese Website wird bei Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA, gehostet. Beim Aufruf der Seiten verarbeitet Vercel technisch notwendige Daten (u. a. IP-Adresse, Datum und Uhrzeit, aufgerufene Seite, Browser- und Systemangaben) in Server-Logfiles, um die Website auszuliefern und ihre Sicherheit zu gewährleisten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO. Vercel ist unter dem EU-US Data Privacy Framework zertifiziert; mit Vercel besteht ein Auftragsverarbeitungsvertrag.</p>
+    <h4>3. Kontaktformular</h4>
+    <p>Wenn Sie das Kontaktformular nutzen, verarbeite ich Ihre E-Mail-Adresse, Ihren Namen, optional Ihre Firma sowie Ihre Nachricht, um Ihre Anfrage zu beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Anbahnung eines Vertrags) bzw. lit. f DSGVO (Beantwortung allgemeiner Anfragen). Zur Zustellung wird die Nachricht über die Bot-API des Messengers Telegram an mich weitergeleitet; Telegram verarbeitet die Daten dabei auf eigenen Servern, auch außerhalb der EU. Die Daten werden gelöscht, sobald die Anfrage abschließend bearbeitet ist und keine gesetzlichen Aufbewahrungspflichten bestehen.</p>
+    <h4>4. Kontakt per E-Mail oder Telegram</h4>
+    <p>Wenn Sie mir per E-Mail oder Telegram schreiben, verarbeite ich Ihre Angaben zur Bearbeitung der Anfrage (Art. 6 Abs. 1 lit. b bzw. f DSGVO). Für Telegram gelten zusätzlich die Datenschutzbestimmungen von Telegram.</p>
+    <h4>5. Lokale Speicherung im Browser</h4>
+    <p>Die gewählte Sprache und das Farbschema werden im lokalen Speicher Ihres Browsers (localStorage) abgelegt und nicht an mich übertragen. Dies ist für die von Ihnen gewünschte Funktion unbedingt erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG). Sie können die Daten jederzeit über die Browsereinstellungen löschen. Es werden keine Cookies, Analyse- oder Tracking-Dienste eingesetzt.</p>
+    <h4>6. Externe Links</h4>
+    <p>Links zu LinkedIn, Telegram und zu Projekt-Websites sind einfache Verlinkungen. Daten werden erst übertragen, wenn Sie einen Link anklicken; dann gelten die Datenschutzbestimmungen des jeweiligen Anbieters.</p>
+    <h4>7. Ihre Rechte</h4>
+    <p>Sie haben das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) sowie Widerspruch gegen Verarbeitungen auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO (Art. 21). Eine formlose Nachricht an die oben genannte E-Mail-Adresse genügt.</p>
+    <p>Außerdem können Sie sich bei einer Datenschutz-Aufsichtsbehörde beschweren, zum Beispiel beim Bayerischen Landesamt für Datenschutzaufsicht (BayLDA), Promenade 18, 91522 Ansbach.</p>
+    <p>Stand: Oktober 2026</p>`,
+};
+function openLegal(k, srcEl) {
+  $('#lmTitle').dataset.i18n = 'lg.' + k;
+  $('#lmBody').innerHTML = LEGAL[k];
+  i18nIn(lm);
+  $('.m-body', lm).scrollTop = 0;
+  openModal(lm, srcEl);
+}
+$$('[data-legal]').forEach(b => b.addEventListener('click', () => openLegal(b.dataset.legal, b)));
 $$('[data-close]').forEach(b => b.addEventListener('click', () => closeModal(b.closest('.modal'))));
 
 let pmIdx = 0, tabIdx = 0;
