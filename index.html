@@ -116,8 +116,12 @@ button{font:inherit;color:inherit}
 .hud-r button.active .bits{color:var(--verd)}
 .hud-r .pip{width:9px;height:9px;border:1px solid var(--line-strong);transform:rotate(45deg);transition:.4s}
 .hud-r button.active .pip{background:var(--verd);border-color:var(--verd);box-shadow:0 0 12px var(--verd)}
-/* pager: previous / next slide buttons at the bottom left */
-.pager{position:fixed;z-index:40;left:clamp(14px,2vw,28px);bottom:calc(env(safe-area-inset-bottom,0px) + 16px);display:flex;gap:10px}
+/* bottom bar: pager on the left, legal links on the right; the links wrap to a row of their own only when they do not fit */
+.bar{position:fixed;z-index:40;left:clamp(14px,2vw,28px);right:clamp(14px,2vw,28px);bottom:calc(env(safe-area-inset-bottom,0px) + 16px);display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px;pointer-events:none}
+.bar>*{pointer-events:auto}
+.bar.wrapped{justify-content:center}
+.bar.wrapped .legal{margin-left:0}
+.pager{display:flex;gap:10px;min-width:0;max-width:100%}
 .pg{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:10px;height:42px;padding:0 16px 0 5px;border:1px solid var(--line-strong);border-radius:30px;background:var(--surface-solid);box-shadow:var(--shadow);font-weight:600;font-size:13.5px;color:var(--ink);white-space:nowrap;transition:border-color .3s,box-shadow .3s,opacity .4s,visibility .4s}
 .pg-next{flex-direction:row-reverse;padding:0 5px 0 16px}
 .pg:hover{border-color:var(--verd);box-shadow:var(--shadow),0 0 0 4px var(--verd-soft)}
@@ -134,13 +138,19 @@ button{font:inherit;color:inherit}
 .stage{position:fixed;inset:0;z-index:10}
 .slide{position:absolute;inset:0;visibility:hidden;opacity:0;pointer-events:none}
 .slide.active{visibility:visible;opacity:1;pointer-events:auto}
-.slide-scroll{position:absolute;inset:0;overflow-x:hidden;overflow-y:auto;scrollbar-width:none;
-  padding:calc(env(safe-area-inset-top,0px) + var(--nav-h) + 14px) clamp(20px,6vw,110px) calc(env(safe-area-inset-bottom,0px) + 70px);
+/* the scroll area ends above the bottom bar (pager + legal links), so content is cut off before it reaches them */
+.slide-scroll{position:absolute;inset:0 0 var(--bar-h,calc(env(safe-area-inset-bottom,0px) + 70px));overflow-x:hidden;overflow-y:auto;scrollbar-width:none;
+  padding:calc(env(safe-area-inset-top,0px) + var(--nav-h) + 14px) clamp(20px,6vw,110px) 14px;
   display:flex;flex-direction:column;justify-content:center}
 .slide-scroll::-webkit-scrollbar{display:none}
 /* content slides: title at the same height on every slide instead of centering */
 #experience .slide-scroll,#skills .slide-scroll,#certs .slide-scroll,#projects .slide-scroll{justify-content:flex-start;padding-top:calc(env(safe-area-inset-top,0px) + var(--nav-h) + var(--top-gap,clamp(12px,2.8vh,34px)))}
 .wrap{width:100%;max-width:1320px;margin:0 auto}
+.foot{margin-top:28px;text-align:center;font-size:12px;color:var(--muted)}
+/* legal links: pinned bottom right on every slide, level with the pager */
+.legal{margin-left:auto;display:flex;align-items:center;gap:18px;font-size:12px}
+.legal button,.chk button{all:unset;cursor:pointer;color:var(--muted);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line-strong);transition:color .3s}
+.legal button:hover,.legal button:focus-visible,.chk button:hover,.chk button:focus-visible{color:var(--brass)}
 .ghost-num{position:absolute;right:clamp(10px,4vw,70px);bottom:calc(env(safe-area-inset-bottom,0px) + 10px);font-family:var(--f-display);font-weight:800;font-size:clamp(120px,22vw,300px);line-height:.8;color:transparent;-webkit-text-stroke:1px var(--line);pointer-events:none;z-index:-1}
 
 /* entrance choreography (on wrappers only) */
@@ -506,6 +516,11 @@ button{font:inherit;color:inherit}
 .field .ferr{display:none;font-size:12px;color:var(--danger)}
 .field.err .ferr{display:block}
 .field.err{animation:shake .45s}
+/* privacy checkbox: the link inside the label opens the policy and does not toggle the box */
+.chk{display:flex;align-items:flex-start;gap:10px;font-size:13px;line-height:1.45;color:var(--ink);cursor:pointer}
+.chk input{flex:none;width:18px;height:18px;margin:0;accent-color:var(--verd);cursor:pointer}
+.chk button{color:var(--ink)}
+.field.err .chk input{outline:2px solid var(--danger);outline-offset:2px}
 @keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
 .flabel{font-size:12px;color:var(--muted);margin-bottom:8px;display:flex;justify-content:space-between}
 .send{all:unset;cursor:pointer;box-sizing:border-box;position:relative;overflow:hidden;width:100%;padding:16px 20px;border-radius:40px;background:var(--ink);color:var(--bg);font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:12px;transition:box-shadow .3s}
@@ -523,7 +538,6 @@ button{font:inherit;color:inherit}
 .tx-done svg.big{width:92px;height:92px;color:var(--verd)}
 .tx-done h3{font-family:var(--f-display);font-size:24px;margin:6px 0 0}
 .tx-done p{color:var(--muted);margin:0;max-width:34ch;font-size:14px}
-.foot{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 28px);text-align:center;font-size:12px;color:var(--muted);pointer-events:none}
 
 /* ============ SHUTTER TRANSITION ============ */
 .shutter{position:fixed;inset:0;z-index:80;pointer-events:none}
@@ -617,9 +631,6 @@ button{font:inherit;color:inherit}
 .lg a{color:var(--verd)}
 .lg-note{font-size:12.5px;color:var(--muted);border:1px dashed var(--line-strong);border-radius:8px;padding:8px 12px;margin-bottom:16px}
 .lg-note:empty{display:none}
-.foot-links{display:inline-flex;gap:14px;margin-left:14px;pointer-events:auto}
-.foot-links button{all:unset;cursor:pointer;color:var(--muted);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line-strong);transition:color .3s}
-.foot-links button:hover,.foot-links button:focus-visible{color:var(--brass)}
 .cm .m-body{display:flex;align-items:center;justify-content:center;padding:24px;background:var(--bg2)}
 .cm .cert-big{position:relative;border:1px solid var(--line-strong);background:#fff;border-radius:4px;overflow:hidden}
 
@@ -664,7 +675,6 @@ button{font:inherit;color:inherit}
   .m-body{grid-template-columns:1fr}
   .m-media{border-right:0;border-bottom:1px solid var(--line)}
   .ghost-num{display:none}
-  .foot{position:static;margin-top:24px;text-align:center}
   .kn{grid-template-columns:1fr}
   /* timeline turns vertical: the line in the middle, jobs alternate left / right and overlap by half a card */
   .tl{--stem:16px;--ny:24px;grid-template-columns:1fr 1fr;grid-template-rows:none;column-gap:calc(var(--stem) * 2);row-gap:12px}
@@ -701,10 +711,12 @@ button{font:inherit;color:inherit}
   .kn-hud .kn-rot{display:none}
   .kn-card{left:8px;bottom:8px;width:calc(100% - 16px);padding:12px 14px 14px}
   /* the pager spans the bottom edge, names shrink with an ellipsis */
-  .pager{left:12px;right:12px;gap:8px}
+  .bar{left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 10px)}
+  .pager{gap:8px}
   .pg{min-width:0;flex:0 1 auto;height:40px;gap:7px;font-size:12.5px;padding:0 12px 0 4px}
   .pg-next{padding:0 4px 0 12px}
   .pg-n b{display:none}
+  .legal{font-size:11.5px}
   /* narrow cards wrap the description into more lines */
   .carousel{height:calc(min(470px,76vw) * 9 / 16 + 248px)}
   .pc-body p{-webkit-line-clamp:6}
@@ -821,10 +833,14 @@ button{font:inherit;color:inherit}
 
 <!-- ========== HUD ========== -->
 <div class="hud hud-r" id="hudR"></div>
+<div class="bar" id="bar">
 <nav class="pager" id="pager" data-i18n-aria="aria.pager">
   <button class="pg pg-prev" id="pgPrev" type="button"><span class="pg-arr" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></span><span class="pg-n"></span></button>
   <button class="pg pg-next" id="pgNext" type="button"><span class="pg-arr" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><span class="pg-n"></span></button>
 </nav>
+<!-- legal links pinned bottom right: Impressum must be reachable from every slide (§ 5 DDG) -->
+<div class="legal"><button type="button" data-legal="imprint" data-i18n="lg.imprint"></button><button type="button" data-legal="privacy" data-i18n="lg.privacy"></button></div>
+</div>
 
 <!-- ========== SLIDES ========== -->
 <main class="stage" id="stage">
@@ -1033,6 +1049,7 @@ button{font:inherit;color:inherit}
             <div class="field req"><label for="fName" data-i18n="f.name"></label><input id="fName" name="name" autocomplete="name" required aria-describedby="fNameErr"><span class="ferr" id="fNameErr" data-i18n="f.nameErr"></span></div>
             <div class="field"><label for="fCompany" data-i18n="f.company"></label><input id="fCompany" name="company" autocomplete="organization"></div>
             <div class="field req"><label for="fMsg" data-i18n="f.msg"></label><textarea id="fMsg" name="message" required aria-describedby="fMsgErr"></textarea><span class="ferr" id="fMsgErr" data-i18n="f.msgErr"></span></div>
+            <div class="field"><label class="chk"><input id="fConsent" name="consent" type="checkbox" required aria-describedby="fConsentErr"><span><span data-i18n="f.consentA"></span><button type="button" data-legal="privacy" data-i18n="f.consentLink"></button><span data-i18n="f.consentB"></span></span></label><span class="ferr" id="fConsentErr" data-i18n="f.consentErr"></span></div>
             <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
             <button class="send" type="submit" id="send"><span class="fill"></span><span class="lbl"><svg class="plane" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 2.5 10.5 13.5M21.5 2.5l-7 19-4-8-8-4z"/></svg><span id="sendTxt"></span></span></button>
           </form>
@@ -1044,7 +1061,7 @@ button{font:inherit;color:inherit}
           </div>
         </div>
       </div>
-      <div class="foot">© 2026 <span data-i18n="name.full"></span><span class="foot-links"><button type="button" data-legal="imprint" data-i18n="lg.imprint"></button><button type="button" data-legal="privacy" data-i18n="lg.privacy"></button></span></div>
+      <div class="foot">© 2026 <span data-i18n="name.full"></span></div>
     </div>
   </section>
 </main>
@@ -1264,6 +1281,7 @@ const I18N = {
     'c.title':'Обратная связь','c.sub':'Есть вопрос или идея? Напишите — я отвечу.','c.loc':'место','c.city':'Нюрнберг','c.tg':'Написать в Telegram',
     'f.name':'Имя','f.nameErr':'Укажите имя','f.mail':'Email','f.mailErr':'Укажите корректный email','f.company':'Фирма (необязательно)',
     'f.msg':'Сообщение','f.msgErr':'Напишите сообщение',
+    'f.consentA':'Я прочитал(а) ','f.consentLink':'политику конфиденциальности','f.consentB':'.','f.consentErr':'Подтвердите, что прочитали политику конфиденциальности',
     'f.send':'Отправить сообщение','f.sending':'отправка','f.sent':'Отправлено','f.ready':'Готов к отправке','f.fix':'Заполните отмеченные поля','f.tx':'Передача данных…','f.delivered':'Доставлено',
     'f.doneT':'Сообщение отправлено','f.doneP':'Отвечу в течение дня.','f.err':'Ошибка отправки, попробуйте ещё раз','f.again':'Отправить ещё одну',
     'sh.module':'МОДУЛЬ','sh.loading':'загрузка раздела «{x}»','sh.boot':'ЗАПУСК','sh.init':'ИНИЦИАЛИЗАЦИЯ СИСТЕМЫ','sh.bootSub':'портфолио загружается',
@@ -1381,6 +1399,7 @@ const I18N = {
     'c.title':'Get in touch','c.sub':'Have a question or an idea? Drop me a line — I\u2019ll get back to you.','c.loc':'location','c.city':'Nuremberg','c.tg':'Message on Telegram',
     'f.name':'Name','f.nameErr':'Enter your name','f.mail':'Email','f.mailErr':'Enter a valid email','f.company':'Company (optional)',
     'f.msg':'Message','f.msgErr':'Write a message',
+    'f.consentA':'I have read the ','f.consentLink':'privacy policy','f.consentB':'.','f.consentErr':'Please confirm that you have read the privacy policy',
     'f.send':'Send message','f.sending':'sending','f.sent':'Sent','f.ready':'Ready to send','f.fix':'Fill in the highlighted fields','f.tx':'Transmitting…','f.delivered':'Delivered',
     'f.doneT':'Message sent','f.doneP':'I\u2019ll reply within a day.','f.err':'Sending failed, please try again','f.again':'Send another',
     'sh.module':'MODULE','sh.loading':'loading section \u201c{x}\u201d','sh.boot':'BOOT','sh.init':'SYSTEM INITIALIZATION','sh.bootSub':'loading portfolio',
@@ -1498,6 +1517,7 @@ const I18N = {
     'c.title':'Kontakt','c.sub':'Eine Frage oder eine Idee? Schreiben Sie mir — ich melde mich.','c.loc':'Ort','c.city':'Nürnberg','c.tg':'Auf Telegram schreiben',
     'f.name':'Name','f.nameErr':'Bitte Namen angeben','f.mail':'E-Mail','f.mailErr':'Bitte gültige E-Mail angeben','f.company':'Firma (optional)',
     'f.msg':'Nachricht','f.msgErr':'Bitte Nachricht schreiben',
+    'f.consentA':'Ich habe die ','f.consentLink':'Datenschutzerklärung','f.consentB':' gelesen.','f.consentErr':'Bitte bestätigen Sie, dass Sie die Datenschutzerklärung gelesen haben',
     'f.send':'Nachricht senden','f.sending':'wird gesendet','f.sent':'Gesendet','f.ready':'Bereit zum Senden','f.fix':'Bitte markierte Felder ausfüllen','f.tx':'Daten werden übertragen…','f.delivered':'Zugestellt',
     'f.doneT':'Nachricht gesendet','f.doneP':'Ich antworte innerhalb eines Tages.','f.err':'Senden fehlgeschlagen, bitte erneut versuchen','f.again':'Weitere senden',
     'sh.module':'MODUL','sh.loading':'Abschnitt \u201e{x}\u201c wird geladen','sh.boot':'START','sh.init':'SYSTEMINITIALISIERUNG','sh.bootSub':'Portfolio wird geladen',
@@ -2004,6 +2024,15 @@ function setPager(i) {
     b.setAttribute('aria-label', t(key) + ': ' + t('nav.' + k));
   });
 }
+// the scroll area of every slide ends 12px above the bottom bar, whose height changes when the legal links wrap;
+// once they wrap, both rows are centred
+const bar = $('#bar');
+function setBarH() {
+  bar.classList.toggle('wrapped', $('.legal', bar).offsetTop >= $('#pager').offsetTop + $('#pager').offsetHeight);
+  document.documentElement.style.setProperty('--bar-h', Math.ceil(innerHeight - bar.getBoundingClientRect().top + 12) + 'px');
+}
+if (window.ResizeObserver) new ResizeObserver(setBarH).observe(bar);
+addEventListener('resize', setBarH);
 function setActiveUI(i) {
   menuBtns.forEach((b, k) => { b.classList.toggle('active', k === i); b.setAttribute('aria-current', k === i ? 'true' : 'false'); });
   $$('#hudR button').forEach((b, k) => b.classList.toggle('active', k === i));
@@ -3052,10 +3081,10 @@ function openCert(i, srcEl) {
 const form = $('#form'), tx = $('#tx');
 form.addEventListener('submit', e => {
   e.preventDefault();
-  const checks = [['#fMail', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())], ['#fName', v => v.trim().length > 1], ['#fMsg', v => v.trim().length > 1]];
+  const checks = [['#fMail', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())], ['#fName', v => v.trim().length > 1], ['#fMsg', v => v.trim().length > 1], ['#fConsent', (v, el) => el.checked]];
   let ok = true;
   checks.forEach(([s, fn]) => {
-    const f = $(s).closest('.field'), bad = !fn($(s).value); f.classList.remove('err');
+    const f = $(s).closest('.field'), bad = !fn($(s).value, $(s)); f.classList.remove('err');
     $(s).setAttribute('aria-invalid', bad);
     if (bad) { void f.offsetWidth; f.classList.add('err'); ok = false; }
   });
