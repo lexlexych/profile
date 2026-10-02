@@ -261,7 +261,9 @@ button{font:inherit;color:inherit}
    --nx: node position from the card's left edge, --stem: distance card ↔ line */
 .tl{--stem:30px;--nx:30px;display:grid;grid-template-columns:repeat(14,minmax(0,1fr));grid-template-rows:auto calc(var(--stem) * 2) auto;column-gap:16px;position:relative}
 .tl-line{grid-column:1/-1;grid-row:2;align-self:center;height:2px;background:var(--line-strong);position:relative;overflow:hidden}
-.tl-line::after{content:"";position:absolute;top:0;left:-180px;height:2px;width:180px;background:linear-gradient(90deg,transparent,var(--verd),transparent);animation:busflow 6.8s linear infinite}
+.tl-line::after{content:"";position:absolute;top:0;left:-180px;height:2px;width:180px;background:linear-gradient(90deg,transparent,var(--verd),transparent);animation:busflow 6.8s linear infinite;animation-direction:reverse}
+/* arrowhead at the start of the line: time runs towards the current job (left on desktop, up on mobile) */
+.tl-arrow{grid-column:1;grid-row:2;align-self:center;justify-self:start;width:12px;height:12px;box-sizing:border-box;border:solid var(--line-strong);border-width:0 0 2px 2px;transform:translateX(1px) rotate(45deg)}
 @keyframes busflow{from{left:-180px}to{left:100%}}
 @keyframes busflowY{from{top:-180px}to{top:100%}}
 .tl-item{grid-column:var(--c)/span 4;position:relative;display:flex}
@@ -674,12 +676,15 @@ button{font:inherit;color:inherit}
   .cert-stage{height:min(62vh,440px)}
   .m-body{grid-template-columns:1fr}
   .m-media{border-right:0;border-bottom:1px solid var(--line)}
+  /* project details take the whole screen: more room for the shots and texts */
+  .pm .m-panel{inset:0;width:auto;max-height:none;transform:none;border:0;border-radius:0;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px);box-sizing:border-box}
   .ghost-num{display:none}
   .kn{grid-template-columns:1fr}
   /* timeline turns vertical: the line in the middle, jobs alternate left / right and overlap by half a card */
   .tl{--stem:16px;--ny:24px;grid-template-columns:1fr 1fr;grid-template-rows:none;column-gap:calc(var(--stem) * 2);row-gap:12px}
   .tl-line{position:absolute;grid-area:auto;align-self:stretch;left:calc(50% - 1px);top:0;bottom:0;width:2px;height:auto}
   .tl-line::after{left:0;top:-180px;width:2px;height:180px;background:linear-gradient(180deg,transparent,var(--verd),transparent);animation-name:busflowY}
+  .tl-arrow{position:absolute;grid-area:auto;left:50%;top:0;transform:translate(-50%,1px) rotate(135deg)}
   .tl-item.up,.tl-item.down{grid-row:var(--r)/span 2;align-self:start}
   .tl-item.up{grid-column:1}.tl-item.down{grid-column:2}
   .tl-item::before,.tl-item.up::before,.tl-item.down::before{top:var(--ny);bottom:auto;width:var(--stem);height:1px}
@@ -725,6 +730,7 @@ button{font:inherit;color:inherit}
 @media (max-width:419.98px){
   .tl{--yw:52px;grid-template-columns:minmax(0,1fr);padding-left:calc(var(--yw) + var(--stem))}
   .tl-line{left:calc(var(--yw) - 1px)}
+  .tl-arrow{left:var(--yw)}
   .tl-item.up,.tl-item.down{grid-column:1;grid-row:auto}
   .tl-item.up::before,.tl-item.down::before{left:auto;right:100%}
   .tl-item.up .tl-node,.tl-item.down .tl-node{left:auto;right:calc(100% + var(--stem) - 11px)}
@@ -1579,17 +1585,17 @@ const CERTS = [
   info:    { get: () => t('cert.' + c.key + '.i') },
   dateStr: { get: () => fmtDate(c.date) },
 }));
-// Места работы по порядку (слева направо по линии). name/parent — без перевода, описание — i18n-ключ job.<key>,
+// Места работы от текущей к первой (слева направо по линии, на мобильном сверху вниз). name/parent — без перевода, описание — i18n-ключ job.<key>,
 // logo — файл в img/logos/, icon — вместо логотипа своя иконка (inline SVG в цветах темы), без обоих — пустая плашка.
 // from — год начала (без него — заглушка job.yyyy), now — текущая работа (пульсирующий узел).
 // Должность — i18n-ключ job.<key>.r. tags — технологии без перевода; '#x' — переводимая плашка job.t.x.
 const JOBS = [
-  { key:'tsys',  name:'T-Systems', parent:'Deutsche Telekom', logo:'img/logos/t-systems.svg', from:'2014', tags:['Java','BPMN','#expert'] },
-  { key:'datev', name:'DATEV', logo:'img/logos/datev.svg', from:'2020', tags:['Java','EJB','PostgreSQL'] },
-  { key:'vw',    name:'Volkswagen', logo:'img/logos/volkswagen.svg', from:'2021', tags:['Java','Angular','GDPR'] },
-  { key:'lean',  name:'LeanCodes', logo:'img/logos/leancodes.png', from:'2022', tags:['Go','Angular','#micro'] },
-  { key:'aix',   name:'AixPano', logo:'img/logos/aixpano.svg', from:'2023', tags:['Java','Vaadin','BPMN'] },
   { key:'free',  free:true, now:true, icon:'free', from:'2026', tags:['n8n','Next.js','LLM'] },
+  { key:'aix',   name:'AixPano', logo:'img/logos/aixpano.svg', from:'2023', tags:['Java','Vaadin','BPMN'] },
+  { key:'lean',  name:'LeanCodes', logo:'img/logos/leancodes.png', from:'2022', tags:['Go','Angular','#micro'] },
+  { key:'vw',    name:'Volkswagen', logo:'img/logos/volkswagen.svg', from:'2021', tags:['Java','Angular','GDPR'] },
+  { key:'datev', name:'DATEV', logo:'img/logos/datev.svg', from:'2020', tags:['Java','EJB','PostgreSQL'] },
+  { key:'tsys',  name:'T-Systems', parent:'Deutsche Telekom', logo:'img/logos/t-systems.svg', from:'2014', tags:['Java','BPMN','#expert'] },
 ];
 // freelance: a laptop with code on the screen and an AI spark
 const JOB_ICONS = {
@@ -1597,7 +1603,7 @@ const JOB_ICONS = {
 };
 const yr = y => y ? esc(y) : '<span data-i18n="job.yyyy"></span>';
 // timeline markup (texts are filled by applyLang); --c: grid column on desktop, --r: grid row on mobile
-$('#tl').innerHTML = '<div class="tl-line" data-a="clip" style="--d:1"></div>' + JOBS.map((j, i) => `
+$('#tl').innerHTML = '<div class="tl-line" data-a="clip" style="--d:1"></div><span class="tl-arrow" data-a="fade" style="--d:3" aria-hidden="true"></span>' + JOBS.map((j, i) => `
   <div class="tl-item ${i % 2 ? 'down' : 'up'}${j.now ? ' now' : ''}" data-a="${i % 2 ? 'fade' : 'up'}" style="--d:${i + 2};--c:${2 * i + 1};--r:${i + 1}">
     <span class="tl-node"><i></i></span><span class="tl-year">${yr(j.from)}</span>
     <article class="job">
@@ -2955,7 +2961,9 @@ function openModal(m, srcEl) {
   panel.style.clipPath = srcEl ? clipFrom(panel, srcEl) : 'inset(50% 50% 50% 50% round 12px)';
   panel.offsetWidth;
   panel.style.transition = '';
-  requestAnimationFrame(() => { m.classList.add('open'); panel.style.clipPath = 'inset(0px 0px 0px 0px round 14px)'; });
+  // the radius comes from CSS: the full-screen project panel on mobile has square corners
+  const r = getComputedStyle(panel).borderTopLeftRadius;
+  requestAnimationFrame(() => { m.classList.add('open'); panel.style.clipPath = `inset(0px 0px 0px 0px round ${r})`; });
   boost(2);
   setTimeout(() => $('[data-close].x', m)?.focus({ preventScroll: true }), 400);
 }
