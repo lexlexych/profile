@@ -159,7 +159,8 @@ button{font:inherit;color:inherit}
 /* the scroll area ends above the bottom bar (pager + legal links), so content is cut off before it reaches them */
 .slide-scroll{position:absolute;inset:0 0 var(--bar-h,calc(env(safe-area-inset-bottom,0px) + 70px));overflow-x:hidden;overflow-y:auto;scrollbar-width:none;
   padding:calc(env(safe-area-inset-top,0px) + var(--nav-h) + 14px) clamp(20px,6vw,110px) 14px;
-  display:flex;flex-direction:column;justify-content:center}
+  display:flex;flex-direction:column;justify-content:center;justify-content:safe center}
+/* safe center: content taller than the screen starts below the nav and scrolls, instead of overflowing upwards under it */
 .slide-scroll::-webkit-scrollbar{display:none}
 /* content slides: title at the same height on every slide instead of centering */
 #experience .slide-scroll,#skills .slide-scroll,#certs .slide-scroll,#projects .slide-scroll{justify-content:flex-start;padding-top:calc(env(safe-area-inset-top,0px) + var(--nav-h) + var(--top-gap,clamp(12px,2.8vh,34px)))}
@@ -256,10 +257,12 @@ button{font:inherit;color:inherit}
 .typer{margin:18px 0 0;font-family:var(--f-mono);font-size:clamp(14px,1.3vw,17px);color:var(--verd);min-height:1.6em}
 .typer .caret{display:inline-block;width:9px;height:1.1em;vertical-align:-3px;background:var(--verd);margin-left:3px;animation:blink 1s steps(1) infinite}
 .lead{color:var(--muted);font-size:clamp(14.5px,1.15vw,16.5px);max-width:52ch;margin:14px 0 0}
-.chips{position:relative;z-index:5;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:center;gap:14px;margin:30px 0 26px}
+/* flex, not a grid: a card is never narrower than its longest title word (min-width:auto = min-content),
+   so an opening card widens and pushes the others aside, or they wrap to the next row */
+.chips{position:relative;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin:30px 0 26px}
 /* service cards open in place: the card grows up and down (the column is centered), the title glides up next to the icon,
    "details" folds away and the description unfolds below; neighbours and the blocks around move aside */
-.chip{--mt:.65s var(--ease-out);position:relative;display:flex;flex-direction:column;padding:16px 14px 14px;border:1px solid var(--line-strong);background:var(--surface);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:6px;cursor:pointer;transition:border-color .3s,box-shadow .5s,background .3s;outline-offset:4px}
+.chip{--mt:.65s var(--ease-out);flex:1 1 0;position:relative;display:flex;flex-direction:column;padding:16px 14px 14px;border:1px solid var(--line-strong);background:var(--surface);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:6px;cursor:pointer;transition:border-color .3s,box-shadow .5s,background .3s;outline-offset:4px}
 .chip::before,.chip::after{content:"";position:absolute;left:16px;right:16px;height:6px;background:repeating-linear-gradient(90deg,var(--line-strong) 0 4px,transparent 4px 10px);transition:background .3s,left var(--mt),right var(--mt)}
 .chip::before{top:-7px}.chip::after{bottom:-7px}
 .chip-ic{flex:none;width:36px;height:36px;display:grid;place-items:center;border:1px solid var(--line-strong);border-radius:4px;color:var(--brass);position:relative;transition:color .3s,border-color .3s,background .3s,transform var(--mt)}
@@ -271,15 +274,14 @@ button{font:inherit;color:inherit}
 .chip-drawer{grid-template-rows:0fr;opacity:0}
 .chip-drawer p{min-height:0;overflow:hidden;margin:0;font-size:13px;line-height:1.5;color:var(--muted);transform:translateY(12px);transition:transform var(--mt)}
 .chip-drawer p::before{content:"";display:block;height:1px;margin:12px 0 10px;background:linear-gradient(90deg,var(--verd),transparent);transform:scaleX(0);transform-origin:left;transition:transform .8s var(--ease-out) .12s}
-.chip:hover,.chip.open,.chip:focus-visible{border-color:var(--verd);background:var(--surface-solid);box-shadow:0 18px 40px -20px var(--verd);z-index:6}
-.chip:hover::before,.chip:hover::after,.chip.open::before,.chip.open::after,.chip:focus-visible::before,.chip:focus-visible::after{left:8px;right:8px;background:repeating-linear-gradient(90deg,var(--verd) 0 4px,transparent 4px 10px)}
-.chip:hover .chip-ic,.chip.open .chip-ic,.chip:focus-visible .chip-ic{color:var(--verd);border-color:var(--verd);background:var(--verd-soft);transform:rotate(-90deg) scale(.94)}
-.chip:hover .chip-ic svg,.chip.open .chip-ic svg,.chip:focus-visible .chip-ic svg{transform:rotate(90deg)}
-.chip:hover h4,.chip.open h4,.chip:focus-visible h4{margin:-36px 0 0 48px;min-height:36px}
-.chip:hover .more,.chip.open .more,.chip:focus-visible .more{grid-template-rows:0fr;opacity:0}
-.chip:hover .chip-drawer,.chip.open .chip-drawer,.chip:focus-visible .chip-drawer{grid-template-rows:1fr;opacity:1}
-.chip:hover .chip-drawer p,.chip.open .chip-drawer p,.chip:focus-visible .chip-drawer p,
-.chip:hover .chip-drawer p::before,.chip.open .chip-drawer p::before,.chip:focus-visible .chip-drawer p::before{transform:none}
+.chip.open{border-color:var(--verd);background:var(--surface-solid);box-shadow:0 18px 40px -20px var(--verd);z-index:6}
+.chip.open::before,.chip.open::after{left:8px;right:8px;background:repeating-linear-gradient(90deg,var(--verd) 0 4px,transparent 4px 10px)}
+.chip.open .chip-ic{color:var(--verd);border-color:var(--verd);background:var(--verd-soft);transform:rotate(-90deg) scale(.94)}
+.chip.open .chip-ic svg{transform:rotate(90deg)}
+.chip.open h4{margin:-36px 0 0 48px;min-height:36px}
+.chip.open .more{grid-template-rows:0fr;opacity:0}
+.chip.open .chip-drawer{grid-template-rows:1fr;opacity:1}
+.chip.open .chip-drawer p,.chip.open .chip-drawer p::before{transform:none}
 .hero-foot{display:flex;flex-wrap:wrap;align-items:center;gap:18px 36px}
 .hero-btns{display:flex;flex-wrap:wrap;gap:12px}
 /* stats: a row under the portrait, big numbers with a brass "+" */
@@ -458,6 +460,12 @@ button{font:inherit;color:inherit}
 .screw.s1{top:8px;left:8px}.screw.s2{top:8px;right:8px}.screw.s3{bottom:8px;left:8px}.screw.s4{bottom:8px;right:8px}
 .cert:hover .screw{transform:rotate(180deg)}
 .cert-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:#fff}
+.ci-check[hidden]{display:none}
+/* minor certificates: a narrow third column, lighter frame */
+.cert-col.m{gap:12px}
+.cert.minor .br{width:10px;height:10px;border-width:1.5px;opacity:.6}
+.cert.minor .br.tl{top:-6px;left:-6px}.cert.minor .br.tr{top:-6px;right:-6px}.cert.minor .br.bl{bottom:-6px;left:-6px}.cert.minor .br.brr{bottom:-6px;right:-6px}
+.cert.minor .screw{display:none}
 .glare{position:absolute;inset:0;background:radial-gradient(circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.22),transparent 45%);opacity:0;transition:opacity .3s;pointer-events:none}
 .cert:hover .glare{opacity:1}
 
@@ -699,13 +707,22 @@ button{font:inherit;color:inherit}
   .nav-inner{gap:10px}
   .hud-r{display:none}
   .slide-scroll{justify-content:flex-start;--top-gap:14px}
+  /* legal links only on the last slide (contact); the pager has the bottom bar to itself elsewhere */
+  .bar:not(.last) .legal{display:none}
   .hero,.contact,.certs{grid-template-columns:1fr}
   .portrait{--s:min(84vw,380px)}
   /* callouts move into the empty corners of the square, clear of the photo and the play button */
   .callout{font-size:11.5px;padding:6px 11px}
   .callout.c1{top:-1%;right:-4%}.callout.c2{bottom:-4%;left:-4%}
-  .chips{grid-template-columns:1fr;gap:18px}
+  .chips{gap:18px}
+  .chip{flex-basis:100%}
   .cert-stage{height:min(62vh,440px)}
+  /* minor certificates: a horizontal strip under the gallery, scrolls sideways when it does not fit */
+  .cert-gal{width:100%;flex-wrap:wrap;justify-content:center;row-gap:18px}
+  .cert-col.m{flex-direction:row;flex-basis:100%;min-width:0;overflow-x:auto;padding:13px 10px;scrollbar-width:none}
+  .cert-col.m::-webkit-scrollbar{display:none}
+  .cert-col.m .cert{flex:none}
+  .cert-col.m .cert:first-child{margin-left:auto}.cert-col.m .cert:last-child{margin-right:auto}
   .m-body{grid-template-columns:1fr}
   .m-media{border-right:0;border-bottom:1px solid var(--line)}
   /* project details take the whole screen: more room for the shots and texts */
@@ -876,7 +893,7 @@ button{font:inherit;color:inherit}
   <button class="pg pg-prev" id="pgPrev" type="button"><span class="pg-arr" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></span><span class="pg-n"></span></button>
   <button class="pg pg-next" id="pgNext" type="button"><span class="pg-arr" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><span class="pg-n"></span></button>
 </nav>
-<!-- legal links pinned bottom right: Impressum must be reachable from every slide (§ 5 DDG) -->
+<!-- legal links pinned bottom right: Impressum must be reachable from every slide (§ 5 DDG); ≤860px only on the last slide -->
 <div class="legal"><button type="button" data-legal="imprint" data-i18n="lg.imprint"></button><button type="button" data-legal="privacy" data-i18n="lg.privacy"></button></div>
 </div>
 
@@ -1248,6 +1265,11 @@ const I18N = {
     'cert.beam':'Специалист по AI-автоматизации бизнеса','cert.beam.i':'Переподготовка 600 ак. часов (27.04–21.08.2026): 15 модулей — AI-агенты и мультиагентные системы, RAG, промпт-инжиниринг, анализ бизнес-процессов, GDPR и EU AI Act. Все модули — «отлично».',
     'cert.n8n':'n8n Professional Certificate','cert.n8n.i':'Пройдены все курсы программы n8n Academy по автоматизации рабочих процессов в n8n.',
     'cert.oracle':'Oracle Certified Professional: Java SE 11 Developer','cert.oracle.i':'Профессиональная сертификация Oracle по разработке на Java SE 11.',
+    'cert.n8n103':'n8n: In Practice — AI, Testing & Best Practices','cert.n8n103.i':'Курс n8n Academy N8N103: AI, тестирование и лучшие практики в рабочих процессах n8n. Итоговый тест сдан.',
+    'cert.n8n102':'n8n: Integrations — APIs & Connected Workflows','cert.n8n102.i':'Курс n8n Academy N8N102: интеграции через API и связанные рабочие процессы в n8n. Итоговый тест сдан.',
+    'cert.udAng':'Angular 9. Теория и практика','cert.udAng.i':'Онлайн-курс на Udemy, 17,5 часа. Преподаватель — Владилен Минин.',
+    'cert.udSpring':'Профессиональные RESTful API на Java и Spring Boot 2','cert.udSpring.i':'Онлайн-курс на Udemy, 3 часа. Преподаватель — Christian Oette.',
+    'cert.oca':'Oracle Certified Associate, Java SE 7 Programmer','cert.oca.i':'Базовая сертификация Oracle по программированию на Java SE 7.',
     'proj.title':'Название проекта','proj.desc':'Короткое описание проекта в одну-две строки: суть задачи и результат.',
     'cat.web':'Веб','cat.ai':'AI-автоматизация','cat.soft':'ПО','media.video':'Видео','media.image':'Изображение','proj.n':'Проект','proj.frame':'Кадр','zm.title':'Просмотр кадра','zm.in':'Увеличить','zm.out':'Уменьшить','zm.close':'Закрыть',
     'pm.lead':'Расширенное описание проекта: для кого он сделан, что умеет и почему это было интересно. Здесь 2–3 предложения.',
@@ -1366,6 +1388,11 @@ const I18N = {
     'cert.beam':'AI Business Automation Specialist','cert.beam.i':'600-hour further education program (27.04–21.08.2026): 15 modules — AI agents and multi-agent systems, RAG, prompt engineering, business process analysis, GDPR and the EU AI Act. All modules graded “very good”.',
     'cert.n8n':'n8n Professional Certificate','cert.n8n.i':'Completed all courses of the n8n Academy program on workflow automation with n8n.',
     'cert.oracle':'Oracle Certified Professional: Java SE 11 Developer','cert.oracle.i':'Oracle professional certification in Java SE 11 development.',
+    'cert.n8n103':'n8n: In Practice — AI, Testing & Best Practices','cert.n8n103.i':'n8n Academy course N8N103: AI, testing and best practices in n8n workflows. Final test passed.',
+    'cert.n8n102':'n8n: Integrations — APIs & Connected Workflows','cert.n8n102.i':'n8n Academy course N8N102: API integrations and connected workflows in n8n. Final test passed.',
+    'cert.udAng':'Angular 9: Theory and Practice','cert.udAng.i':'Udemy online course, 17.5 hours. Instructor: Vladilen Minin.',
+    'cert.udSpring':'Professional RESTful APIs with Java and Spring Boot 2','cert.udSpring.i':'Udemy online course, 3 hours. Instructor: Christian Oette.',
+    'cert.oca':'Oracle Certified Associate, Java SE 7 Programmer','cert.oca.i':'Oracle associate-level certification in Java SE 7 programming.',
     'proj.title':'Project title','proj.desc':'A one- or two-line project summary: the task and the result.',
     'cat.web':'Web','cat.ai':'AI automation','cat.soft':'Software','media.video':'Video','media.image':'Image','proj.n':'Project','proj.frame':'Frame','zm.title':'Frame viewer','zm.in':'Zoom in','zm.out':'Zoom out','zm.close':'Close',
     'pm.lead':'Extended project description: who it was built for, what it does and why it was interesting. Two or three sentences here.',
@@ -1484,6 +1511,11 @@ const I18N = {
     'cert.beam':'KI-Business-Automatisierungs-Spezialist','cert.beam.i':'Weiterbildung mit 600 UE (27.04.–21.08.2026): 15 Module — KI-Agenten und Multi-Agenten-Systeme, RAG, Prompt Engineering, Geschäftsprozessanalyse, DSGVO und EU AI Act. Alle Module „sehr gut“.',
     'cert.n8n':'n8n Professional Certificate','cert.n8n.i':'Alle Kurse des n8n-Academy-Programms zur Workflow-Automatisierung mit n8n abgeschlossen.',
     'cert.oracle':'Oracle Certified Professional: Java SE 11 Developer','cert.oracle.i':'Oracle-Profizertifizierung für die Entwicklung mit Java SE 11.',
+    'cert.n8n103':'n8n: In Practice — AI, Testing & Best Practices','cert.n8n103.i':'n8n-Academy-Kurs N8N103: KI, Testing und Best Practices in n8n-Workflows. Abschlusstest bestanden.',
+    'cert.n8n102':'n8n: Integrations — APIs & Connected Workflows','cert.n8n102.i':'n8n-Academy-Kurs N8N102: API-Integrationen und verbundene Workflows in n8n. Abschlusstest bestanden.',
+    'cert.udAng':'Angular 9: Theorie und Praxis','cert.udAng.i':'Udemy-Onlinekurs, 17,5 Stunden. Dozent: Wladilen Minin.',
+    'cert.udSpring':'Professionelle Restful APIs mit Java und Spring Boot 2','cert.udSpring.i':'Udemy-Onlinekurs, 3 Stunden. Dozent: Christian Oette.',
+    'cert.oca':'Oracle Certified Associate, Java SE 7 Programmer','cert.oca.i':'Oracle-Associate-Zertifizierung für die Programmierung mit Java SE 7.',
     'proj.title':'Projekttitel','proj.desc':'Kurze Projektbeschreibung in ein, zwei Zeilen: Aufgabe und Ergebnis.',
     'cat.web':'Web','cat.ai':'KI-Automatisierung','cat.soft':'Software','media.video':'Video','media.image':'Bild','proj.n':'Projekt','proj.frame':'Bild','zm.title':'Bildansicht','zm.in':'Vergrößern','zm.out':'Verkleinern','zm.close':'Schließen',
     'pm.lead':'Ausführliche Projektbeschreibung: für wen es gebaut wurde, was es kann und warum es spannend war. Zwei, drei Sätze.',
@@ -1615,6 +1647,17 @@ const CERTS = [
     verify:'https://credentials.learn.n8n.io/credentials/c4dac917cdda4d3ba02a5eb0e42f55c6/' },
   { id:'C-03', key:'oracle', org:'Oracle University', date:'2020-06-09', no:'242653379OCPJSE11',
     img:'img/certs/oracle-java-se11.jpg', w:1650, h:1275 },
+  // minor: small cards, desktop — a third column stacked top to bottom, ≤860px — a horizontal strip under the gallery
+  { id:'C-04', key:'n8n103', minor:true, org:'n8n Academy', date:'2026-09-24', no:'89242af809f2427d9840bfab84025a2b',
+    img:'img/certs/n8n-103-in-practice.jpg', w:1546, h:1093, verify:'https://learn.n8n.io/certificates/89242af809f2427d9840bfab84025a2b' },
+  { id:'C-05', key:'n8n102', minor:true, org:'n8n Academy', date:'2026-09-23', no:'5c022912ac9f4f75aa2a1817def26a16',
+    img:'img/certs/n8n-102-integrations.jpg', w:1546, h:1093, verify:'https://learn.n8n.io/certificates/5c022912ac9f4f75aa2a1817def26a16' },
+  { id:'C-06', key:'udAng', minor:true, org:'Udemy', date:'2020-11-01', no:'UC-5d3769de-6920-40fa-854d-b3e245ccebde',
+    img:'img/certs/udemy-angular-9.jpg', w:1600, h:1190, verify:'https://ude.my/UC-5d3769de-6920-40fa-854d-b3e245ccebde' },
+  { id:'C-07', key:'udSpring', minor:true, org:'Udemy', date:'2020-03-15', no:'UC-0699a783-a43e-4931-b174-7b8cfd449550',
+    img:'img/certs/udemy-spring-boot-apis.jpg', w:1600, h:1190, verify:'https://ude.my/UC-0699a783-a43e-4931-b174-7b8cfd449550' },
+  { id:'C-08', key:'oca', minor:true, org:'Oracle University', date:'2015-11-24', no:'242653379OCAJSE7',
+    img:'img/certs/oracle-oca-java-se7.jpg', w:1650, h:1275 },
 ].map(c => Object.defineProperties(Object.assign(c, { ratio: c.w / c.h, orient: c.h > c.w ? 'portrait' : 'landscape' }), {
   title:   { get: () => t('cert.' + c.key) },
   info:    { get: () => t('cert.' + c.key + '.i') },
@@ -2084,6 +2127,8 @@ function setActiveUI(i) {
   history.replaceState(null, '', '#' + slides[i].id);
   if (slides[i].id === 'projects') playAnims();
   if (slides[i].id !== 'about') heroVideoStop();
+  bar.classList.toggle('last', i === slides.length - 1); // mobile shows the legal links on the last slide only
+  setBarH();
 }
 
 function randomBits(lines = 60, len = 90) {
@@ -2245,8 +2290,18 @@ function magnetic(el) {
   el.addEventListener('pointerleave', () => el.style.transform = '');
 }
 $$('.magnetic').forEach(magnetic);
-// chips toggle on tap
-$$('.chip').forEach(c => c.addEventListener('click', () => { const o = c.classList.contains('open'); $$('.chip').forEach(x => x.classList.remove('open')); if (!o) c.classList.add('open'); }));
+// service chips: only one is open at a time. Mouse: opens on hover, all close when the pointer leaves the row
+// (not the card: an opening card may widen or wrap, and must not flicker under the cursor). Touch: tap toggles. Keyboard: focus opens
+const chips = $$('.chip'), chipOpen = c => chips.forEach(x => x.classList.toggle('open', x === c));
+let chipPtr = '';
+chips.forEach(c => {
+  c.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') chipOpen(c); });
+  c.addEventListener('pointerdown', e => { chipPtr = e.pointerType; });
+  c.addEventListener('click', () => { if (chipPtr !== 'mouse') chipOpen(c.classList.contains('open') ? null : c); chipPtr = ''; });
+  c.addEventListener('focus', () => { if (c.matches(':focus-visible')) chipOpen(c); });
+  c.addEventListener('blur', () => { if (!c.matches(':hover')) c.classList.remove('open'); });
+});
+$('.chips').addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') chipOpen(null); });
 
 /* ================= KNOWLEDGE GRAPH ================= */
 const hex2rgb = h => { h = h.trim().replace('#', ''); if (h.length === 3) h = h.replace(/./g, '$&$&'); const n = parseInt(h, 16) || 0; return `${n >> 16 & 255},${n >> 8 & 255},${n & 255}`; };
@@ -2744,18 +2799,20 @@ function certImg(c) {
   return `<img class="cert-img" src="${c.img}" width="${c.w}" height="${c.h}" alt="" decoding="async">`;
 }
 function buildCerts() {
-  const P = CERTS.filter(c => c.orient === 'portrait'), L = CERTS.filter(c => c.orient !== 'portrait');
+  const main = CERTS.filter(c => !c.minor), M = CERTS.filter(c => c.minor);
+  const P = main.filter(c => c.orient === 'portrait'), L = main.filter(c => c.orient !== 'portrait');
   const lCols = []; for (let k = 0; k < L.length; k += 2) lCols.push(L.slice(k, k + 2));
   certCols = P.map(c => ({ type: 'p', items: [c] }));
   const mid = Math.ceil(certCols.length / 2);
   certCols.splice(certCols.length > 1 ? mid : certCols.length, 0, ...lCols.map(items => ({ type: 'l', items })));
+  if (M.length) certCols.push({ type: 'm', items: M });
   certGal.innerHTML = '';
   certCols.forEach(col => {
-    const ce = document.createElement('div'); ce.className = 'cert-col';
+    const ce = document.createElement('div'); ce.className = 'cert-col' + (col.type === 'm' ? ' m' : '');
     col.items.forEach(c => {
       const idx = CERTS.indexOf(c);
       const el = document.createElement('div');
-      el.className = 'cert'; el.tabIndex = 0; el.dataset.idx = idx;
+      el.className = 'cert' + (c.minor ? ' minor' : ''); el.tabIndex = 0; el.dataset.idx = idx;
       el.setAttribute('role', 'button'); el.setAttribute('aria-label', t('cert.open') + ': ' + c.title);
       el.innerHTML = `<div class="cert-in">${certImg(c)}<div class="glare"></div></div><span class="br tl"></span><span class="br tr"></span><span class="br bl"></span><span class="br brr"></span><span class="screw s1"></span><span class="screw s2"></span><span class="screw s3"></span><span class="screw s4"></span>`;
       tilt(el, $('.cert-in', el), 12, $('.glare', el));
@@ -2774,23 +2831,34 @@ function buildCerts() {
   selectCert(0, true);
 }
 function layoutCerts() {
-  const gap = 18;
+  const gap = 18, mgap = 12, mobile = matchMedia('(max-width:860px)').matches;
   certStage.style.height = '';
   const W = certStage.clientWidth, Hmax = certStage.clientHeight;
   if (!W || !Hmax) return;
-  // total width is linear in H: portrait column = ratio·H, landscape column (2 stacked) = maxRatio·(H − gap)/2
-  let a = 0, b = gap * (certCols.length - 1) + 24;
-  certCols.forEach(col => {
+  // ≤860px the minor column turns into a horizontal strip under the gallery and takes no width from it
+  const cols = mobile ? certCols.filter(col => col.type !== 'm') : certCols;
+  const invSum = col => col.items.reduce((s, c) => s + 1 / c.ratio, 0);
+  // total width is linear in H: portrait column = ratio·H, landscape column (2 stacked) = maxRatio·(H − gap)/2,
+  // minor column (n stacked, one shared width) = (H − (n−1)·mgap) / Σ(1/ratio)
+  let a = 0, b = gap * (cols.length - 1) + 24;
+  cols.forEach(col => {
+    if (col.type === 'm') { const S = invSum(col); a += 1 / S; b -= (col.items.length - 1) * mgap / S; return; }
     const r = Math.max(...col.items.map(c => c.ratio));
     if (col.type === 'p') a += r; else { a += r / 2; b -= r * gap / 2; }
   });
   const H = Math.max(160, Math.min(Hmax - 20, (W - b) / a));
-  certCols.forEach(col => col.items.forEach(c => {
-    const h = col.type === 'p' ? H : (H - gap) / 2;
-    c._el.style.width = (h * c.ratio).toFixed(1) + 'px'; c._el.style.height = h.toFixed(1) + 'px';
-  }));
-  // single column (≤860px): the gallery is width-bound, shrink the stage to it so the details panel follows right below
-  if (matchMedia('(max-width:860px)').matches) certStage.style.height = Math.ceil(H + 20) + 'px';
+  const mh = Math.round(Math.min(110, Math.max(76, W / 4.2))); // strip height on mobile
+  certCols.forEach(col => {
+    const mw = col.type === 'm' && !mobile ? (H - (col.items.length - 1) * mgap) / invSum(col) : 0;
+    col.items.forEach(c => {
+      let w, h;
+      if (col.type === 'm') { if (mobile) { h = mh; w = h * c.ratio; } else { w = mw; h = w / c.ratio; } }
+      else { h = col.type === 'p' ? H : (H - gap) / 2; w = h * c.ratio; }
+      c._el.style.width = w.toFixed(1) + 'px'; c._el.style.height = h.toFixed(1) + 'px';
+    });
+  });
+  // single column (≤860px): the gallery is width-bound, shrink the stage to it (plus the strip) so the details panel follows right below
+  if (mobile) certStage.style.height = Math.ceil(H + 20 + (certCols.some(col => col.type === 'm') ? mh + 26 + gap : 0)) + 'px';
 }
 function selectCert(i, silent) {
   activeCert = i;
@@ -2800,8 +2868,9 @@ function selectCert(i, silent) {
   $('#ciOrg').textContent = c.org; $('#ciDate').textContent = c.dateStr;
   $('#ciInfo').textContent = c.info;
   const v = $('#ciVerify'); v.hidden = !c.verify; if (c.verify) v.href = c.verify; else v.removeAttribute('href');
-  if (silent) { $('#ciTitle').textContent = c.title; $('#ciHash').textContent = c.no; }
-  else { scrambleText($('#ciTitle'), c.title, 500); scrambleText($('#ciHash'), c.no, 700); }
+  $('#ciHash').parentNode.hidden = !c.no;
+  if (silent) { $('#ciTitle').textContent = c.title; $('#ciHash').textContent = c.no || ''; }
+  else { scrambleText($('#ciTitle'), c.title, 500); if (c.no) scrambleText($('#ciHash'), c.no, 700); }
 }
 
 /* ================= PROJECTS CAROUSEL ================= */
