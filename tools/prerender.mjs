@@ -13,7 +13,7 @@ const LANGS = ['de', 'en', 'ru'];
 const PATH = { de: '/', en: '/en/', ru: '/ru/' };
 const LOCALE = { de: 'de_DE', en: 'en_US', ru: 'ru_RU' };
 const NAME = 'Aleksei Chasovskoi', NAME_RU = 'Алексей Часовской';
-const SAME_AS = ['https://www.linkedin.com/in/aleksei-chasovskoi/', 'https://t.me/a1exeych'];
+const SAME_AS = ['https://www.linkedin.com/in/aleksei-chasovskoi/', 'https://www.freelancermap.de/profil/aleksei-chasovskoi', 'https://t.me/a1exeych'];
 const ADDRESS = { '@type': 'PostalAddress', addressLocality: 'Roth', postalCode: '91154', addressRegion: 'Bayern', addressCountry: 'DE' };
 const CHECK = process.argv.includes('--check');
 
