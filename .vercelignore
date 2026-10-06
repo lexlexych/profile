@@ -1,0 +1,10 @@
+# не публикуется на сайте
+Lebenslauf_Aleksei_Chasovskoi.pdf
+AGENTS.md
+.claude/
+tools/
+# оригиналы, заменённые на WebP (сайт их не использует)
+img/photo.jpg
+img/certs/*.jpg
+img/projects/*.png
+img/projects/*.gif

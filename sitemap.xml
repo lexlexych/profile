@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://profidev.de/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://profidev.de/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://profidev.de/en/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://profidev.de/ru/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://profidev.de/"/>
+  </url>
+  <url>
+    <loc>https://profidev.de/en/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://profidev.de/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://profidev.de/en/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://profidev.de/ru/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://profidev.de/"/>
+  </url>
+  <url>
+    <loc>https://profidev.de/ru/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://profidev.de/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://profidev.de/en/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://profidev.de/ru/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://profidev.de/"/>
+  </url>
+  <url><loc>https://profidev.de/impressum/</loc></url>
+  <url><loc>https://profidev.de/datenschutz/</loc></url>
+</urlset>

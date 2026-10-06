@@ -1,0 +1,78 @@
+# Aleksei Chasovskoi – profidev.de
+
+> Softwareentwickler aus Nürnberg: KI-Agenten, n8n-Automatisierung, Sprachassistenten und Web-Apps für KMU. 12+ Jahre Erfahrung – jetzt Projekt anfragen.
+
+Zuverlässige Entwicklung. Intelligente Automatisierung. Liebe zum Detail. Alles, damit Ihr Unternehmen präzise und reibungslos läuft.
+
+Softwareentwickler für KI-Automatisierung, Nürnberg. Offen für Projekte, arbeite remote. Sprachen: Deutsch, Englisch, Russisch.
+
+## Leistungen
+- **Web-Entwicklung**: Websites und Portale, Mobile- und Desktop-Apps, PWAs — eine App für Browser, Smartphone und Computer. Backend, APIs und Integrationen aus einer Hand.
+- **Automatisierung & KI-Agenten**: Agenten übernehmen die Routine: Sie sortieren Kunden-E-Mails, entwerfen Antworten und übergeben Aufgaben und Daten zwischen Abteilungen, CRM und ERP.
+- **Sprachassistenten**: Sie beantworten Kundenanfragen per Stimme am Telefon oder auf der Website, nehmen Bestellungen und Reservierungen an, rufen Tools auf und schreiben das Ergebnis in die Datenbank.
+
+## Berufserfahrung
+- **Freelance**, ab 2026: Software, Web & KI-Automatisierung. KI-Agenten, Prozessautomatisierung, SaaS und Web-Apps für kleine und mittlere Unternehmen. Technologien: n8n, Next.js, LLM.
+- **AixPano**, ab 2023: Senior-Entwickler. ERP und Automatisierung für Verpackungshersteller. Technologien: Java, Vaadin, BPMN.
+- **LeanCodes**, ab 2022: Senior Fullstack-Entwickler. ERP für das Baustellenmanagement. Technologien: Go, Angular, Microservices.
+- **Volkswagen**, ab 2021: Teamleiter. Privacy-Portal: DSGVO-Anfragen von Kunden. Technologien: Java, Angular, GDPR.
+- **DATEV**, ab 2020: Senior Java-Entwickler. Datenbanken und Systemmigration. Technologien: Java, EJB, PostgreSQL.
+- **T-Systems** (Deutsche Telekom), ab 2014: Entwickler: von Junior bis Senior. E2E-Diagnose von Kundenproblemen bei der Deutschen Telekom: Internet, Telefonie, TV. Technologien: Java, BPMN, Expertensysteme.
+
+## Projekte
+- **drafta**: SaaS für kleine und mittlere Unternehmen: KI entwirft Antworten an Kunden in allen Messengern und sozialen Netzwerken, Sie klicken nur auf Senden. Stack: Next.js, Supabase, Mistral, OpenAI.
+- **Mira**: KI-Assistent für die Reisesuche: Sie schreiben im Chat, wohin und mit welchem Budget Sie reisen möchten, und Agenten finden passende Flüge und Hotels. Stack: n8n, Next.js, Supabase, HubSpot, Telegram, OpenAI, Mistral.
+- **Spirit FairPlate Shop**: Portal für die Spirit GmbH: Kunden laden ein Verpackungsmotiv hoch und erhalten mit wenigen Klicks die Flächen je Farbe und den Klischeepreis. Stack: Next.js, TypeScript, PostgreSQL, Self-hosted.
+- **Benefita** (https://benefita.de/): Kooperatives Treueprogramm für lokale Betriebe: In einem Betrieb gesammelte Punkte werden bei anderen gegen Rabatte eingelöst. Stack: Next.js, Supabase, PWA.
+- **Product Card AI**: KI-Assistent für Händler: macht aus einem Amateurfoto eines Produkts ein fertiges Angebot für Amazon, Etsy, eBay oder Shopify. Stack: Gemini, React, API, Vercel.
+- **Gastronomie AI**: Sprachassistent für ein Restaurant: nimmt Anrufe an, reserviert Tische und nimmt Bestellungen zur Abholung auf, komplexe Fragen gehen an einen Mitarbeiter. Stack: LiveKit, ElevenLabs, Next.js, PostgreSQL, Self-hosted.
+- **Lingvy**: App zum Deutschlernen mit Büchern und Filmen: Lesen mit Übersetzung, Audio-Nacherzählungen, ein persönliches Vokabelheft und Wortübungen. Stack: Telegram Mini App, React, Supabase, Vercel.
+
+## Zertifikate
+- KI-Business-Automatisierungs-Spezialist – Beam Institute of Technology, Berlin, 21. August 2026
+- n8n Professional Certificate – n8n Academy, September 2026 – Prüfen: https://credentials.learn.n8n.io/credentials/c4dac917cdda4d3ba02a5eb0e42f55c6/
+- Oracle Certified Professional: Java SE 11 Developer – Oracle University, 9. Juni 2020
+- n8n: In Practice — AI, Testing & Best Practices – n8n Academy, 24. September 2026 – Prüfen: https://learn.n8n.io/certificates/89242af809f2427d9840bfab84025a2b
+- n8n: Integrations — APIs & Connected Workflows – n8n Academy, 23. September 2026 – Prüfen: https://learn.n8n.io/certificates/5c022912ac9f4f75aa2a1817def26a16
+- Angular 9: Theorie und Praxis – Udemy, 1. November 2020 – Prüfen: https://ude.my/UC-5d3769de-6920-40fa-854d-b3e245ccebde
+- Professionelle Restful APIs mit Java und Spring Boot 2 – Udemy, 15. März 2020 – Prüfen: https://ude.my/UC-0699a783-a43e-4931-b174-7b8cfd449550
+- Oracle Certified Associate, Java SE 7 Programmer – Oracle University, 24. November 2015
+
+## Wissensnetz
+- Automatisierung & KI-Agenten: KI-Agenten, n8n, Workflow-Automatisierung, Low-code / No-code, LLM API · OpenAI · Claude, Prompt Engineering, Chain-of-Thought, Individuelle KI-Assistenten, Chatbots, Agenten-Routing, Multi-Agenten-Systeme, MCP, RAG, Embeddings, Vektordatenbanken, Datenpipelines, Human-in-the-Loop, BPMN, Flowable, Claude Code, Codex, LiveKit, Content-Generierung, Veo 3
+- KI-Beratung: KI-Strategie, AI Opportunity Map, Prozessanalyse AS-IS / TO-BE, Portfolio von KI-Initiativen, Finanzmodell: ROI, TCO, P&L, KI-Reifegradanalyse, KI-Governance & RACI, Datenqualität, DSGVO, EU AI Act, LLM-Risikomanagement, Audit von KI-Agenten, Change Management, Transformations-Roadmap
+- Web & Frontend: JavaScript, HTML5, CSS & Responsive Design, TypeScript, React, Angular, Node.js, Thymeleaf, Canvas / SVG-Animation, Barrierefreiheit (a11y), Mehrsprachigkeit (i18n)
+- Backend & DevOps: REST API, Microservices, SQL, PostgreSQL, Docker, Git, CI/CD · GitHub Actions, Linux / Bash, VPS & Self-Hosting, OpenAPI / Swagger, OAuth 2.0 / JWT, JSON, Webhooks, Postman, SOAP, GraphQL, Supabase, Go
+- Java-Ökosystem: Java, OOP & SOLID, Collections & Generics, Stream API & Lambdas, Nebenläufigkeit, JVM & GC, Entwurfsmuster, Spring Framework, Spring Boot, Spring Web MVC, Spring Data JPA, Hibernate / JPA, Spring Security, JDBC, Maven, Gradle, JUnit 5, Mockito, Lombok, Groovy, Vaadin, JasperReports, JMeter, SAP NetWeaver
+
+## Häufige Fragen
+### Welche Aufgaben kann ein KI-Agent in meinem Unternehmen übernehmen?
+Wiederkehrende Routine mit Texten und Daten: E-Mails und Anfragen sortieren, Antworten vorbereiten, Daten zwischen CRM, ERP und Tabellen übertragen, Dokumente auswerten, Termine und Bestellungen annehmen. Entscheidungen mit Risiko bleiben beim Menschen – der Agent bereitet sie vor.
+
+### Arbeiten Sie mit n8n oder mit eigenem Code?
+Mit beidem. Für Integrationen und Workflows nutze ich n8n (zertifiziert durch die n8n Academy), für Web-Apps, Portale und Sprachassistenten eigenen Code mit Next.js, TypeScript, Java und PostgreSQL. Die Wahl richtet sich nach Aufgabe, Budget und danach, wer die Lösung später pflegt.
+
+### Wie läuft ein Projekt ab?
+Zuerst ein Gespräch über den Prozess und das Ziel. Danach schlage ich eine Lösung vor und baue einen ersten funktionierenden Prototyp, den Sie mit echten Daten testen. Es folgen Umsetzung, Übergabe mit Dokumentation und auf Wunsch Betreuung.
+
+### Sind die Lösungen DSGVO-konform?
+Datenschutz plane ich von Anfang an mit ein: Hosting auf Servern in der EU, Sprachmodelle europäischer Anbieter wie Mistral, Datensparsamkeit und klare Zugriffsrechte. Welche Variante passt, hängt von den verarbeiteten Daten ab.
+
+### Arbeiten Sie remote oder vor Ort?
+Überwiegend remote, für Kunden in ganz Deutschland und im deutschsprachigen Raum. In Nürnberg und Umgebung komme ich für Workshops und Termine gern vor Ort.
+
+### In welchen Sprachen kann ich mit Ihnen arbeiten?
+Auf Deutsch, Englisch und Russisch. Sprachassistenten und KI-Agenten können ebenfalls mehrsprachig arbeiten.
+
+## Kontakt
+- E-Mail: info@profidev.de
+- Telegram: https://t.me/a1exeych
+- LinkedIn: https://www.linkedin.com/in/aleksei-chasovskoi/
+- Ort: Nürnberg, Deutschland
+
+## Seiten
+- [Deutsch](https://profidev.de/)
+- [English](https://profidev.de/en/)
+- [Русский](https://profidev.de/ru/)
+- [Impressum](https://profidev.de/impressum/)
+- [Datenschutzerklärung](https://profidev.de/datenschutz/)
